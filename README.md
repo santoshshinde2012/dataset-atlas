@@ -40,9 +40,10 @@ Power features:
 - **Shareable URLs** — every view (domain, region, country, filters, sort, projection) lives in the URL hash: bookmark it, cite it, send it. The Passport's *Share link* even carries your pinned collection to a colleague.
 - **Search anywhere** — type with no region selected and a results rail opens grouped by region; no dead ends.
 - **Compare tray** — shortlist up to four datasets and see them side by side (license, coverage, granularity, size, access) with download one click away.
-- **Dataset DNA & provenance** — the five-bar strip compares freshness, coverage span, granularity, size, and license openness; shield badges show when each link was last verified by the weekly pipeline, and lock badges warn about account/sign-up walls *before* you click out. "About this data" explains the whole pipeline in-app.
+- **Dataset DNA & provenance** — the five-bar strip compares freshness, coverage span, granularity, size, and license openness; shield badges show when each link was last verified by the daily pipeline, and lock badges warn about account/sign-up walls *before* you click out. "About this data" explains the whole pipeline in-app.
 - **Data Passport** — pin datasets across regions, then export a reproducible `data-passport.sh` manifest and a `references.bib` (per-card BibTeX copy too).
-- **Filters rail** — use-case presets, source type, format, license-openness slider, search (`/`), a sort control (freshness/coverage/openness/size/A–Z), and a "new or updated since your last visit" filter powered by the weekly refresh. A badge shows active-filter count when the rail is collapsed; empty states offer removable filter chips.
+- **Starter bundles** — each "I want to…" preset carries 5 curated datasets; one click pins the whole kit into your Passport, ready to export (bundle links are CI-validated against the catalog).
+- **Filters rail** — use-case presets, source type, format, license-openness slider, search (`/`), a sort control (freshness/coverage/openness/size/A–Z), and a "new or updated since your last visit" filter powered by the daily refresh. A badge shows active-filter count when the rail is collapsed; empty states offer removable filter chips.
 - **Mobile-first ergonomics** — bottom-sheet panels with swipe-to-dismiss, pinch/double-tap/button zoom, always-visible dock labels, and safe-area-aware chrome.
 - **Themes** — light (default) and dark, one click, remembered. Both palettes validated for colorblind-safe separation and surface contrast.
 - **Keyboard & screen readers** — `/` focuses search, `Esc` closes panels in order, Tab/Enter selects regions, focus lands in opened panels, and filter changes are announced via a live region. Reduced motion disables rotation and animations.
@@ -61,7 +62,7 @@ Power features:
 | `data/country-codes.json` | ISO-numeric → alpha-2 code + display name (country focus) |
 | `scripts/` | Catalog validator and the liveness/freshness refresh job |
 | `vendor/` | Local copies of D3 v7 and topojson-client (works offline) |
-| `.github/workflows/` | CI, GitHub Pages deploy, weekly catalog refresh |
+| `.github/workflows/` | CI, GitHub Pages deploy, daily catalog refresh |
 | `docs/` | Concept & research, system design, free-cloud deployment guide |
 
 ## Architecture
@@ -119,9 +120,11 @@ Three GitHub Actions workflows ship with the repo:
 
 - **CI** (`ci.yml`) — syntax-checks every module, runs the test suite and the catalog validator on each push and PR.
 - **Deploy** (`deploy-pages.yml`) — publishes the repo root to GitHub Pages on every push to `main`; it creates the Pages site itself on first run.
-- **Refresh** (`refresh.yml`) — weekly (and on demand): re-verifies every dataset URL, pulls last-modified dates from source APIs (World Bank, CKAN portals, GitHub, figshare), stamps the catalog, and opens a review PR when anything changed. Dead links turn the run red. The rail shows "Catalog refreshed \<date\>" so users see the data's age.
+- **Refresh** (`refresh.yml`) — **daily** (and on demand): re-verifies every dataset URL, pulls last-modified dates from source APIs (World Bank, CKAN portals, GitHub, figshare — plus Kaggle when the optional secrets are set), and stamps the catalog. Safe metadata updates commit straight to `main` behind the validate + test gate and auto-deploy; **dead links open a review PR** and turn the run red. The rail shows "Catalog refreshed \<date\>" so users always see the data's age.
 
-One repo setting is required for refresh PRs: **Settings → Actions → General → Workflow permissions → "Allow GitHub Actions to create and approve pull requests."**
+Two optional one-time settings:
+- Refresh PRs need **Settings → Actions → General → Workflow permissions → "Allow GitHub Actions to create and approve pull requests."**
+- Kaggle freshness needs repo secrets `KAGGLE_USERNAME` and `KAGGLE_KEY` (from [kaggle.com/settings](https://www.kaggle.com/settings) → Create New Token). Without them the Kaggle adapter simply skips.
 
 ## Deploying (free)
 
@@ -136,7 +139,8 @@ Point any static host at the repo root — GitHub Pages is wired up already; Clo
 | [docs/deployment-free-cloud.md](docs/deployment-free-cloud.md) | Zero-cost deployment on four hosts, step by step |
 | [CLAUDE.md](CLAUDE.md) | Working conventions for the codebase |
 
-## Roadmap
+## Roadmap status (from the concept doc)
 
-- **Phase 2 — shipped**: weekly liveness + freshness refresh with review PRs; remaining: Kaggle API enrichment (needs an API token) and automated new-entry proposals.
-- **Phase 3** — use-case bundles ("I want to…" flows that pre-assemble a passport) and shareable passports (pins in the URL hash).
+- **Phase 1 — complete**: the curated catalog + map UI, shipped as a static single-page site.
+- **Phase 2 — complete**: the catalog refreshes itself **daily** — liveness sweep, freshness from source APIs (World Bank, CKAN portals, GitHub, figshare, and Kaggle once the optional `KAGGLE_USERNAME`/`KAGGLE_KEY` repo secrets are added), per-entry verified stamps. Safe metadata changes commit straight to `main` behind the validate + test gate and deploy automatically; dead links open a review PR instead. New catalog entries remain agent-assisted curation (the multi-agent verify pipeline described in [docs/system-design.md](docs/system-design.md)) — deliberately not blind automation.
+- **Phase 3 — complete**: use-case **starter bundles** (activate a preset → one click pins its 5 curated datasets into the Passport, ready to export) and **shareable passports** (the Passport's *Share link* carries pins in the URL).

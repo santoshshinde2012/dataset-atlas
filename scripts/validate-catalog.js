@@ -12,7 +12,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { sanitizeEntry } from '../js/catalog.js';
-import { DOMAIN_META, REGION_META, GLOBAL_REGION } from '../js/config.js';
+import { DOMAIN_META, REGION_META, GLOBAL_REGION, PRESETS } from '../js/config.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const raw = JSON.parse(readFileSync(join(root, 'data/catalog.json'), 'utf8'));
@@ -50,6 +50,16 @@ for (const key of Object.keys(DOMAIN_META)) {
 }
 for (const key of [...Object.keys(REGION_META), GLOBAL_REGION]) {
   if (!byRegion[key]) warnings.push(`region "${key}" has no datasets`);
+}
+
+// starter bundles must always resolve — a renamed/removed URL breaks concept C
+const allUrls = new Set(entries.map((d) => (d.url || '').toLowerCase().replace(/\/+$/, '')));
+for (const p of PRESETS) {
+  for (const url of p.bundle || []) {
+    if (!allUrls.has(url.toLowerCase().replace(/\/+$/, ''))) {
+      errors.push(`preset "${p.label}": bundle URL not in catalog — ${url}`);
+    }
+  }
 }
 
 console.log(`catalog: ${entries.length} entries, ${errors.length} errors, ${warnings.length} warnings`);

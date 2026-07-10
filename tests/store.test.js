@@ -182,6 +182,23 @@ test('importPins merges only known ids and reports the count', () => {
   assert.equal(store.actions.importPins([id]), 0, 'already-pinned ids are not re-imported');
 });
 
+test('presetBundleIds resolves bundle URLs to catalog ids, skipping absentees', async () => {
+  const { PRESETS } = await import('../js/config.js');
+  const bundled = PRESETS.findIndex((p) => p.bundle?.length);
+  assert.notEqual(bundled, -1, 'at least one preset carries a starter bundle');
+  const raw = {
+    datasets: [
+      { ...rawCatalog.datasets[0], title: 'Bundle member', url: PRESETS[bundled].bundle[0] },
+      rawCatalog.datasets[1],
+    ],
+  };
+  const store = createStore({ catalog: buildCatalog(raw), pinStorage: fakeStorage() });
+  const ids = store.select.presetBundleIds(bundled);
+  assert.equal(ids.length, 1, 'only bundle URLs present in the catalog resolve');
+  assert.equal(ids[0], store.select.catalog().find((d) => d.title === 'Bundle member').id);
+  assert.deepEqual(store.select.presetBundleIds(99), [], 'unknown preset index yields an empty bundle');
+});
+
 test('railMode reflects region vs search-anywhere', () => {
   const store = mkStore();
   assert.equal(store.select.railMode(), null);

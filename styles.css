@@ -419,7 +419,9 @@ button {
 #search-input::placeholder { color: var(--muted); }
 
 #preset-list { display: flex; flex-direction: column; gap: 5px; }
+.preset-wrap { display: flex; flex-direction: column; gap: 4px; }
 .preset {
+  width: 100%;
   text-align: left;
   padding: 7px 10px;
   border-radius: 8px;
@@ -432,6 +434,19 @@ button {
 .preset:hover { border-color: var(--accent-dim); background: rgba(var(--accent-rgb), 0.08); transform: translateY(-1px); }
 .preset.active { border-color: var(--accent); background: rgba(var(--accent-rgb), 0.12); }
 .preset small { display: block; color: var(--muted); font-size: 11px; margin-top: 1px; }
+.bundle-btn {
+  align-self: flex-start;
+  margin-left: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--btn-primary-border);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  font-size: 11px;
+  font-weight: 700;
+  transition: background 0.15s, transform 0.15s;
+}
+.bundle-btn:hover { background: var(--btn-primary-hover); transform: translateY(-1px); }
 
 .filter-row {
   display: flex;

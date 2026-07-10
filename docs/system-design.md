@@ -162,7 +162,7 @@ Modeled on farmlandatlas.com's interaction grammar: the map is the persistent st
 
 | Phase | Scope | Architectural impact |
 |---|---|---|
-| **2 — auto-refresh (shipped)** | `scripts/refresh-catalog.js` + weekly `refresh.yml`: liveness sweep over every URL, freshness bumps from source metadata APIs (World Bank, CKAN portals, GitHub, figshare — an adapter registry, one entry per host family), `generated` stamp surfaced in the UI, PR opened for review when anything changed | Scheduled CI writing `catalog.json` through the existing validate gate; runtime unchanged |
-| **2 — remaining** | Kaggle API enrichment (requires an API token secret) and automated new-entry proposals | New adapters in the refresh registry; curation agents on a schedule |
-| **3 — use-case bundles** | "I want to…" flows that pre-assemble 3–5 datasets into a one-click passport | New `bundles` registry in config; passport accepts a preset list |
-| **3 — shareable passports** | Pins encoded in the URL hash for link sharing | Store serializes pins to `location.hash`; no backend needed |
+| **2 — auto-refresh (complete)** | `scripts/refresh-catalog.js` + daily `refresh.yml`: liveness sweep over every URL, freshness bumps from source metadata APIs (World Bank, CKAN portals, GitHub, figshare, Kaggle behind optional secrets — an adapter registry, one entry per host family), per-entry `verified` stamps, `generated` stamp in the UI. Safe changes auto-commit to main behind the validate+test gate; dead links open a review PR | Scheduled CI writing `catalog.json` through the existing validate gate; runtime unchanged |
+| **2 — editorial growth (ongoing)** | New catalog entries via agent-assisted curation rounds (curate → adversarially verify → validate gate), run on demand rather than blind automation | The pipeline in §5; no runtime change |
+| **3 — use-case bundles (complete)** | Each "I want to…" preset carries 5 curated datasets; one click pins the kit into the Passport (bundle URLs CI-validated against the catalog) | `bundle` arrays on the PRESETS registry; `presetBundleIds` selector + `importPins` |
+| **3 — shareable passports (complete)** | The Passport's Share link encodes pins in the URL hash; opening it imports them | url-state `p=` param + `importPins`; no backend |

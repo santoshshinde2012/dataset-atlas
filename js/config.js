@@ -41,12 +41,60 @@ export const SOURCE_TYPE_META = {
   ngo:          { name: 'NGO',               color: '#fb7185' },
 };
 
+/** Use-case presets (concept C). Each carries a starter BUNDLE — 5 curated
+ * catalog URLs that one click pins into the Data Passport, ready to export.
+ * Bundle URLs are validated against the catalog by `npm run validate`. */
 export const PRESETS = [
-  { label: 'Forecast crop yields',      sub: 'agriculture data',       domain: 'agriculture' },
-  { label: 'Study disease outbreaks',   sub: 'health & epidemiology',  domain: 'health' },
-  { label: 'Model climate risk',        sub: 'climate & environment',  domain: 'climate' },
-  { label: 'Build an economic model',   sub: 'macro & finance series', domain: 'economy' },
-  { label: 'Analyze energy transition', sub: 'power & emissions',      domain: 'energy' },
+  {
+    label: 'Forecast crop yields', sub: 'agriculture data', domain: 'agriculture',
+    bundle: [
+      'https://www.fao.org/faostat/en/#data/QCL',
+      'https://ourworldindata.org/crop-yields',
+      'https://catalog.data.gov/dataset/quick-stats-agricultural-database',
+      'https://www.data.gov.in/catalog/district-wise-season-wise-crop-production-statistics-0',
+      'https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset',
+    ],
+  },
+  {
+    label: 'Study disease outbreaks', sub: 'health & epidemiology', domain: 'health',
+    bundle: [
+      'https://github.com/owid/covid-19-data/tree/master/public/data',
+      'https://www.who.int/data/gho',
+      'https://www.kaggle.com/datasets/lydia70/malaria-in-africa',
+      'https://www.kaggle.com/datasets/sudalairajkumar/covid19-in-india',
+      'https://www.kaggle.com/datasets/kumarajarshi/life-expectancy-who',
+    ],
+  },
+  {
+    label: 'Model climate risk', sub: 'climate & environment', domain: 'climate',
+    bundle: [
+      'https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=overview',
+      'https://registry.opendata.aws/nex-gddp-cmip6/',
+      'https://github.com/owid/co2-data',
+      'https://www.ncei.noaa.gov/stormevents/',
+      'https://registry.opendata.aws/deafrica-chirps/',
+    ],
+  },
+  {
+    label: 'Build an economic model', sub: 'macro & finance series', domain: 'economy',
+    bundle: [
+      'https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators',
+      'https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2023',
+      'https://www.kaggle.com/datasets/sazidthe1/global-inflation-data',
+      'https://ec.europa.eu/eurostat/web/products-datasets/-/prc_hicp_minr',
+      'https://data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG?locations=ZQ',
+    ],
+  },
+  {
+    label: 'Analyze energy transition', sub: 'power & emissions', domain: 'energy',
+    bundle: [
+      'https://github.com/owid/energy-data',
+      'https://data.open-power-system-data.org/time_series/',
+      'https://datasets.wri.org/dataset/globalpowerplantdatabase',
+      'https://www.eia.gov/electricity/data/eia923/',
+      'https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-statistics-and-modelling/energy-statistics/electricity-statistics',
+    ],
+  },
 ];
 
 export const LICENSE_LABELS = {

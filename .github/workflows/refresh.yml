@@ -2,7 +2,7 @@ name: Refresh catalog
 
 on:
   schedule:
-    - cron: '0 5 * * 1' # every Monday 05:00 UTC
+    - cron: '0 5 * * *' # daily 05:00 UTC — the catalog stays current hands-free
   workflow_dispatch:
 
 permissions:
@@ -21,8 +21,12 @@ jobs:
       - name: Refresh liveness + freshness
         id: refresh
         # dead links make the step fail AFTER writing the report — keep going
-        # so a PR with the freshness bumps is still opened for review
+        # so the safe freshness bumps still land for review
         continue-on-error: true
+        env:
+          # optional: unlock the Kaggle metadata adapter (Settings → Secrets)
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: npm run refresh
 
       - name: Validate refreshed catalog
@@ -31,28 +35,42 @@ jobs:
       - name: Unit tests
         run: npm test
 
-      - name: Open PR when anything changed
-        env:
-          GH_TOKEN: ${{ github.token }}
+      # Machine-verified metadata (freshness bumps, verified stamps, the
+      # generated date) commits straight to main — validate + tests above are
+      # the gate, and the Pages deploy follows automatically. Dead links are
+      # the one case that needs a human: those go to a PR instead.
+      - name: Commit safe refresh directly
+        if: steps.refresh.outcome == 'success'
         run: |
           if git diff --quiet; then
             echo "catalog already current"
             exit 0
           fi
-          BRANCH="catalog-refresh-$(date +%Y%m%d)"
           git config user.name "atlas-refresh-bot"
           git config user.email "actions@github.com"
-          git checkout -b "$BRANCH"
           git add data/catalog.json
-          git commit -m "Automated catalog refresh: liveness sweep + freshness bumps"
-          git push -u origin "$BRANCH"
-          gh pr create \
-            --title "Automated catalog refresh $(date +%Y-%m-%d)" \
-            --body "Weekly refresh: URL liveness sweep and source-API freshness updates. Dead links (if any) are listed in the workflow log — replace or drop those entries before merging." \
-            --base main --head "$BRANCH"
+          git commit -m "Automated daily refresh: liveness sweep + freshness bumps"
+          git push
 
-      - name: Fail visibly when dead links were found
+      - name: Open PR when dead links need a human
         if: steps.refresh.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          echo "::error::Dead links detected — see the refresh step log and the opened PR"
+          if git diff --quiet; then
+            echo "no catalog changes to propose"
+          else
+            BRANCH="catalog-refresh-$(date +%Y%m%d)"
+            git config user.name "atlas-refresh-bot"
+            git config user.email "actions@github.com"
+            git checkout -b "$BRANCH"
+            git add data/catalog.json
+            git commit -m "Catalog refresh with dead links flagged — review required"
+            git push -u origin "$BRANCH"
+            gh pr create \
+              --title "Catalog refresh $(date +%Y-%m-%d): dead links need review" \
+              --body "The daily refresh found dead links (listed in the workflow log). Replace or drop those entries, then merge the accompanying freshness updates." \
+              --base main --head "$BRANCH"
+          fi
+          echo "::error::Dead links detected — see the refresh step log"
           exit 1

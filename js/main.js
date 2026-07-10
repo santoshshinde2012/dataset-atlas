@@ -112,7 +112,7 @@ async function boot() {
   initPassport({ store, toast, copyText });
   initTopbar({ store, onPassportToggle: store.actions.togglePassport });
   initDomainDock({ store });
-  initFilterRail({ store, generated });
+  initFilterRail({ store, generated, toast });
   initCardRail({ store, toast, copyText, countryNames });
   initCompare({ store, toast });
   initWelcome({ store });

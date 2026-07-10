@@ -25,14 +25,14 @@ const catalog = data.datasets;
 
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 DatasetAtlasBot/1.0';
 
-async function get(url, timeoutMs = 30000, asJson = false) {
+async function get(url, timeoutMs = 30000, asJson = false, extraHeaders = {}) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const res = await fetch(url, {
       signal: ctrl.signal,
       redirect: 'follow',
-      headers: { 'User-Agent': UA, Accept: asJson ? 'application/json' : 'text/html,*/*' },
+      headers: { 'User-Agent': UA, Accept: asJson ? 'application/json' : 'text/html,*/*', ...extraHeaders },
     });
     const body = asJson && res.ok ? await res.json().catch(() => null) : null;
     return { status: res.status, body };
@@ -97,6 +97,25 @@ const ADAPTERS = [
       // WDI database-level last update (source 2)
       const { body } = await get('https://api.worldbank.org/v2/sources/2?format=json', 30000, true);
       const d = body?.[1]?.[0]?.lastupdated;
+      return d ? new Date(d).getFullYear() : null;
+    },
+  },
+  {
+    // Phase 2 completion: Kaggle metadata via the official API. Activates only
+    // when KAGGLE_USERNAME / KAGGLE_KEY are present (repo secrets in CI, or a
+    // local ~/.kaggle token exported to the environment); skips silently
+    // otherwise so the refresh stays credential-free by default.
+    name: 'kaggle',
+    match: (u) => u.hostname === 'www.kaggle.com' && /^\/datasets\/([\w.-]+)\/([\w.-]+)/.exec(u.pathname),
+    async year(u, m) {
+      const user = process.env.KAGGLE_USERNAME;
+      const key = process.env.KAGGLE_KEY;
+      if (!user || !key) return null;
+      const auth = 'Basic ' + Buffer.from(`${user}:${key}`).toString('base64');
+      const { body } = await get(
+        `https://www.kaggle.com/api/v1/datasets/view/${m[1]}/${m[2]}`,
+        30000, true, { Authorization: auth });
+      const d = body?.lastUpdated || body?.lastUpdatedNullable;
       return d ? new Date(d).getFullYear() : null;
     },
   },

@@ -96,6 +96,13 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     isPinned: (id) => state.pins.has(id),
     /** Which right-rail view applies: 'region' | 'search' | null. */
     railMode: () => (state.region ? 'region' : state.search ? 'search' : null),
+    /** Resolve a preset's starter-bundle URLs to catalog ids (unknown URLs drop). */
+    presetBundleIds: (index) => {
+      const urls = PRESETS[index]?.bundle || [];
+      return urls
+        .map((url) => catalog.find((d) => d.url === url)?.id)
+        .filter(Boolean);
+    },
   };
 
   const actions = {

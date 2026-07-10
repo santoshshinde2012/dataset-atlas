@@ -3,12 +3,12 @@ import { SOURCE_TYPE_META, PRESETS, LICENSE_LABELS, REGION_META } from '../confi
 import { $, el } from '../utils/dom.js';
 import { esc, normFormat } from '../utils/text.js';
 
-export function initFilterRail({ store, generated = null }) {
+export function initFilterRail({ store, generated = null, toast = () => {} }) {
   if (generated) {
     $('#catalog-stamp').textContent = `Catalog refreshed ${generated}`;
     $('#catalog-stamp').hidden = false;
   }
-  buildPresets(store);
+  buildPresets(store, toast);
   buildFacet(
     $('#source-filters'),
     Object.entries(SOURCE_TYPE_META).map(([k, m]) => [k, m.name]),
@@ -41,8 +41,12 @@ export function initFilterRail({ store, generated = null }) {
     if ($('#search-input').value !== state.search) $('#search-input').value = state.search;
     if (+$('#license-slider').value !== state.minOpenness) $('#license-slider').value = state.minOpenness;
 
-    [...$('#preset-list').children].forEach((b, i) =>
-      b.classList.toggle('active', state.preset === i));
+    [...$('#preset-list').children].forEach((wrap, i) => {
+      const active = state.preset === i;
+      wrap.querySelector('.preset').classList.toggle('active', active);
+      const bundleBtn = wrap.querySelector('.bundle-btn');
+      if (bundleBtn) bundleBtn.hidden = !active;
+    });
 
     // "new since your last visit" pill under the tally
     const pill = $('#changes-pill');
@@ -90,13 +94,29 @@ export function setCollapsed(collapsed) {
   $('#rail-expand').hidden = !collapsed;
 }
 
-function buildPresets(store) {
+function buildPresets(store, toast) {
   const box = $('#preset-list');
   PRESETS.forEach((p, i) => {
+    const wrap = el('div', 'preset-wrap');
     const b = el('button', 'preset');
     b.innerHTML = `${esc(p.label)}<small>${esc(p.sub)}</small>`;
     b.onclick = () => store.actions.togglePreset(i);
-    box.appendChild(b);
+    wrap.appendChild(b);
+    if (p.bundle && p.bundle.length) {
+      // the concept-C payoff: one click pins the whole starter kit
+      const bundleBtn = el('button', 'bundle-btn', `Pin starter bundle · ${p.bundle.length}`);
+      bundleBtn.hidden = true;
+      bundleBtn.onclick = () => {
+        const ids = store.select.presetBundleIds(i);
+        const added = store.actions.importPins(ids);
+        toast(added
+          ? `Pinned ${added} starter dataset${added === 1 ? '' : 's'} to your Passport`
+          : 'Starter bundle is already in your Passport');
+        store.actions.openPassport();
+      };
+      wrap.appendChild(bundleBtn);
+    }
+    box.appendChild(wrap);
   });
 }
 

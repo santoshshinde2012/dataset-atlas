@@ -35,7 +35,7 @@ The deploy workflow is **already in the repo** at `.github/workflows/deploy-page
    - `CI` — syntax checks, the unit-test suite, catalog validation (a broken catalog never deploys),
    - `Deploy to GitHub Pages` — uploads the repo root and publishes it.
 
-   There's also a third, scheduled workflow — `Refresh catalog` — that re-verifies every dataset link weekly and opens a PR when sources changed. For it to open PRs, enable **Settings → Actions → General → Workflow permissions → "Allow GitHub Actions to create and approve pull requests"**.
+   There's also a third, scheduled workflow — `Refresh catalog` — that re-verifies every dataset link **daily**, auto-commits safe freshness updates to `main` (which redeploys the site), and opens a PR only when dead links need a human. For those PRs, enable **Settings → Actions → General → Workflow permissions → "Allow GitHub Actions to create and approve pull requests"**. Optionally add `KAGGLE_USERNAME`/`KAGGLE_KEY` repo secrets to unlock Kaggle freshness lookups.
 
    Your atlas is live at:
 
