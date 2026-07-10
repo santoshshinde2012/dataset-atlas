@@ -24,3 +24,5 @@ Map-first dataset discovery: Region → Domain → Get in ≤3 clicks. Dependenc
 - Every string interpolated into innerHTML goes through `esc()`; URLs into `href` only exist post-sanitizer.
 - UI components build static DOM once and update counts/classes in place so keyboard focus and scroll survive re-renders.
 - `data/catalog.json` entries were curated and link-verified by multi-agent workflows; run `npm run validate` after any edit and deep-link URLs directly to dataset pages (never portal homepages).
+- Optional `countries` tags (≤4 ISO alpha-2) mark country-specific datasets and drive the map's country-focus behavior; tag only clearly identifiable covered countries, leave region-wide datasets untagged.
+- Regions are config registry entries (`REGION_META`) — adding one needs a centroid, a `data/country-regions.json` remap, and catalog entries; no rendering-code changes.

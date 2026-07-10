@@ -32,7 +32,7 @@ The deploy workflow is **already in the repo** at `.github/workflows/deploy-page
 2. **Enable Pages via Actions**: on GitHub → your repo → **Settings → Pages → Build and deployment → Source: "GitHub Actions"**.
 
 3. That's it. The push you just made (and every future push to `main`) triggers two workflows:
-   - `CI` — syntax checks, unit tests, catalog validation (a broken catalog never deploys),
+   - `CI` — syntax checks, the unit-test suite, catalog validation (a broken catalog never deploys),
    - `Deploy to GitHub Pages` — uploads the repo root and publishes it.
 
    There's also a third, scheduled workflow — `Refresh catalog` — that re-verifies every dataset link weekly and opens a PR when sources changed. For it to open PRs, enable **Settings → Actions → General → Workflow permissions → "Allow GitHub Actions to create and approve pull requests"**.

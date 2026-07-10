@@ -140,7 +140,7 @@ Modeled on farmlandatlas.com's interaction grammar: the map is the persistent st
 
 ## 8. Testing and CI
 
-- **37 unit tests** (`node --test`, zero dependencies) over the pure modules: sanitizer (including injection cases), facet predicates, manifest hardening, DNA scoring, store behavior, and a **theme-drift test** that fails CI if CSS and config accent colors diverge.
+- **39 unit tests** (`node --test`, zero dependencies) over the pure modules: sanitizer (including injection and country-tag cases), facet predicates, manifest hardening, DNA scoring, store behavior (including country-focus ordering), and a **theme-drift test** that fails CI if CSS and config accent colors diverge.
 - **Live verification** during development: every feature exercised in a real browser (projections, filters, pinning, manifest export, keyboard paths, mobile layout).
 - **CI** (GitHub Actions): syntax-check every module → unit tests → catalog validation. No install step — the pipeline is as dependency-free as the app.
 - Three adversarial multi-agent review rounds (4 lenses each, findings verified by independent skeptic agents before being acted on) ran during development; 30 confirmed findings were fixed.

@@ -2,6 +2,8 @@
 
 **A map-first experience for discovering and downloading datasets across domains and regions — in 3 clicks or fewer: Region → Domain → Get.**
 
+155 curated, link-verified datasets · 8 domains · 7 world regions + global (every domain×region cell ≥ 2 datasets) · country-level focus · self-refreshing catalog.
+
 Instead of knowing *where to look* (Kaggle? World Bank? WHO? a national portal?), you start from a world map painted by data availability, filter by domain with one click, and every dataset card gives you a direct **Get data** link plus a one-click copy — the `kaggle datasets download` command for Kaggle sources, or the dataset link for everything else.
 
 The UI/UX follows the interaction model of [farmlandatlas.com](https://farmlandatlas.com/): an answer-first map as the persistent stage, layers/filters as toggles in a side rail (never page navigation), global controls on top, zero-friction entry (no landing page, no login), and progressive disclosure (use-case presets in front, full filters behind).
@@ -73,8 +75,10 @@ CI (GitHub Actions, `.github/workflows/ci.yml`) syntax-checks every module and r
 - **Left rail filters** — use-case presets ("I want to… forecast crop yields"), source type, format, and a license-openness slider.
 - **Card rail** — click a region for its dataset cards: source badge, formats, license, description, and a **DNA strip** (freshness, coverage span, granularity, size, license openness at a glance).
 - **Low-click download** — every card has *Get data* (deep link, opens the dataset page directly) and *Copy CLI* (`kaggle datasets download -d owner/slug`) or *Copy link*.
+- **Country focus** — clicking a country (e.g. India) opens its region with that country's datasets sorted first and badged; the hover tooltip shows the country-specific count. 85 entries carry verified country tags.
 - **Data Passport** — pin datasets across regions and export one reproducible manifest (`data-passport.sh`) with all URLs, Kaggle CLI commands, and `kagglehub` one-liners.
-- **Keyboard** — `/` focuses search, `Esc` closes panels.
+- **Self-refreshing catalog** — a weekly workflow re-verifies every link and pulls freshness from source APIs; the rail shows the last refresh date.
+- **Keyboard** — `/` focuses search, `Esc` closes panels, region nodes are Tab/Enter operable.
 
 ## Catalog schema
 
@@ -90,9 +94,12 @@ Each entry in `data/catalog.json`:
   "kaggleRef": "owner/slug (Kaggle only)",
   "formats": ["CSV", "API"], "license": "CC BY 4.0", "licenseOpenness": 0.8,
   "freshnessYear": 2025, "coverageStart": 1960, "coverageEnd": 2024,
-  "granularity": "country|admin|city|point|grid", "approxSizeMB": 270
+  "granularity": "country|admin|city|point|grid", "approxSizeMB": 270,
+  "countries": ["IN"]
 }
 ```
+
+`countries` is optional (≤4 ISO alpha-2 codes) and marks datasets specific to identifiable countries — it powers the country-focus behavior on the map.
 
 ## Roadmap (from the concept doc)
 
