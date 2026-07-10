@@ -27,7 +27,10 @@ export function manifestText(list) {
   }
   if (kaggle.length) {
     lines.push('# ── Kaggle datasets — needs `pip install kaggle` + API token (kaggle.com/docs/api) ──');
-    for (const d of kaggle) lines.push(`kaggle datasets download -d ${d.kaggleRef}   # ${oneLine(d.title)}`);
+    for (const d of kaggle) {
+      lines.push(`kaggle datasets download -d ${d.kaggleRef}   # ${oneLine(d.title)}`);
+      lines.push(`#     ${oneLineUrl(d.url)}`);
+    }
     lines.push('');
     lines.push('# Python alternative:');
     for (const d of kaggle) lines.push(`#   import kagglehub; kagglehub.dataset_download("${d.kaggleRef}")`);

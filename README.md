@@ -2,7 +2,7 @@
 
 **A map-first experience for discovering and downloading datasets across domains and regions — in 3 clicks or fewer: Region → Domain → Get.**
 
-Instead of knowing *where to look* (Kaggle? World Bank? WHO? a national portal?), you start from a world map painted by data availability, filter by domain with one click, and every dataset card gives you a direct **Get data** link plus a one-click copy of the `kaggle datasets download` command.
+Instead of knowing *where to look* (Kaggle? World Bank? WHO? a national portal?), you start from a world map painted by data availability, filter by domain with one click, and every dataset card gives you a direct **Get data** link plus a one-click copy — the `kaggle datasets download` command for Kaggle sources, or the dataset link for everything else.
 
 The UI/UX follows the interaction model of [farmlandatlas.com](https://farmlandatlas.com/): an answer-first map as the persistent stage, layers/filters as toggles in a side rail (never page navigation), global controls on top, zero-friction entry (no landing page, no login), and progressive disclosure (use-case presets in front, full filters behind).
 
@@ -43,6 +43,8 @@ js/
   dna.js             dataset "DNA" scoring (freshness/coverage/granularity/size/license)
   manifest.js        Data Passport shell-script generation (injection-hardened)
   lib.js             adapter over the vendored d3/topojson globals
+  utils/             pure helpers: esc() HTML escaping, oneLine/oneLineUrl shell hardening,
+                     hashId, format normalization (text.js); $/el DOM builders (dom.js)
   services/          ports: pins storage (localStorage), clipboard, toast
   map/projections.js globe/flat projection strategies behind one interface
   map/map-view.js    the map stage: rendering + drag/zoom/auto-rotate/focus

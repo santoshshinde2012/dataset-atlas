@@ -17,6 +17,8 @@ test('manifest contains both sections with correct commands', () => {
   assert.ok(text.includes('kaggle datasets download -d o/s'));
   assert.ok(text.includes('https://data.worldbank.org/indicator/X'));
   assert.ok(text.includes('kagglehub.dataset_download("o/s")'));
+  // Kaggle entries include their page URL too — the manifest is a complete URL inventory
+  assert.ok(text.includes('https://www.kaggle.com/datasets/o/s'));
 });
 
 test('every non-command line is a comment (script stays runnable)', () => {

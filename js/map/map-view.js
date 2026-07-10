@@ -4,7 +4,7 @@
  * narrow interface and a projection strategy — never on other UI components.
  */
 import { d3, topojson } from '../lib.js';
-import { REGION_META, ACCENT_COLOR, DOMAIN_META, AVAIL_RAMP } from '../config.js';
+import { REGION_META, ACCENT_COLOR, DOMAIN_META, AVAIL_RAMP, NO_REGION_FILL } from '../config.js';
 import { PROJECTIONS } from './projections.js';
 
 const availColor = (t) => d3.interpolateRgbBasis(AVAIL_RAMP)(t * 0.92);
@@ -180,7 +180,7 @@ export class MapView {
     const max = Math.max(1, ...Object.keys(REGION_META).map((k) => counts[k]));
     this.gCountries.selectAll('path').attr('fill', (d) => {
       const region = this.countryRegion[d.id];
-      if (!region) return '#0e1626';
+      if (!region) return NO_REGION_FILL;
       return availColor(Math.sqrt(counts[region] / max));
     });
   }

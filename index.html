@@ -32,7 +32,7 @@
       <button id="proj-flat" title="Flat projection">Flat</button>
     </div>
     <button id="passport-btn" title="Your Data Passport — pinned datasets">
-      <span class="passport-icon">🛂</span> Passport <span id="passport-count" class="count-badge">0</span>
+      <span>🛂</span> Passport <span id="passport-count" class="count-badge">0</span>
     </button>
   </div>
 </header>
@@ -42,26 +42,26 @@
   <button id="rail-collapse" title="Collapse panel" aria-label="Collapse filter panel">◂</button>
   <div class="rail-inner">
 
-    <section class="rail-section" id="section-search">
-      <input id="search-input" type="search" placeholder="Search datasets…  ( / )" autocomplete="off" />
+    <section class="rail-section">
+      <input id="search-input" type="search" placeholder="Search datasets…  ( / )" autocomplete="off" aria-label="Search datasets" />
     </section>
 
-    <section class="rail-section" id="section-presets">
+    <section class="rail-section">
       <h3>I want to…</h3>
       <div id="preset-list"><!-- presets injected --></div>
     </section>
 
-    <section class="rail-section" id="section-source">
+    <section class="rail-section">
       <h3>Source type</h3>
       <div id="source-filters"><!-- checkboxes injected --></div>
     </section>
 
-    <section class="rail-section" id="section-format">
+    <section class="rail-section">
       <h3>Format</h3>
       <div id="format-filters"><!-- checkboxes injected --></div>
     </section>
 
-    <section class="rail-section" id="section-license">
+    <section class="rail-section">
       <h3>License openness</h3>
       <label class="slider-row">
         <input id="license-slider" type="range" min="0" max="1" step="0.2" value="0" />
@@ -80,7 +80,7 @@
 
 <!-- ======= Map stage ======= -->
 <main id="stage">
-  <svg id="map" role="img" aria-label="World map of dataset availability"></svg>
+  <svg id="map" role="group" aria-label="World map of dataset availability"></svg>
   <button id="global-pill" title="Datasets covering the whole world">
     🌐 Global <span class="count-badge" id="global-count">0</span>
   </button>

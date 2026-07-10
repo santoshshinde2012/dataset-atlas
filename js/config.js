@@ -59,5 +59,11 @@ export const ACCENT_COLOR = '#38e1ff';
 /** Choropleth availability ramp — also drives the on-map legend gradient. */
 export const AVAIL_RAMP = ['#111f38', '#164860', '#1e7d9c', '#35c3e0'];
 
+/** Fill for countries outside every atlas region (e.g. Antarctica). */
+export const NO_REGION_FILL = '#0e1626';
+
+/** Darker accent companion used inside DNA-strip gradients. */
+export const ACCENT_DEEP = '#17557a';
+
 /** Reference year for freshness scoring (kept explicit so scoring is deterministic). */
 export const CURRENT_YEAR = 2026;

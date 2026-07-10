@@ -1,5 +1,5 @@
 /** Right card rail: the selected region's dataset cards. */
-import { REGION_META, DOMAIN_META, SOURCE_TYPE_META, GLOBAL_REGION } from '../config.js';
+import { REGION_META, DOMAIN_META, SOURCE_TYPE_META, GLOBAL_REGION, ACCENT_COLOR, ACCENT_DEEP } from '../config.js';
 import { $, el } from '../utils/dom.js';
 import { esc } from '../utils/text.js';
 import { dnaMetrics } from '../dna.js';
@@ -151,7 +151,7 @@ export function initCardRail({ store, toast, copyText }) {
       bar.onclick = () => toast(tip); // hover-less devices get the detail on tap
       const fill = el('div', 'dna-fill');
       fill.style.height = Math.round(value * 100) + '%';
-      fill.style.background = `color-mix(in srgb, #38e1ff ${Math.round(30 + value * 70)}%, #17557a)`;
+      fill.style.background = `color-mix(in srgb, ${ACCENT_COLOR} ${Math.round(30 + value * 70)}%, ${ACCENT_DEEP})`;
       bar.appendChild(fill);
       bar.appendChild(el('span', '', label));
       strip.appendChild(bar);
