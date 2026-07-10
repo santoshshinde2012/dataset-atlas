@@ -146,6 +146,8 @@ export class MapView {
 
     nodes.append('circle').attr('class', 'halo');
     nodes.append('circle').attr('class', 'core');
+    // in "All domains" mode each node wears a donut ring of its domain mix
+    nodes.append('g').attr('class', 'domain-ring');
     nodes.append('text').attr('class', 'node-name');
     // the count renders in a solid pill so the number stays legible over
     // any map fill, in either theme
@@ -249,6 +251,17 @@ export class MapView {
       : domainColor(state.domain, state.theme);
     const s = this.strategy;
 
+    // per-region domain mix for the "All domains" donut rings
+    let regionDomainMix = null;
+    if (state.domain === 'all') {
+      regionDomainMix = {};
+      for (const d of this.store.select.filtered()) {
+        if (!REGION_META[d.region]) continue;
+        (regionDomainMix[d.region] ||= {})[d.domain] =
+          ((regionDomainMix[d.region] || {})[d.domain] || 0) + 1;
+      }
+    }
+
     const self = this;
     // scope to the node class — each node contains a nested count-badge <g>
     this.gNodes.selectAll('g.region-node').each(function ([key, meta]) {
@@ -276,6 +289,25 @@ export class MapView {
         .attr('height', 18)
         .attr('rx', 9)
         .attr('stroke', nodeColor);
+
+      // "All domains": a donut ring showing this region's domain mix,
+      // in fixed domain order with gaps between segments
+      const ring = g.select('.domain-ring');
+      if (!regionDomainMix || count === 0) {
+        ring.selectAll('path').remove();
+      } else {
+        const mix = regionDomainMix[key] || {};
+        const ordered = Object.keys(DOMAIN_META)
+          .map((dk) => [dk, mix[dk] || 0])
+          .filter(([, v]) => v > 0);
+        const arcs = d3.pie().sort(null).padAngle(0.08).value((e) => e[1])(ordered);
+        const arcGen = d3.arc().innerRadius(r + 2).outerRadius(r + 6).cornerRadius(1.5);
+        ring.selectAll('path')
+          .data(arcs)
+          .join('path')
+          .attr('d', arcGen)
+          .attr('fill', (a) => domainColor(a.data[0], state.theme));
+      }
     });
   }
 
