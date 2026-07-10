@@ -1,0 +1,2385 @@
+{
+ "datasets": [
+  {
+   "title": "Africa Soil Information Service (AfSIS) Soil Chemistry",
+   "description": "Georeferenced topsoil and subsoil samples from 19 Sub-Saharan African countries (Phase I, 2009-2013): wet-chemistry reference measurements paired with infrared spectra (CSV + OPUS) for soil property prediction; open S3 bucket.",
+   "domain": "agriculture",
+   "region": "africa",
+   "source": "AfSIS / QED via Registry of Open Data on AWS",
+   "sourceType": "research",
+   "url": "https://registry.opendata.aws/afsis/",
+   "formats": [
+    "CSV"
+   ],
+   "license": "ODbL 1.0",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2018,
+   "coverageStart": 2009,
+   "coverageEnd": 2013,
+   "granularity": "point",
+   "approxSizeMB": 2000
+  },
+  {
+   "title": "Ethiopia Socioeconomic Survey ESS4 2018/19 (LSMS-ISA)",
+   "description": "Nationally representative panel of ~6,770 households in 535 enumeration areas: plot-level crop production, land holdings, livestock and input use plus household welfare modules; public-use microdata in Stata/CSV.",
+   "domain": "agriculture",
+   "region": "africa",
+   "source": "World Bank Microdata Library (LSMS)",
+   "sourceType": "intl-org",
+   "url": "https://microdata.worldbank.org/index.php/catalog/3823",
+   "formats": [
+    "CSV",
+    "Stata"
+   ],
+   "license": "Free with registration",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2020,
+   "coverageStart": 2018,
+   "coverageEnd": 2019,
+   "granularity": "point",
+   "approxSizeMB": 200
+  },
+  {
+   "title": "Crop Production in India (Kaggle)",
+   "description": "District-wise, season-wise crop area (ha) and production (t) across Indian states, 1997-2015; ~246,000 rows with columns State_Name, District_Name, Crop_Year, Season, Crop, Area, Production; mirrors government statistics.",
+   "domain": "agriculture",
+   "region": "asia",
+   "source": "Kaggle (Abhinand)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/abhinand05/crop-production-in-india",
+   "kaggleRef": "abhinand05/crop-production-in-india",
+   "formats": [
+    "CSV"
+   ],
+   "license": "Other (specified in description)",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2019,
+   "coverageStart": 1997,
+   "coverageEnd": 2015,
+   "granularity": "admin",
+   "approxSizeMB": 15
+  },
+  {
+   "title": "Crop Recommendation Dataset (Kaggle)",
+   "description": "2,200 labeled records for 22 crops (rice, maize, pulses, fruits, cotton, coffee...) with soil N, P, K, temperature, humidity, pH and rainfall values; built by augmenting Indian rainfall, climate and fertilizer data.",
+   "domain": "agriculture",
+   "region": "asia",
+   "source": "Kaggle (Atharva Ingle)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset",
+   "kaggleRef": "atharvaingle/crop-recommendation-dataset",
+   "formats": [
+    "CSV"
+   ],
+   "license": "Unspecified (free Kaggle download)",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2020,
+   "coverageStart": 2020,
+   "coverageEnd": 2020,
+   "granularity": "point",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "India — District-wise Crop Production",
+   "description": "Season-wise crop area and production by Indian district from the Ministry of Agriculture, via data.gov.in.",
+   "domain": "agriculture",
+   "region": "asia",
+   "source": "data.gov.in",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.in/catalog/district-wise-season-wise-crop-production-statistics",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "Open Government Data India",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2023,
+   "coverageStart": 1997,
+   "coverageEnd": 2022,
+   "granularity": "admin",
+   "approxSizeMB": 25
+  },
+  {
+   "title": "Singapore Local Production, Annual",
+   "description": "Annual local production of seafood, vegetables, hen shell eggs, aquarium fish and aquatic plants in Singapore, 1976-2025; single SINGSTAT-maintained CSV with one row per commodity, plus data.gov.sg API access.",
+   "domain": "agriculture",
+   "region": "asia",
+   "source": "SINGSTAT via data.gov.sg",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.sg/datasets/d_c02f75e7dd48f2e24f61e007033c28ca/view",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "Singapore Open Data Licence",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1976,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Eurostat: Crop Production in EU Standard Humidity (apro_cpsh1)",
+   "description": "Harvested production, cultivated area and yield in EU standard humidity for cereals, oilseeds and other field crops; EU member states plus candidate countries, annual 2000-2026, ~385,000 observations; TSV/CSV and SDMX API.",
+   "domain": "agriculture",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/databrowser/view/apro_cpsh1/default/table?lang=en",
+   "formats": [
+    "CSV",
+    "TSV",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2000,
+   "coverageEnd": 2026,
+   "granularity": "country",
+   "approxSizeMB": 20
+  },
+  {
+   "title": "Agricultural Land (% of Land Area) — World Bank",
+   "description": "FAO-sourced share of land area used for agriculture, one row per country per year for 200+ economies, 1961-2023; downloadable as CSV/XML/Excel and queryable via the World Bank API.",
+   "domain": "agriculture",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/AG.LND.AGRI.ZS",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "XML",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1961,
+   "coverageEnd": 2023,
+   "granularity": "country",
+   "approxSizeMB": 1
+  },
+  {
+   "title": "Crop Yields (Our World in Data)",
+   "description": "Country-level yields (t/ha) for wheat, rice, maize, soybeans and other major crops from 1961 onward, based on FAOSTAT with OWID processing; every chart offers a full CSV download and cross-metric comparisons.",
+   "domain": "agriculture",
+   "region": "global",
+   "source": "Our World in Data",
+   "sourceType": "intl-org",
+   "url": "https://ourworldindata.org/crop-yields",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1961,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 5
+  },
+  {
+   "title": "FAOSTAT: Crops and Livestock Products (QCL)",
+   "description": "Production quantity, harvested area, yield and producing-animal numbers for ~280 crop and livestock items in 245+ countries and territories, annual from 1961. Bulk CSV download plus REST API.",
+   "domain": "agriculture",
+   "region": "global",
+   "source": "FAO (FAOSTAT)",
+   "sourceType": "intl-org",
+   "url": "https://www.fao.org/faostat/en/#data/QCL",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "CC BY 4.0 IGO",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1961,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 40
+  },
+  {
+   "title": "Global Food & Agriculture Statistics (UN on Kaggle)",
+   "description": "Kaggle mirror of FAOSTAT: 3M+ time series on crop and livestock production, trade, land use and food supply by country, 1961-2013. Top-level summary CSVs plus a full-archive zip.",
+   "domain": "agriculture",
+   "region": "global",
+   "source": "United Nations / Kaggle",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/unitednations/global-food-agriculture-statistics",
+   "kaggleRef": "unitednations/global-food-agriculture-statistics",
+   "formats": [
+    "CSV"
+   ],
+   "license": "UNdata terms (free with attribution)",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2017,
+   "coverageStart": 1961,
+   "coverageEnd": 2013,
+   "granularity": "country",
+   "approxSizeMB": 1500
+  },
+  {
+   "title": "Brazil Municipal Agricultural Production (PAM) — SIDRA Table 5457",
+   "description": "Planted/harvested area, quantity produced, average yield and production value for temporary and permanent crops in each of Brazil's ~5,570 municipalities, annual since 1974; query interface with CSV/XLSX export and API.",
+   "domain": "agriculture",
+   "region": "latin-america",
+   "source": "IBGE SIDRA (Brazil)",
+   "sourceType": "gov-portal",
+   "url": "https://sidra.ibge.gov.br/tabela/5457",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "API"
+   ],
+   "license": "Free use with attribution (IBGE)",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1974,
+   "coverageEnd": 2024,
+   "granularity": "admin",
+   "approxSizeMB": 300
+  },
+  {
+   "title": "USDA Cropland Data Layer (CropScape)",
+   "description": "Annual crop-specific land-cover raster of the conterminous US from satellite imagery; 30 m resolution (10 m from 2024) with classes for corn, soybeans, wheat and 100+ other covers; GeoTIFF via National Download and CroplandCROS.",
+   "domain": "agriculture",
+   "region": "north-america",
+   "source": "USDA National Agricultural Statistics Service",
+   "sourceType": "gov-portal",
+   "url": "https://www.nass.usda.gov/Research_and_Science/Cropland/SARS1a.php",
+   "formats": [
+    "GeoTIFF"
+   ],
+   "license": "US Government public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2026,
+   "coverageStart": 1997,
+   "coverageEnd": 2025,
+   "granularity": "grid",
+   "approxSizeMB": 2000
+  },
+  {
+   "title": "USDA NASS Quick Stats Agricultural Database",
+   "description": "US crop and livestock statistics — acreage, yield, production, prices, inventories, operator characteristics — from agricultural censuses and surveys at national, state and county level; queryable web tool and REST API.",
+   "domain": "agriculture",
+   "region": "north-america",
+   "source": "USDA NASS via data.gov",
+   "sourceType": "gov-portal",
+   "url": "https://catalog.data.gov/dataset/quick-stats-agricultural-database",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2026,
+   "coverageStart": 1850,
+   "coverageEnd": 2026,
+   "granularity": "admin",
+   "approxSizeMB": 4000
+  },
+  {
+   "title": "Agricultural Commodities, Australia (ABS)",
+   "description": "Crop and livestock production, area and agricultural land statistics by state/territory through 2021-22 (final issue), plus a historical commodity series back to 1860; XLSX data cubes from the Australian Bureau of Statistics.",
+   "domain": "agriculture",
+   "region": "oceania",
+   "source": "Australian Bureau of Statistics",
+   "sourceType": "gov-portal",
+   "url": "https://www.abs.gov.au/statistics/industry/agriculture/agricultural-commodities-australia/latest-release",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2023,
+   "coverageStart": 1860,
+   "coverageEnd": 2022,
+   "granularity": "admin",
+   "approxSizeMB": 20
+  },
+  {
+   "title": "Ethiopia: Rainfall Indicators at Subnational Level",
+   "description": "Dekadal CHIRPS satellite-gauge rainfall for Ethiopian admin-1/admin-2 units since 1981: 10-day totals, 1- and 3-month rolling sums, long-term averages and anomaly percentages, with P-codes for joining.",
+   "domain": "climate",
+   "region": "africa",
+   "source": "WFP via Humanitarian Data Exchange",
+   "sourceType": "intl-org",
+   "url": "https://data.humdata.org/dataset/eth-rainfall-subnational",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1981,
+   "coverageEnd": 2026,
+   "granularity": "admin",
+   "approxSizeMB": 40
+  },
+  {
+   "title": "Singapore Surface Air Temperature - Monthly Mean",
+   "description": "Monthly mean surface air temperature (deg C) recorded at Changi Climate Station from 1982 onward; about 530 rows, updated monthly by the National Environment Agency. CSV download and API access.",
+   "domain": "climate",
+   "region": "asia",
+   "source": "National Environment Agency (data.gov.sg)",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.sg/datasets/d_755290a24afe70c8f9e8bcbf9f251573/view",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "Singapore Open Data Licence",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1982,
+   "coverageEnd": 2026,
+   "granularity": "point",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Sub-Divisional Monthly Rainfall of India, 1901-2017",
+   "description": "Monthly, seasonal and annual rainfall (mm) for the 36 IMD meteorological subdivisions of India, 1901-2017, with departures from normal. Published by the India Meteorological Department on the OGD platform.",
+   "domain": "climate",
+   "region": "asia",
+   "source": "India Meteorological Department (data.gov.in)",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.in/resource/sub-divisional-monthly-rainfall-1901-2017",
+   "formats": [
+    "CSV",
+    "JSON",
+    "API"
+   ],
+   "license": "Government Open Data License - India (GODL)",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2017,
+   "coverageStart": 1901,
+   "coverageEnd": 2017,
+   "granularity": "admin",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "E-OBS Daily Gridded Observations for Europe",
+   "description": "Daily gridded station observations for Europe from 1950: min/mean/max temperature, precipitation, humidity, pressure, radiation and wind at 0.1 and 0.25 degrees. NetCDF, built from ECA&D station data, updated twice a year.",
+   "domain": "climate",
+   "region": "europe",
+   "source": "ECA&D / Copernicus Climate Data Store",
+   "sourceType": "intl-org",
+   "url": "https://cds.climate.copernicus.eu/datasets/insitu-gridded-observations-europe?tab=overview",
+   "formats": [
+    "NetCDF",
+    "API"
+   ],
+   "license": "E-OBS product licence (free with registration)",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2026,
+   "coverageStart": 1950,
+   "coverageEnd": 2026,
+   "granularity": "grid",
+   "approxSizeMB": 5000
+  },
+  {
+   "title": "ERA5 Reanalysis (Copernicus CDS)",
+   "description": "Hourly global climate reanalysis 1940–present: temperature, wind, precipitation and 200+ variables on a 31 km grid.",
+   "domain": "climate",
+   "region": "europe",
+   "source": "Copernicus",
+   "sourceType": "intl-org",
+   "url": "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels",
+   "formats": [
+    "NetCDF",
+    "GRIB",
+    "API"
+   ],
+   "license": "Free with registration",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2026,
+   "coverageStart": 1940,
+   "coverageEnd": 2026,
+   "granularity": "grid",
+   "approxSizeMB": 100000
+  },
+  {
+   "title": "Eurostat: Greenhouse Gas Emissions by Source Sector (env_air_gge)",
+   "description": "National greenhouse gas inventories for EU countries by source sector (energy, transport, agriculture, waste, LULUCF) in CO2 equivalent, 1990-2024. Table env_air_gge with TSV download and SDMX API.",
+   "domain": "climate",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/databrowser/view/env_air_gge/default/table?lang=en",
+   "formats": [
+    "TSV",
+    "CSV",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1990,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 5
+  },
+  {
+   "title": "Climate Change: Earth Surface Temperature Data",
+   "description": "Monthly average land temperatures from 1750 to 2013 by city, country, state and globally, repackaged from Berkeley Earth. Each record includes an uncertainty estimate.",
+   "domain": "climate",
+   "region": "global",
+   "source": "Berkeley Earth (via Kaggle)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data",
+   "kaggleRef": "berkeleyearth/climate-change-earth-surface-temperature-data",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY-NC-SA 4.0",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2013,
+   "coverageStart": 1750,
+   "coverageEnd": 2013,
+   "granularity": "city",
+   "approxSizeMB": 88
+  },
+  {
+   "title": "ERA5 Monthly Averaged Reanalysis (Single Levels)",
+   "description": "Monthly-mean global reanalysis of temperature, wind, precipitation, pressure and 200+ other variables on a 0.25-degree grid, 1940 to present. Subset by variable, region and period via the CDS web form or API.",
+   "domain": "climate",
+   "region": "global",
+   "source": "Copernicus Climate Change Service (ECMWF)",
+   "sourceType": "intl-org",
+   "url": "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=overview",
+   "formats": [
+    "GRIB",
+    "NetCDF",
+    "API"
+   ],
+   "license": "Copernicus licence (free with registration)",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2026,
+   "coverageStart": 1940,
+   "coverageEnd": 2026,
+   "granularity": "grid",
+   "approxSizeMB": 2000
+  },
+  {
+   "title": "NASA NEX-GDDP-CMIP6 Downscaled Climate Projections",
+   "description": "Downscaled daily climate projections (tasmax, tasmin, pr and more) at 0.25 degrees from 30+ CMIP6 models: historical 1950-2014 plus SSP scenarios to 2100. NetCDF and COG on AWS; full archive about 30 TB.",
+   "domain": "climate",
+   "region": "global",
+   "source": "NASA Earth Exchange / Registry of Open Data on AWS",
+   "sourceType": "research",
+   "url": "https://registry.opendata.aws/nex-gddp-cmip6/",
+   "formats": [
+    "NetCDF",
+    "GeoTIFF"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2022,
+   "coverageStart": 1950,
+   "coverageEnd": 2100,
+   "granularity": "grid",
+   "approxSizeMB": 30000000
+  },
+  {
+   "title": "Our World in Data: CO2 and Greenhouse Gas Emissions",
+   "description": "Country-year panel of CO2 and GHG emissions: annual, per-capita, cumulative and consumption-based CO2, CH4, N2O, plus energy mix and carbon intensity. Compiled from the Global Carbon Budget and other sources.",
+   "domain": "climate",
+   "region": "global",
+   "source": "Our World in Data",
+   "sourceType": "intl-org",
+   "url": "https://github.com/owid/co2-data",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1750,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 20
+  },
+  {
+   "title": "Significant Earthquakes, 1965–2016",
+   "description": "USGS records of every earthquake magnitude 5.5+ : date, time, location, depth, magnitude, and source.",
+   "domain": "climate",
+   "region": "global",
+   "source": "Kaggle",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/usgs/earthquake-database",
+   "kaggleRef": "usgs/earthquake-database",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2017,
+   "coverageStart": 1965,
+   "coverageEnd": 2016,
+   "granularity": "point",
+   "approxSizeMB": 3
+  },
+  {
+   "title": "Forest Fires in Brazil",
+   "description": "Monthly counts of forest fire reports by Brazilian state, 1998-2017, sourced from Brazil's official open data. Columns: year, state, month, number of fires, date.",
+   "domain": "climate",
+   "region": "latin-america",
+   "source": "Brazilian Government (via Kaggle)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/gustavomodelli/forest-fires-in-brazil",
+   "kaggleRef": "gustavomodelli/forest-fires-in-brazil",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2017,
+   "coverageStart": 1998,
+   "coverageEnd": 2017,
+   "granularity": "admin",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "PRODES Deforestation Monitoring (TerraBrasilis)",
+   "description": "Annual deforestation increment and accumulated-loss polygons for the Brazilian Amazon and other biomes since 1988, mapped by INPE satellite monitoring. Shapefile downloads per biome from TerraBrasilis.",
+   "domain": "climate",
+   "region": "latin-america",
+   "source": "INPE TerraBrasilis",
+   "sourceType": "research",
+   "url": "https://terrabrasilis.dpi.inpe.br/en/download-files/",
+   "formats": [
+    "Shapefile"
+   ],
+   "license": "CC BY-SA 4.0",
+   "licenseOpenness": 0.7,
+   "freshnessYear": 2026,
+   "coverageStart": 1988,
+   "coverageEnd": 2025,
+   "granularity": "point",
+   "approxSizeMB": 2000
+  },
+  {
+   "title": "1.88 Million US Wildfires",
+   "description": "Spatial database of 1.88 million US wildfire records, 1992-2015, with discovery date, final fire size, cause and point location, compiled for the national Fire Program Analysis system. Single SQLite file.",
+   "domain": "climate",
+   "region": "north-america",
+   "source": "US Forest Service (via Kaggle)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires",
+   "kaggleRef": "rtatman/188-million-us-wildfires",
+   "formats": [
+    "SQLite"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2015,
+   "coverageStart": 1992,
+   "coverageEnd": 2015,
+   "granularity": "point",
+   "approxSizeMB": 170
+  },
+  {
+   "title": "NOAA Storm Events Database",
+   "description": "Records of US storm events since January 1950: tornadoes, hail, floods, hurricanes and other phenomena with location, timing, deaths, injuries and damage estimates. Bulk yearly CSV downloads and a search interface.",
+   "domain": "climate",
+   "region": "north-america",
+   "source": "NOAA NCEI",
+   "sourceType": "gov-portal",
+   "url": "https://www.ncei.noaa.gov/stormevents/",
+   "formats": [
+    "CSV"
+   ],
+   "license": "US Government work / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2026,
+   "coverageStart": 1950,
+   "coverageEnd": 2026,
+   "granularity": "point",
+   "approxSizeMB": 700
+  },
+  {
+   "title": "ACORN-SAT: Australian Climate Observations Reference Network",
+   "description": "Homogenised daily maximum and minimum temperatures for 112 Australian stations from 1910 onward, the Bureau of Meteorology's reference series for national climate trend analysis. Per-station data downloads.",
+   "domain": "climate",
+   "region": "oceania",
+   "source": "Australian Bureau of Meteorology",
+   "sourceType": "gov-portal",
+   "url": "https://www.bom.gov.au/climate/data/acorn-sat/",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY (Bureau of Meteorology)",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1910,
+   "coverageEnd": 2026,
+   "granularity": "point",
+   "approxSizeMB": 50
+  },
+  {
+   "title": "NIWA Seven-Station Temperature Series (New Zealand)",
+   "description": "Adjusted monthly and annual temperature anomalies for seven long-running New Zealand stations (Auckland, Masterton, Wellington, Hokitika, Nelson, Lincoln, Dunedin) since 1909, combined into NIWA's national series.",
+   "domain": "climate",
+   "region": "oceania",
+   "source": "NIWA",
+   "sourceType": "research",
+   "url": "https://niwa.co.nz/climate-and-weather/nz-temperature-record/seven-station-series-temperature-data",
+   "formats": [
+    "XLS"
+   ],
+   "license": "Free download; attribution requested",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2024,
+   "coverageStart": 1909,
+   "coverageEnd": 2024,
+   "granularity": "point",
+   "approxSizeMB": 0.05
+  },
+  {
+   "title": "Nigeria - Subnational Population Statistics (HDX)",
+   "description": "Nigeria population by sex and age for reference year 2022 at national and state (admin 1) level, projected from the 2006 census by the National Population Commission and UNFPA. CSV/XLSX tables with P-codes.",
+   "domain": "demographics",
+   "region": "africa",
+   "source": "UNFPA via HDX",
+   "sourceType": "intl-org",
+   "url": "https://data.humdata.org/dataset/cod-ps-nga",
+   "formats": [
+    "CSV",
+    "XLSX"
+   ],
+   "license": "CC BY 3.0 IGO",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2022,
+   "coverageStart": 2022,
+   "coverageEnd": 2022,
+   "granularity": "admin",
+   "approxSizeMB": 1
+  },
+  {
+   "title": "WorldPop: Africa Continental Population Datasets (2000-2020)",
+   "description": "Gridded population counts for the whole African continent at ~1 km resolution for 2000, 2005, 2010, 2015 and 2020, adjusted to UN national totals. GeoTIFF mosaics built from WorldPop country datasets.",
+   "domain": "demographics",
+   "region": "africa",
+   "source": "WorldPop, University of Southampton",
+   "sourceType": "research",
+   "url": "https://hub.worldpop.org/geodata/summary?id=139",
+   "formats": [
+    "GeoTIFF"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2020,
+   "coverageStart": 2000,
+   "coverageEnd": 2020,
+   "granularity": "grid",
+   "approxSizeMB": 1000
+  },
+  {
+   "title": "India: State/UT-wise Area, Districts and Villages (Census 2001 & 2011)",
+   "description": "State and union-territory rows with land area, number of districts and number of villages from India's Census 2001 and Census 2011, published on the Open Government Data Platform India. Small CSV with API access.",
+   "domain": "demographics",
+   "region": "asia",
+   "source": "Open Government Data Platform India",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.in/resource/stateut-wise-area-districts-and-villages-india-census-2001-and-census-2011",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "GODL-India",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2011,
+   "coverageStart": 2001,
+   "coverageEnd": 2011,
+   "granularity": "admin",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Singapore Residents by Age Group, Ethnic Group and Sex",
+   "description": "Annual end-June counts of Singapore residents by age group, ethnic group and sex, 1957-2025, from the Department of Statistics. Single tidy CSV, also queryable via the data.gov.sg open API.",
+   "domain": "demographics",
+   "region": "asia",
+   "source": "Singapore Department of Statistics / data.gov.sg",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.sg/datasets/d_3cf667d761b4bdc6d4d3d3aeec37dea5/view",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "Singapore Open Data Licence",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1957,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Eurostat: Population on 1 January by age and sex (demo_pjan)",
+   "description": "Population on 1 January by single year of age and sex for EU, EFTA and candidate countries, 1960-2025 (~739,000 observations). Download CSV/XLSX from the Data Browser or query the Eurostat dissemination API.",
+   "domain": "demographics",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "gov-portal",
+   "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table?lang=en",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1960,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 15
+  },
+  {
+   "title": "Our World in Data: Population & Demography Explorer",
+   "description": "Country-level series from UN WPP 2024: population, growth rate, median age, fertility, life expectancy and migration, 1950-2023 with projections to 2100. Each explorer view offers a full CSV download.",
+   "domain": "demographics",
+   "region": "global",
+   "source": "Our World in Data",
+   "sourceType": "research",
+   "url": "https://ourworldindata.org/explorers/population-and-demography",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 1950,
+   "coverageEnd": 2100,
+   "granularity": "country",
+   "approxSizeMB": 10
+  },
+  {
+   "title": "UN World Population Prospects 2024",
+   "description": "Official UN population estimates (1950-2023) and projections to 2100 for 237 countries or areas: population by age and sex, fertility, mortality and migration indicators. Bulk CSV and XLSX files organized by topic.",
+   "domain": "demographics",
+   "region": "global",
+   "source": "UN DESA Population Division",
+   "sourceType": "intl-org",
+   "url": "https://population.un.org/wpp/",
+   "formats": [
+    "CSV",
+    "XLSX"
+   ],
+   "license": "CC BY 3.0 IGO",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 1950,
+   "coverageEnd": 2100,
+   "granularity": "country",
+   "approxSizeMB": 150
+  },
+  {
+   "title": "World Bank: Population, total (SP.POP.TOTL)",
+   "description": "Total midyear population for 217 economies and aggregates, one row per country-year, 1960-2025, compiled from UN WPP and national sources. Downloadable as CSV/XML/XLSX and queryable via the World Bank API.",
+   "domain": "demographics",
+   "region": "global",
+   "source": "World Bank",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/SP.POP.TOTL",
+   "formats": [
+    "CSV",
+    "XML",
+    "XLSX",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1960,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "World Population Dataset (Kaggle)",
+   "description": "One row per country/territory (234) with population at snapshot years 1970-2022, land area, density, growth rate and share of world population; 17 columns compiled from worldpopulationreview.com. Usability 10.0, widely used.",
+   "domain": "demographics",
+   "region": "global",
+   "source": "Kaggle / Sourav Banerjee",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/iamsouravbanerjee/world-population-dataset",
+   "kaggleRef": "iamsouravbanerjee/world-population-dataset",
+   "formats": [
+    "CSV"
+   ],
+   "license": "Other / unspecified",
+   "licenseOpenness": 0.2,
+   "freshnessYear": 2022,
+   "coverageStart": 1970,
+   "coverageEnd": 2022,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Brazil - Subnational Population Statistics (HDX)",
+   "description": "Brazil projected 2022 population disaggregated by sex and age at national, state and municipality (admin 0-2) levels, prepared by UNFPA. CSV/XLSX tables keyed by P-code for GIS linkage to COD boundaries.",
+   "domain": "demographics",
+   "region": "latin-america",
+   "source": "UNFPA via HDX",
+   "sourceType": "intl-org",
+   "url": "https://data.humdata.org/dataset/cod-ps-bra",
+   "formats": [
+    "CSV",
+    "XLSX"
+   ],
+   "license": "CC BY 3.0 IGO",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2022,
+   "coverageStart": 2022,
+   "coverageEnd": 2022,
+   "granularity": "admin",
+   "approxSizeMB": 5
+  },
+  {
+   "title": "CEPALSTAT — Latin America & Caribbean Statistics",
+   "description": "UN ECLAC's databank: demographic, economic, social, and environmental indicators for all LAC countries.",
+   "domain": "demographics",
+   "region": "latin-america",
+   "source": "CEPAL",
+   "sourceType": "intl-org",
+   "url": "https://statistics.cepal.org/portal/cepalstat/index.html?lang=en",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "Open",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1990,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 60
+  },
+  {
+   "title": "Mexico - Subnational Population Statistics (HDX)",
+   "description": "Mexico population by sex and age group for reference year 2024 at national and state (admin 1) level, prepared by UNFPA and CONAPO. CSV/XLSX tables with P-codes for joining to COD administrative boundaries.",
+   "domain": "demographics",
+   "region": "latin-america",
+   "source": "UNFPA via HDX",
+   "sourceType": "intl-org",
+   "url": "https://data.humdata.org/dataset/cod-ps-mex",
+   "formats": [
+    "CSV",
+    "XLSX"
+   ],
+   "license": "CC BY 3.0 IGO",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 2024,
+   "coverageEnd": 2024,
+   "granularity": "admin",
+   "approxSizeMB": 2
+  },
+  {
+   "title": "US Census Demographic Data (Kaggle)",
+   "description": "ACS 5-year estimates (2015 and 2017 vintages) for every US census tract and county: population by race and sex, income, poverty, employment sector and commute variables from DP03/DP05 tables. CSV files per level and year.",
+   "domain": "demographics",
+   "region": "north-america",
+   "source": "Kaggle / MuonNeutrino",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/muonneutrino/us-census-demographic-data",
+   "kaggleRef": "muonneutrino/us-census-demographic-data",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2019,
+   "coverageStart": 2015,
+   "coverageEnd": 2017,
+   "granularity": "admin",
+   "approxSizeMB": 30
+  },
+  {
+   "title": "US County Population Estimates, Vintage 2025",
+   "description": "Annual resident population estimates for every US county, DC and Puerto Rico from April 2020 to July 2025, plus components of change (births, deaths, domestic and international migration). CSV and XLSX files.",
+   "domain": "demographics",
+   "region": "north-america",
+   "source": "U.S. Census Bureau",
+   "sourceType": "gov-portal",
+   "url": "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-counties-total.html",
+   "formats": [
+    "CSV",
+    "XLSX"
+   ],
+   "license": "Public domain (US Government)",
+   "licenseOpenness": 1,
+   "freshnessYear": 2026,
+   "coverageStart": 2020,
+   "coverageEnd": 2025,
+   "granularity": "admin",
+   "approxSizeMB": 3
+  },
+  {
+   "title": "ABS Regional Population, Australia",
+   "description": "Annual estimated resident population for Australian SA2 statistical areas and local government areas, 2001 to June 2025, with components of change and a 1 km population grid. Excel data cubes plus GeoTIFF grid.",
+   "domain": "demographics",
+   "region": "oceania",
+   "source": "Australian Bureau of Statistics",
+   "sourceType": "gov-portal",
+   "url": "https://www.abs.gov.au/statistics/people/population/regional-population/latest-release",
+   "formats": [
+    "XLSX",
+    "GeoTIFF"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2001,
+   "coverageEnd": 2025,
+   "granularity": "admin",
+   "approxSizeMB": 2.5
+  },
+  {
+   "title": "Africa Development Indicators",
+   "description": "Frozen World Bank collection of 1,400+ development indicators for 53 African countries, 1960-2012: macroeconomy, trade, debt, infrastructure. CSV/Excel download; superseded by WDI for recent years.",
+   "domain": "economy",
+   "region": "africa",
+   "source": "World Bank",
+   "sourceType": "intl-org",
+   "url": "https://datacatalog.worldbank.org/search/dataset/0023402/africa-development-indicators",
+   "formats": [
+    "CSV",
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2013,
+   "coverageStart": 1960,
+   "coverageEnd": 2012,
+   "granularity": "country",
+   "approxSizeMB": 50
+  },
+  {
+   "title": "Africa Economic, Banking and Systemic Crisis Data",
+   "description": "Annual panel for 13 African countries, 1860-2014, flagging banking, currency, sovereign debt and inflation crises, with exchange rates and CPI inflation. Single CSV derived from Reinhart-Rogoff data.",
+   "domain": "economy",
+   "region": "africa",
+   "source": "Kaggle (chirin)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/chirin/africa-economic-banking-and-systemic-crisis-data",
+   "kaggleRef": "chirin/africa-economic-banking-and-systemic-crisis-data",
+   "formats": [
+    "CSV"
+   ],
+   "license": "Data files © Original Authors",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2014,
+   "coverageStart": 1860,
+   "coverageEnd": 2014,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Kiva Crowdfunding Loans",
+   "description": "670k+ microfinance loans across 80+ developing countries: amounts, sectors, borrower genders, repayment terms.",
+   "domain": "economy",
+   "region": "africa",
+   "source": "Kaggle",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/kiva/data-science-for-good-kiva-crowdfunding",
+   "kaggleRef": "kiva/data-science-for-good-kiva-crowdfunding",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2018,
+   "coverageStart": 2014,
+   "coverageEnd": 2017,
+   "granularity": "admin",
+   "approxSizeMB": 205
+  },
+  {
+   "title": "Indian Startup Funding",
+   "description": "~3,000 disclosed venture funding deals for Indian startups, Jan 2015-Sep 2021: startup name, sector, city, investor names, investment type and amount in USD. One CSV, one row per deal.",
+   "domain": "economy",
+   "region": "asia",
+   "source": "Kaggle (sudalairajkumar)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/sudalairajkumar/indian-startup-funding",
+   "kaggleRef": "sudalairajkumar/indian-startup-funding",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2021,
+   "coverageStart": 2015,
+   "coverageEnd": 2021,
+   "granularity": "point",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Singapore Consumer Price Index (CPI), 2024 Base Year, Monthly",
+   "description": "Monthly consumer price index for Singapore, Jan 1961-May 2026, base 2024=100, by expenditure category. Single CSV (~1 MB) plus API; updated monthly by the Singapore Department of Statistics.",
+   "domain": "economy",
+   "region": "asia",
+   "source": "SingStat via data.gov.sg",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.sg/datasets/d_bdaff844e3ef89d39fceb962ff8f0791/view",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "Singapore Open Data Licence",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1961,
+   "coverageEnd": 2026,
+   "granularity": "country",
+   "approxSizeMB": 1
+  },
+  {
+   "title": "Eurostat: GDP and Main Components (nama_10_gdp)",
+   "description": "GDP and main expenditure/income components for EU members, EFTA and candidate countries, annual 1975-2025, in current and chained prices. TSV/CSV bulk download and SDMX API; dataset code nama_10_gdp.",
+   "domain": "economy",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/web/products-datasets/-/nama_10_gdp",
+   "formats": [
+    "TSV",
+    "CSV",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1975,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 20
+  },
+  {
+   "title": "GDP per Capita (PPP, constant 2021 international-$)",
+   "description": "Country-year GDP per capita in constant 2021 international-$ (PPP), 1990-2024, for ~190 economies. World Bank WDI data processed by Our World in Data; full or filtered CSV download plus API.",
+   "domain": "economy",
+   "region": "global",
+   "source": "Our World in Data",
+   "sourceType": "intl-org",
+   "url": "https://ourworldindata.org/grapher/gdp-per-capita-worldbank",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1990,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 2
+  },
+  {
+   "title": "Global Inflation Dataset",
+   "description": "Annual CPI inflation rates for 196 countries, 1980-2024, compiled from IMF World Economic Outlook data. Wide-format CSV with one row per country and one column per year.",
+   "domain": "economy",
+   "region": "global",
+   "source": "Kaggle (sazidthe1)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/sazidthe1/global-inflation-data",
+   "kaggleRef": "sazidthe1/global-inflation-data",
+   "formats": [
+    "CSV"
+   ],
+   "license": "Other (specified in description)",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2024,
+   "coverageStart": 1980,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Maddison Project Database 2023",
+   "description": "Long-run real GDP per capita and population for 169 countries, sparse estimates from 1 CE and dense coverage 1820-2022. Country-year rows in Excel/Stata; standard source for historical income comparisons.",
+   "domain": "economy",
+   "region": "global",
+   "source": "Groningen Growth and Development Centre, University of Groningen",
+   "sourceType": "research",
+   "url": "https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2023",
+   "formats": [
+    "XLSX",
+    "Stata"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2023,
+   "coverageStart": 1,
+   "coverageEnd": 2022,
+   "granularity": "country",
+   "approxSizeMB": 3
+  },
+  {
+   "title": "World Development Indicators",
+   "description": "The World Bank's flagship compilation: 1,400+ development indicators for 217 economies, 1960 to present.",
+   "domain": "economy",
+   "region": "global",
+   "source": "World Bank",
+   "sourceType": "intl-org",
+   "url": "https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators",
+   "formats": [
+    "CSV",
+    "API",
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1960,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 270
+  },
+  {
+   "title": "World Development Indicators (WDI)",
+   "description": "1,500+ annual indicators for 200+ economies, 1960-2025: GDP, trade, inflation, employment, poverty, debt and more. Country-year rows; the World Bank's primary macroeconomic development database.",
+   "domain": "economy",
+   "region": "global",
+   "source": "World Bank",
+   "sourceType": "intl-org",
+   "url": "https://datacatalog.worldbank.org/search/dataset/0037712",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1960,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 270
+  },
+  {
+   "title": "Brazilian E-Commerce Public Dataset by Olist",
+   "description": "~100k anonymized orders from the Olist marketplace in Brazil, 2016-2018: 9 relational CSVs covering order items, prices, freight, payments, reviews, and customer/seller location by zip-code prefix.",
+   "domain": "economy",
+   "region": "latin-america",
+   "source": "Olist via Kaggle",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+   "kaggleRef": "olistbr/brazilian-ecommerce",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY-NC-SA 4.0",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2018,
+   "coverageStart": 2016,
+   "coverageEnd": 2018,
+   "granularity": "point",
+   "approxSizeMB": 50
+  },
+  {
+   "title": "Canada: Monthly GDP at Basic Prices by Industry (Table 36-10-0434-01)",
+   "description": "Monthly real GDP at basic prices by NAICS industry for Canada, Jan 1997 onward, chained 2017 dollars, seasonally adjusted. Statistics Canada table 36-10-0434-01; full-table CSV and SDMX download.",
+   "domain": "economy",
+   "region": "north-america",
+   "source": "Statistics Canada",
+   "sourceType": "gov-portal",
+   "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610043401",
+   "formats": [
+    "CSV",
+    "SDMX"
+   ],
+   "license": "Statistics Canada Open Licence",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1997,
+   "coverageEnd": 2026,
+   "granularity": "country",
+   "approxSizeMB": 30
+  },
+  {
+   "title": "GDP by County (BEA Regional Accounts)",
+   "description": "Annual GDP for all ~3,100 US counties, 2001-2024, in current and chained dollars with industry detail. CSV/XLSX tables and API from the US Bureau of Economic Analysis; 2024 vintage released Feb 2026.",
+   "domain": "economy",
+   "region": "north-america",
+   "source": "US Bureau of Economic Analysis",
+   "sourceType": "gov-portal",
+   "url": "https://www.bea.gov/data/gdp/gdp-by-county",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "API"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2026,
+   "coverageStart": 2001,
+   "coverageEnd": 2024,
+   "granularity": "admin",
+   "approxSizeMB": 60
+  },
+  {
+   "title": "Australian National Accounts: National Income, Expenditure and Product",
+   "description": "Quarterly Australian national accounts: GDP, consumption, investment, income and saving, Sep 1959 to Mar 2026 quarter. Seasonally adjusted and trend series in XLSX time-series workbooks and CSV.",
+   "domain": "economy",
+   "region": "oceania",
+   "source": "Australian Bureau of Statistics",
+   "sourceType": "gov-portal",
+   "url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product/latest-release",
+   "formats": [
+    "XLSX",
+    "CSV"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1959,
+   "coverageEnd": 2026,
+   "granularity": "country",
+   "approxSizeMB": 10
+  },
+  {
+   "title": "South Africa School Masterlist (EMIS)",
+   "description": "Quarterly masterlists of all South African ordinary, special-needs and ECD schools 2013-2025: per-school EMIS number, name, sector, quintile, location and learner/educator counts, per province and national.",
+   "domain": "education",
+   "region": "africa",
+   "source": "Department of Basic Education (South Africa)",
+   "sourceType": "gov-portal",
+   "url": "https://www.education.gov.za/Programmes/EMIS/EMISDownloads.aspx",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "Free (government copyright)",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2025,
+   "coverageStart": 2013,
+   "coverageEnd": 2025,
+   "granularity": "point",
+   "approxSizeMB": 50
+  },
+  {
+   "title": "Education in India (DISE District & State Statistics)",
+   "description": "District- and state-wise Indian school education statistics from DISE for 2013-14 to 2015-16: schools, enrollment, teachers, facilities (water, electricity, toilets) for elementary and secondary levels.",
+   "domain": "education",
+   "region": "asia",
+   "source": "Kaggle",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/rajanand/education-in-india",
+   "kaggleRef": "rajanand/education-in-india",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY-SA 4.0",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2017,
+   "coverageStart": 2013,
+   "coverageEnd": 2016,
+   "granularity": "admin",
+   "approxSizeMB": 15
+  },
+  {
+   "title": "Government Expenditure on Education, Annual (Singapore)",
+   "description": "Singapore government education expenditure by financial year 1960-2026, broken down by institution type (primary, secondary, junior colleges, ITE, polytechnics, universities), in thousands of SGD. CSV and API.",
+   "domain": "education",
+   "region": "asia",
+   "source": "data.gov.sg (SingStat)",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.sg/datasets/d_fa81cdad2b8e8d0d5ac6d97b992ea8e1/view",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "Singapore Open Data Licence",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1960,
+   "coverageEnd": 2026,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Open University Learning Analytics Dataset (OULAD)",
+   "description": "Anonymised data on ~32,000 UK Open University students across 7 courses (2013-2014): demographics, registrations, assessment scores and ~10M clickstream interactions with the VLE, as linked CSV tables.",
+   "domain": "education",
+   "region": "europe",
+   "source": "UCI Machine Learning Repository",
+   "sourceType": "research",
+   "url": "https://archive.ics.uci.edu/dataset/349/open+university+learning+analytics+dataset",
+   "formats": [
+    "CSV",
+    "ZIP"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2015,
+   "coverageStart": 2013,
+   "coverageEnd": 2014,
+   "granularity": "point",
+   "approxSizeMB": 45
+  },
+  {
+   "title": "Pupils and Students Enrolled by Education Level, Sex and Age (educ_uoe_enra02)",
+   "description": "Eurostat UOE enrollment counts for EU/EFTA/candidate countries by ISCED level, sex and single year of age, annual from 2012 to latest school year. Table download or SDMX API.",
+   "domain": "education",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/web/products-datasets/-/educ_uoe_enra02",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2012,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 10
+  },
+  {
+   "title": "Cross-Country Literacy Rates",
+   "description": "Adult literacy rate (share of people 15+ who can read and write) by country and year, combining UNESCO data with long-run historical estimates. Downloadable as full or filtered CSV plus a data API.",
+   "domain": "education",
+   "region": "global",
+   "source": "Our World in Data",
+   "sourceType": "intl-org",
+   "url": "https://ourworldindata.org/grapher/cross-country-literacy-rates",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1475,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Government Expenditure on Education (% of GDP)",
+   "description": "Country-year panel of public education spending as a share of GDP for ~200 economies, sourced from the UNESCO Institute for Statistics. One row per country with annual values 1970-2025.",
+   "domain": "education",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/SE.XPD.TOTL.GD.ZS",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "XML",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1970,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "OECD PISA 2022 Database",
+   "description": "Student-, school- and teacher-level microdata from the 2022 PISA assessment of 15-year-olds in 81 countries: cognitive item responses, questionnaire data, creative thinking and financial literacy modules.",
+   "domain": "education",
+   "region": "global",
+   "source": "OECD",
+   "sourceType": "intl-org",
+   "url": "https://webfs.oecd.org/pisa2022/index.html",
+   "formats": [
+    "SPSS",
+    "SAS",
+    "CSV"
+   ],
+   "license": "CC BY 4.0 (OECD terms)",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 2022,
+   "coverageEnd": 2022,
+   "granularity": "point",
+   "approxSizeMB": 2000
+  },
+  {
+   "title": "UNESCO — Education Statistics (SDG 4)",
+   "description": "UNESCO Institute for Statistics indicators: enrollment, completion, literacy, and education spending worldwide.",
+   "domain": "education",
+   "region": "global",
+   "source": "UNESCO UIS",
+   "sourceType": "intl-org",
+   "url": "https://databrowser.uis.unesco.org/",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "CC BY 3.0 IGO",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1970,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 40
+  },
+  {
+   "title": "World University Rankings",
+   "description": "Times Higher Education, Shanghai (ARWU) and CWUR ranking tables 2005-2016 in CSV form, with scores by criterion per university plus supplementary country education expenditure and attainment files.",
+   "domain": "education",
+   "region": "global",
+   "source": "Kaggle",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/mylesoneill/world-university-rankings",
+   "kaggleRef": "mylesoneill/world-university-rankings",
+   "formats": [
+    "CSV"
+   ],
+   "license": "Data files © Original Authors",
+   "licenseOpenness": 0.2,
+   "freshnessYear": 2019,
+   "coverageStart": 2005,
+   "coverageEnd": 2016,
+   "granularity": "point",
+   "approxSizeMB": 3
+  },
+  {
+   "title": "Censo Escolar Microdata (Brazil School Census)",
+   "description": "Annual school-level microdata for all Brazilian basic-education schools 1995-2025: enrollment, classes, teachers and infrastructure per school. Yearly ZIP archives with CSV files and dictionaries from INEP.",
+   "domain": "education",
+   "region": "latin-america",
+   "source": "INEP (Brazil Ministry of Education)",
+   "sourceType": "gov-portal",
+   "url": "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar",
+   "formats": [
+    "CSV",
+    "ZIP"
+   ],
+   "license": "CC BY-ND 3.0",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2026,
+   "coverageStart": 1995,
+   "coverageEnd": 2025,
+   "granularity": "point",
+   "approxSizeMB": 500
+  },
+  {
+   "title": "College Scorecard",
+   "description": "Institution-level data on ~6,500 US colleges 1996-97 to 2025-26: enrollment, costs, student aid, completion, cumulative debt and post-graduation earnings, plus field-of-study files by CIP code.",
+   "domain": "education",
+   "region": "north-america",
+   "source": "US Department of Education",
+   "sourceType": "gov-portal",
+   "url": "https://collegescorecard.ed.gov/data/",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2026,
+   "coverageStart": 1996,
+   "coverageEnd": 2026,
+   "granularity": "point",
+   "approxSizeMB": 470
+  },
+  {
+   "title": "HarvardX Person-Course De-Identified Dataset (AY2013)",
+   "description": "De-identified person-course records from HarvardX MOOCs on edX, Fall 2012-Summer 2013: one row per learner per course with registration, activity, certification and demographic variables. TSV plus codebook PDFs.",
+   "domain": "education",
+   "region": "north-america",
+   "source": "Harvard Dataverse",
+   "sourceType": "research",
+   "url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/26147",
+   "formats": [
+    "TSV"
+   ],
+   "license": "Custom terms of use",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2019,
+   "coverageStart": 2012,
+   "coverageEnd": 2013,
+   "granularity": "point",
+   "approxSizeMB": 40
+  },
+  {
+   "title": "Schools, Australia (ABS)",
+   "description": "15 Excel data cubes on Australian schools 2004-2025: student enrolments, apparent retention rates, staff counts and student-teacher ratios by state/territory, school affiliation, sex and remoteness area.",
+   "domain": "education",
+   "region": "oceania",
+   "source": "Australian Bureau of Statistics",
+   "sourceType": "gov-portal",
+   "url": "https://www.abs.gov.au/statistics/people/education/schools/latest-release",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2004,
+   "coverageEnd": 2025,
+   "granularity": "admin",
+   "approxSizeMB": 15
+  },
+  {
+   "title": "Africa Electricity Transmission & Distribution Grid Map",
+   "description": "GIS vector layers of existing and planned transmission/distribution lines (up to 700 kV) for all continental African countries and Madagascar, compiled 2017 from AICD, utilities, World Bank projects and OSM.",
+   "domain": "energy",
+   "region": "africa",
+   "source": "World Bank / ENERGYDATA.INFO",
+   "sourceType": "intl-org",
+   "url": "https://energydata.info/dataset/africa-electricity-transmission-and-distribution-grid-map-2017",
+   "formats": [
+    "GeoJSON",
+    "SHP"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 2017,
+   "coverageEnd": 2017,
+   "granularity": "point",
+   "approxSizeMB": 40
+  },
+  {
+   "title": "Electricity Generation and Consumption, Annual — Singapore",
+   "description": "Singapore's annual electricity generated and consumed in GWh, 1975-2025, with consumption broken down by sector (industrial, commerce, transport, households); 18 series compiled by SINGSTAT from EMA data.",
+   "domain": "energy",
+   "region": "asia",
+   "source": "SINGSTAT via data.gov.sg",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.sg/datasets/d_3745e3aa98ff3c4bcfcb8e1f6dffef42/view",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "Singapore Open Data Licence",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1975,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Solar Power Generation Data (India) — Kaggle",
+   "description": "15-minute inverter-level DC/AC power, daily and total yield from two Indian solar plants over 34 days (May-Jun 2020), paired with plant-level sensor readings: irradiation, ambient and module temperature.",
+   "domain": "energy",
+   "region": "asia",
+   "source": "Kaggle (anikannal)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/anikannal/solar-power-generation-data",
+   "kaggleRef": "anikannal/solar-power-generation-data",
+   "formats": [
+    "CSV"
+   ],
+   "license": "Data files © original authors (free with registration)",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2020,
+   "coverageStart": 2020,
+   "coverageEnd": 2020,
+   "granularity": "point",
+   "approxSizeMB": 2
+  },
+  {
+   "title": "Eurostat — Complete Energy Balances (nrg_bal_c)",
+   "description": "Full annual energy balances for EU-27, EFTA and candidate countries: supply, transformation and final consumption crossed by ~60 fuel/product codes and balance flows, from 1990 onward.",
+   "domain": "energy",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/web/products-datasets/-/nrg_bal_c",
+   "formats": [
+    "CSV",
+    "TSV",
+    "XLSX",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1990,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 40
+  },
+  {
+   "title": "Eurostat — Energy Statistics",
+   "description": "Comparable EU energy balances, prices, and renewables shares for all member states, monthly and annual.",
+   "domain": "energy",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/web/energy/database",
+   "formats": [
+    "CSV",
+    "API",
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1990,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 120
+  },
+  {
+   "title": "Open Power System Data — European Time Series",
+   "description": "Hourly (plus 15/30-min) electricity load, wind and solar generation and capacity, and day-ahead prices for 32 European countries, 2015 to mid-2020, sourced from ENTSO-E Transparency. Version 2020-10-06.",
+   "domain": "energy",
+   "region": "europe",
+   "source": "Open Power System Data",
+   "sourceType": "research",
+   "url": "https://data.open-power-system-data.org/time_series/",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "SQLite"
+   ],
+   "license": "Free use with attribution (ENTSO-E source terms apply)",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2020,
+   "coverageStart": 2015,
+   "coverageEnd": 2020,
+   "granularity": "country",
+   "approxSizeMB": 250
+  },
+  {
+   "title": "Access to Electricity (% of Population) — World Bank",
+   "description": "Annual share of population with electricity access for 200+ economies, 1990-2023, from the SDG 7.1.1 electrification database. Related series split urban/rural access and generation sources.",
+   "domain": "energy",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/EG.ELC.ACCS.ZS",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "XML",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1990,
+   "coverageEnd": 2023,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Global Power Plant Database (WRI)",
+   "description": "~35,000 grid-connected power plants in 167 countries with geolocation, capacity (MW), primary fuel, commissioning year, owner, and reported/estimated annual generation for 2013-2019. Version 1.3.0.",
+   "domain": "energy",
+   "region": "global",
+   "source": "World Resources Institute",
+   "sourceType": "ngo",
+   "url": "https://datasets.wri.org/dataset/globalpowerplantdatabase",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2021,
+   "coverageStart": 2013,
+   "coverageEnd": 2019,
+   "granularity": "point",
+   "approxSizeMB": 10
+  },
+  {
+   "title": "International Energy Statistics (UN) — Kaggle",
+   "description": "UN Energy Statistics Database extract: ~1.2M country-commodity-year rows covering production, trade, stocks and consumption of coal, oil, gas, electricity and renewables, 1990-2014.",
+   "domain": "energy",
+   "region": "global",
+   "source": "United Nations Statistics Division (via Kaggle)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/unitednations/international-energy-statistics",
+   "kaggleRef": "unitednations/international-energy-statistics",
+   "formats": [
+    "CSV"
+   ],
+   "license": "UNdata terms (free reuse with attribution)",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2014,
+   "coverageStart": 1990,
+   "coverageEnd": 2014,
+   "granularity": "country",
+   "approxSizeMB": 8
+  },
+  {
+   "title": "Our World in Data — Energy Dataset",
+   "description": "Country-year panel of ~130 variables: primary energy consumption, electricity generation and mix by source, per-capita use, imports. Compiled from Energy Institute, US EIA and Ember; includes full codebook.",
+   "domain": "energy",
+   "region": "global",
+   "source": "Our World in Data",
+   "sourceType": "research",
+   "url": "https://github.com/owid/energy-data",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1900,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 15
+  },
+  {
+   "title": "Carga de Energia — Brazilian Grid Load (ONS)",
+   "description": "Daily electricity load (MWmed) for the four subsystems of Brazil's National Interconnected System (North, Northeast, Southeast/Center-West, South) from 2000 onward; one file per year, updated twice daily.",
+   "domain": "energy",
+   "region": "latin-america",
+   "source": "ONS — Operador Nacional do Sistema Elétrico (Brazil)",
+   "sourceType": "gov-portal",
+   "url": "https://dados.ons.org.br/dataset/carga-energia",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "Parquet"
+   ],
+   "license": "CC BY",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2000,
+   "coverageEnd": 2026,
+   "granularity": "admin",
+   "approxSizeMB": 5
+  },
+  {
+   "title": "EIA-923: Power Plant Operations (United States)",
+   "description": "Monthly and annual plant-level US data on net generation, fuel consumption, fuel receipts, costs and stocks by prime mover and fuel type for ~12,500 plants; files from 2001, predecessor forms back to 1970.",
+   "domain": "energy",
+   "region": "north-america",
+   "source": "U.S. Energy Information Administration",
+   "sourceType": "gov-portal",
+   "url": "https://www.eia.gov/electricity/data/eia923/",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "CC0 / Public domain (US Government)",
+   "licenseOpenness": 1,
+   "freshnessYear": 2026,
+   "coverageStart": 1970,
+   "coverageEnd": 2026,
+   "granularity": "point",
+   "approxSizeMB": 15
+  },
+  {
+   "title": "Hourly Energy Consumption (PJM) — Kaggle",
+   "description": "Hourly electricity demand in MW for PJM Interconnection regional zones in the eastern US (AEP, COMED, DAYTON, PJME, PJMW and others), 2002-2018; one CSV per zone with datetime and megawatt load columns.",
+   "domain": "energy",
+   "region": "north-america",
+   "source": "PJM via Kaggle (robikscube)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/robikscube/hourly-energy-consumption",
+   "kaggleRef": "robikscube/hourly-energy-consumption",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2018,
+   "coverageStart": 2002,
+   "coverageEnd": 2018,
+   "granularity": "admin",
+   "approxSizeMB": 12
+  },
+  {
+   "title": "Open Energy Data Initiative (OEDI) Data Lake — AWS",
+   "description": "US DOE data lake on S3 curated by NREL: building-stock hourly load profiles, PVDAQ solar plant time series, wind resource, grid and demand-side datasets. No AWS account needed; queryable via CLI or Athena.",
+   "domain": "energy",
+   "region": "north-america",
+   "source": "NREL / Registry of Open Data on AWS",
+   "sourceType": "research",
+   "url": "https://registry.opendata.aws/oedi-data-lake/",
+   "formats": [
+    "Parquet",
+    "CSV",
+    "HDF5"
+   ],
+   "license": "CC BY 3.0 US",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 2007,
+   "coverageEnd": 2024,
+   "granularity": "point",
+   "approxSizeMB": 500000
+  },
+  {
+   "title": "New Zealand Electricity Statistics (MBIE)",
+   "description": "Quarterly-updated tables of NZ electricity generation by fuel (hydro, geothermal, wind, thermal), demand by sector (residential, industrial, commercial), capacity and transmission/distribution, from 1974.",
+   "domain": "energy",
+   "region": "oceania",
+   "source": "NZ Ministry of Business, Innovation and Employment",
+   "sourceType": "gov-portal",
+   "url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-statistics-and-modelling/energy-statistics/electricity-statistics",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "CC BY 3.0 NZ",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1974,
+   "coverageEnd": 2026,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Malaria in Africa",
+   "description": "Malaria indicators for African countries, 2007-2017: country, year, ISO3 code, incidence per 1,000 at risk, reported cases and use of preventive measures such as bed nets.",
+   "domain": "health",
+   "region": "africa",
+   "source": "Kaggle — Lydia (WHO/World Bank data)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/lydia70/malaria-in-africa",
+   "kaggleRef": "lydia70/malaria-in-africa",
+   "formats": [
+    "CSV"
+   ],
+   "license": "Unspecified",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2020,
+   "coverageStart": 2007,
+   "coverageEnd": 2017,
+   "granularity": "country",
+   "approxSizeMB": 0.2
+  },
+  {
+   "title": "COVID-19 in India",
+   "description": "State-wise daily COVID-19 time series for India (confirmed, cured, deaths) with ICMR testing, hospital beds, vaccination, age-group and individual-detail files; Jan 2020-Aug 2021.",
+   "domain": "health",
+   "region": "asia",
+   "source": "Kaggle — SRK (India MoHFW)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/sudalairajkumar/covid19-in-india",
+   "kaggleRef": "sudalairajkumar/covid19-in-india",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY-SA 4.0",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2021,
+   "coverageStart": 2020,
+   "coverageEnd": 2021,
+   "granularity": "admin",
+   "approxSizeMB": 2.4
+  },
+  {
+   "title": "Weekly Infectious Disease Bulletin Cases (Singapore)",
+   "description": "Weekly counts of notifiable infectious diseases in Singapore (dengue, HFMD, etc.) by epidemiological week, Jan 2012-Dec 2022; columns for epi week, disease and number of cases.",
+   "domain": "health",
+   "region": "asia",
+   "source": "data.gov.sg (Singapore MOH)",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.sg/datasets/d_ca168b2cb763640d72c4600a68f9909e/view",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "Singapore Open Data Licence 1.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 2012,
+   "coverageEnd": 2022,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "ONS National life tables, UK",
+   "description": "Period life expectancy, mortality rate and survivors by single year of age and sex for the UK and its four countries; three-year rolling tables from 1980-1982 to 2020-2022.",
+   "domain": "health",
+   "region": "europe",
+   "source": "UK Office for National Statistics",
+   "sourceType": "gov-portal",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/nationallifetablesunitedkingdomreferencetables",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "Open Government Licence v3.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1980,
+   "coverageEnd": 2022,
+   "granularity": "country",
+   "approxSizeMB": 0.6
+  },
+  {
+   "title": "Life Expectancy (WHO) — Kaggle",
+   "description": "2938 rows for 193 countries, 2000-2015: life expectancy plus immunization (hepatitis B, polio, measles), adult and infant mortality, BMI, GDP, schooling and HIV prevalence.",
+   "domain": "health",
+   "region": "global",
+   "source": "Kaggle — Kumar Rajarshi (WHO/UN data)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/kumarajarshi/life-expectancy-who",
+   "kaggleRef": "kumarajarshi/life-expectancy-who",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC0: Public Domain",
+   "licenseOpenness": 0.95,
+   "freshnessYear": 2018,
+   "coverageStart": 2000,
+   "coverageEnd": 2015,
+   "granularity": "country",
+   "approxSizeMB": 0.3
+  },
+  {
+   "title": "Our World in Data COVID-19 dataset",
+   "description": "One row per country per date with confirmed COVID-19 cases, deaths, hospitalizations, testing and vaccinations plus demographic and health context variables; all countries, 2020-2024.",
+   "domain": "health",
+   "region": "global",
+   "source": "Our World in Data",
+   "sourceType": "research",
+   "url": "https://github.com/owid/covid-19-data/tree/master/public/data",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 2020,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 75
+  },
+  {
+   "title": "WHO Global Health Observatory",
+   "description": "Official WHO indicators on disease burden, mortality, health systems, and risk factors for all member states, via OData API and CSV.",
+   "domain": "health",
+   "region": "global",
+   "source": "WHO",
+   "sourceType": "intl-org",
+   "url": "https://www.who.int/data/gho",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "CC BY-NC-SA 3.0 IGO",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2026,
+   "coverageStart": 2000,
+   "coverageEnd": 2026,
+   "granularity": "country",
+   "approxSizeMB": 50
+  },
+  {
+   "title": "WHO Global Health Observatory: Life expectancy at birth",
+   "description": "Life expectancy at birth in years by country, year (2000-2021) and sex, from WHO's Global Health Observatory; ~183 member states. Downloadable as CSV or via the GHO OData API.",
+   "domain": "health",
+   "region": "global",
+   "source": "WHO Global Health Observatory",
+   "sourceType": "intl-org",
+   "url": "https://www.who.int/data/gho/data/indicators/indicator-details/GHO/life-expectancy-at-birth-(years)",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "CC BY-NC-SA 3.0 IGO",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2024,
+   "coverageStart": 2000,
+   "coverageEnd": 2021,
+   "granularity": "country",
+   "approxSizeMB": 1
+  },
+  {
+   "title": "World Bank Health Nutrition and Population Statistics",
+   "description": "200+ health, nutrition and population indicators by country and year from 1960: life expectancy, mortality, immunization, fertility, HIV, health expenditure. Bulk CSV/Excel and API.",
+   "domain": "health",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://datacatalog.worldbank.org/search/dataset/0037652/health-nutrition-and-population-statistics",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1960,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 30
+  },
+  {
+   "title": "COVID-19 patient pre-condition dataset (Mexico)",
+   "description": "~566k patient records from Mexico's govt COVID-19 surveillance: age, sex, pneumonia, ICU, intubation and comorbidities (diabetes, COPD, asthma, hypertension, obesity) with SARS-CoV-2 test result.",
+   "domain": "health",
+   "region": "latin-america",
+   "source": "Kaggle — tanmoyx (Mexican Ministry of Health)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/tanmoyx/covid19-patient-precondition-dataset",
+   "kaggleRef": "tanmoyx/covid19-patient-precondition-dataset",
+   "formats": [
+    "CSV"
+   ],
+   "license": "Libre Uso MX (unspecified on Kaggle)",
+   "licenseOpenness": 0.4,
+   "freshnessYear": 2020,
+   "coverageStart": 2020,
+   "coverageEnd": 2020,
+   "granularity": "point",
+   "approxSizeMB": 20
+  },
+  {
+   "title": "InRad COVID-19 X-Ray and CT Scans (Brazil)",
+   "description": "Anonymized thoracic chest X-rays (PNG) and CT scans (NIfTI) of suspected COVID-19 patients from Sao Paulo hospitals, each labelled by RT-PCR SARS-CoV-2 result.",
+   "domain": "health",
+   "region": "latin-america",
+   "source": "Registry of Open Data on AWS (USP InRad)",
+   "sourceType": "research",
+   "url": "https://registry.opendata.aws/inlab-covid-19-images-dataset/",
+   "formats": [
+    "PNG",
+    "NIfTI"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2020,
+   "coverageStart": 2020,
+   "coverageEnd": 2020,
+   "granularity": "point",
+   "approxSizeMB": 2000
+  },
+  {
+   "title": "CDC PLACES: Local Data for Better Health, County Data",
+   "description": "Model-based county-level prevalence estimates for 40 measures (health outcomes, prevention, risk behaviours, disabilities, social needs) for all US counties, 2024 release (BRFSS 2022).",
+   "domain": "health",
+   "region": "north-america",
+   "source": "US CDC / data.gov",
+   "sourceType": "gov-portal",
+   "url": "https://catalog.data.gov/dataset/places-local-data-for-better-health-county-data-2024-release",
+   "formats": [
+    "CSV",
+    "JSON",
+    "API"
+   ],
+   "license": "ODbL 1.0",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2025,
+   "coverageStart": 2021,
+   "coverageEnd": 2022,
+   "granularity": "admin",
+   "approxSizeMB": 40
+  },
+  {
+   "title": "U.S. Chronic Disease Indicators (CDI)",
+   "description": "Survey- and model-based estimates for 100+ chronic disease indicators (diabetes, cancer, tobacco, arthritis) by US state/territory, year, sex and race/ethnicity, with confidence limits.",
+   "domain": "health",
+   "region": "north-america",
+   "source": "US CDC / data.gov",
+   "sourceType": "gov-portal",
+   "url": "https://catalog.data.gov/dataset/u-s-chronic-disease-indicators",
+   "formats": [
+    "CSV",
+    "JSON",
+    "API"
+   ],
+   "license": "ODbL 1.0",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2026,
+   "coverageStart": 2001,
+   "coverageEnd": 2021,
+   "granularity": "admin",
+   "approxSizeMB": 150
+  },
+  {
+   "title": "Causes of Death, Australia",
+   "description": "Annual deaths in Australia by underlying cause (ICD-10), sex, age group and state/territory, 2024 reference year with trends from 1968; includes leading causes and age-standardised rates.",
+   "domain": "health",
+   "region": "oceania",
+   "source": "Australian Bureau of Statistics",
+   "sourceType": "gov-portal",
+   "url": "https://www.abs.gov.au/statistics/health/causes-death/causes-death-australia/latest-release",
+   "formats": [
+    "XLSX",
+    "CSV"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1968,
+   "coverageEnd": 2024,
+   "granularity": "admin",
+   "approxSizeMB": 8
+  },
+  {
+   "title": "Road Traffic Accidents in Addis Ababa",
+   "description": "12,316 police-reported road traffic accidents in Addis Ababa, Ethiopia (2017-2020) with 32 attributes: driver age/sex/experience, vehicle type, road surface, weather, collision type and accident severity. Sourced from Mendeley Data.",
+   "domain": "transport",
+   "region": "africa",
+   "source": "Kaggle (Mendeley Data)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/saurabhshahane/road-traffic-accidents",
+   "kaggleRef": "saurabhshahane/road-traffic-accidents",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2020,
+   "coverageStart": 2017,
+   "coverageEnd": 2020,
+   "granularity": "point",
+   "approxSizeMB": 2
+  },
+  {
+   "title": "Annual Motor Vehicle Population by Vehicle Type (Singapore)",
+   "description": "Annual count of motor vehicles registered in Singapore by category and type (cars, buses, motorcycles, goods vehicles, taxis), 2005-2024. 412-row CSV with year, category, type, number; published by the Land Transport Authority.",
+   "domain": "transport",
+   "region": "asia",
+   "source": "data.gov.sg (Land Transport Authority)",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.sg/datasets/d_2873f3b1b2a836103f51f696350b98fa/view",
+   "formats": [
+    "CSV",
+    "API"
+   ],
+   "license": "Singapore Open Data Licence",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 2005,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Railway Passenger Transport (rail_pa_total, Eurostat)",
+   "description": "Annual rail passengers transported by country for EU member states, EFTA and candidate countries, 2004 onward (quarterly figures are in the separate rail_pa_quartal dataset). Bulk TSV download plus databrowser CSV/XLSX export and SDMX API.",
+   "domain": "transport",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/web/products-datasets/-/rail_pa_total",
+   "formats": [
+    "TSV",
+    "CSV",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2004,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 1
+  },
+  {
+   "title": "Road Safety Open Data (STATS19, Great Britain)",
+   "description": "Police-reported personal-injury road collisions in Great Britain, 1979-2025: separate collision, vehicle and casualty CSVs with date, coordinates, severity, road/weather conditions and vehicle attributes, plus a decoding data guide.",
+   "domain": "transport",
+   "region": "europe",
+   "source": "UK Department for Transport (GOV.UK)",
+   "sourceType": "gov-portal",
+   "url": "https://www.gov.uk/government/statistical-data-sets/road-safety-open-data",
+   "formats": [
+    "CSV",
+    "XLSX"
+   ],
+   "license": "Open Government Licence v3.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1979,
+   "coverageEnd": 2025,
+   "granularity": "point",
+   "approxSizeMB": 4000
+  },
+  {
+   "title": "Air Transport, Passengers Carried",
+   "description": "Annual passengers carried by registered air carriers for ~200 countries and aggregates, 1970-2023. Columns: country, year, passenger count. Compiled by World Bank from ICAO Civil Aviation Statistics of the World.",
+   "domain": "transport",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/IS.AIR.PSGR",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "XML"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1970,
+   "coverageEnd": 2023,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Death Rate from Road Traffic Injuries",
+   "description": "WHO-estimated road traffic deaths per 100,000 population for ~190 countries and world regions, 2000-2019. CSV with entity, ISO code, year, death rate; downloadable full or filtered, plus JSON metadata and data API.",
+   "domain": "transport",
+   "region": "global",
+   "source": "Our World in Data",
+   "sourceType": "research",
+   "url": "https://ourworldindata.org/grapher/death-rate-road-traffic-injuries",
+   "formats": [
+    "CSV",
+    "JSON",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2023,
+   "coverageStart": 2000,
+   "coverageEnd": 2019,
+   "granularity": "country",
+   "approxSizeMB": 0.5
+  },
+  {
+   "title": "Estimated Road Traffic Death Rate (WHO GHO)",
+   "description": "WHO Global Health Observatory indicator: estimated road traffic fatal injuries per 100,000 population by country and sex, underpinning SDG target 3.6; current release carries 2021 estimates from the Global Status Report on Road Safety 2023. Data and metadata tabs with download and OData API access.",
+   "domain": "transport",
+   "region": "global",
+   "source": "WHO Global Health Observatory",
+   "sourceType": "intl-org",
+   "url": "https://www.who.int/data/gho/data/indicators/indicator-details/GHO/estimated-road-traffic-death-rate-(per-100-000-population)",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "API"
+   ],
+   "license": "CC BY-NC-SA 3.0 IGO",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2023,
+   "coverageStart": 2021,
+   "coverageEnd": 2021,
+   "granularity": "country",
+   "approxSizeMB": 1
+  },
+  {
+   "title": "OpenFlights Flight Route Database",
+   "description": "59,036 airline routes between 3,209 airports on 531 airlines worldwide, from the OpenFlights/Airline Route Mapper database (snapshot as of January 2012, uploaded to Kaggle 2017). Columns: airline, source/destination airport, codeshare flag, stops, equipment.",
+   "domain": "transport",
+   "region": "global",
+   "source": "Kaggle (OpenFlights)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/open-flights/flight-route-database",
+   "kaggleRef": "open-flights/flight-route-database",
+   "formats": [
+    "CSV"
+   ],
+   "license": "ODbL (Database: Open Database, Contents: Database Contents)",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2012,
+   "coverageStart": 2012,
+   "coverageEnd": 2012,
+   "granularity": "point",
+   "approxSizeMB": 2.5
+  },
+  {
+   "title": "Buenos Aires Public Bike Share (Ecobici) Trips",
+   "description": "Trip records from Buenos Aires' Ecobici bike-share since 2010: origin/destination station, departure/arrival times, plus user tables with age and gender. Published by the city transport secretariat, updated monthly.",
+   "domain": "transport",
+   "region": "latin-america",
+   "source": "Buenos Aires Data (GCBA)",
+   "sourceType": "gov-portal",
+   "url": "https://data.buenosaires.gob.ar/dataset/bicicletas-publicas",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "ZIP"
+   ],
+   "license": "CC BY 2.5 AR",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2010,
+   "coverageEnd": 2026,
+   "granularity": "point",
+   "approxSizeMB": 800
+  },
+  {
+   "title": "Voo Regular Ativo (VRA) - Brazilian Scheduled Flights (ANAC)",
+   "description": "Records of Brazilian scheduled airline flights from ANAC's VRA system, Jan 2000-Aug 2020: airline, flight number, origin/destination airport, scheduled vs actual departure/arrival times, and flight status.",
+   "domain": "transport",
+   "region": "latin-america",
+   "source": "Kaggle (ANAC Brazil)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/rdewes/voo-regular-ativo-vra-anac",
+   "kaggleRef": "rdewes/voo-regular-ativo-vra-anac",
+   "formats": [
+    "CSV"
+   ],
+   "license": "Unknown (unspecified on Kaggle; sourced from ANAC open data)",
+   "licenseOpenness": 0.3,
+   "freshnessYear": 2020,
+   "coverageStart": 2000,
+   "coverageEnd": 2020,
+   "granularity": "point",
+   "approxSizeMB": 1800
+  },
+  {
+   "title": "2015 Flight Delays and Cancellations (US DOT)",
+   "description": "On-time performance for ~5.8M US domestic flights in 2015 from DOT Bureau of Transportation Statistics: flights.csv with carrier, origin/destination, departure/arrival delays, cancellation causes; plus airline and airport lookup tables.",
+   "domain": "transport",
+   "region": "north-america",
+   "source": "Kaggle (US DOT)",
+   "sourceType": "kaggle",
+   "url": "https://www.kaggle.com/datasets/usdot/flight-delays",
+   "kaggleRef": "usdot/flight-delays",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC0 / Public domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2015,
+   "coverageStart": 2015,
+   "coverageEnd": 2015,
+   "granularity": "point",
+   "approxSizeMB": 200
+  },
+  {
+   "title": "New York City TLC Trip Record Data",
+   "description": "Monthly Parquet files of NYC yellow/green taxi and for-hire vehicle trips since 2009: pickup/dropoff timestamps and zones, trip distance, fares, tips, payment type, passenger count. Hosted on AWS S3, updated as released.",
+   "domain": "transport",
+   "region": "north-america",
+   "source": "Registry of Open Data on AWS / NYC TLC",
+   "sourceType": "research",
+   "url": "https://registry.opendata.aws/nyc-tlc-trip-records-pds/",
+   "formats": [
+    "Parquet"
+   ],
+   "license": "NYC Open Data terms (free reuse)",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2009,
+   "coverageEnd": 2026,
+   "granularity": "point",
+   "approxSizeMB": 30000
+  },
+  {
+   "title": "Crash Analysis System (CAS) Data, New Zealand",
+   "description": "All ~913,000 traffic crashes reported to NZ Police since 2000, as geocoded points with crash severity, number and types of vehicles involved, road features, speed limit, weather and lighting conditions. Updated regularly.",
+   "domain": "transport",
+   "region": "oceania",
+   "source": "Waka Kotahi NZ Transport Agency Open Data",
+   "sourceType": "gov-portal",
+   "url": "https://opendata-nzta.opendata.arcgis.com/datasets/NZTA::crash-analysis-system-cas-data-1/about",
+   "formats": [
+    "CSV",
+    "GeoJSON",
+    "Shapefile",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2000,
+   "coverageEnd": 2026,
+   "granularity": "point",
+   "approxSizeMB": 250
+  }
+ ]
+}

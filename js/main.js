@@ -1,0 +1,63 @@
+/**
+ * Composition root. The only module that knows about every piece: it loads
+ * the data, builds the store and services, and injects them into the map
+ * and UI components. Components never import each other.
+ */
+import { loadAtlasData } from './catalog.js';
+import { createStore } from './store.js';
+import { localPinStorage } from './services/storage.js';
+import { createToast } from './services/toast.js';
+import { createClipboard } from './services/clipboard.js';
+import { createTooltip } from './ui/tooltip.js';
+import { MapView } from './map/map-view.js';
+import { initTopbar } from './ui/topbar.js';
+import { initFilterRail, setCollapsed } from './ui/filter-rail.js';
+import { initCardRail } from './ui/card-rail.js';
+import { initPassport } from './ui/passport.js';
+import { $ } from './utils/dom.js';
+
+async function boot() {
+  const { world, countryRegion, catalog } = await loadAtlasData();
+
+  const store = createStore({ catalog, pinStorage: localPinStorage });
+  const toast = createToast($('#toast'));
+  const copyText = createClipboard(toast);
+  const tooltip = createTooltip($('#tooltip'), store);
+
+  new MapView({ svgElement: $('#map'), world, countryRegion, store, tooltip });
+
+  initPassport({ store, toast, copyText });
+  initTopbar({ store, onPassportToggle: store.actions.togglePassport });
+  initFilterRail({ store });
+  initCardRail({ store, toast, copyText });
+
+  // single writer for the shared right-edge layout state
+  const syncRailOpen = () => {
+    const { region, passportOpen } = store.getState();
+    document.body.classList.toggle('rail-open', !!region || passportOpen);
+  };
+  store.subscribe(syncRailOpen);
+  syncRailOpen();
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const { region, passportOpen } = store.getState();
+      if (passportOpen) store.actions.closePassport();
+      else if (region) store.actions.selectRegion(null);
+    }
+    if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+      e.preventDefault();
+      setCollapsed(false);
+      $('#search-input').focus();
+    }
+  });
+}
+
+boot().catch((err) => {
+  console.error(err);
+  document.body.insertAdjacentHTML('beforeend',
+    `<div style="position:fixed;inset:0;display:grid;place-items:center;background:#070b14;z-index:99">
+       <p style="color:#8b98ad;font-size:14px;text-align:center">
+         Could not load atlas data.<br>Serve this folder over HTTP (e.g. <code>python3 -m http.server</code>) and reload.
+       </p></div>`);
+});

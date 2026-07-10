@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Dataset Atlas — find &amp; download data in 3 clicks</title>
+<meta name="description" content="A map-first atlas for discovering and downloading datasets across domains and regions. Region → Domain → Get, in 3 clicks or fewer." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ======= Top bar ======= -->
+<header id="topbar">
+  <div class="brand">
+    <span class="brand-mark">🗺️</span>
+    <div class="brand-text">
+      <h1>The Dataset Atlas</h1>
+      <p>Region → Domain → Get · data in ≤3 clicks</p>
+    </div>
+  </div>
+
+  <nav id="domain-chips" aria-label="Domain filters"><!-- chips injected --></nav>
+
+  <div class="top-actions">
+    <div class="proj-toggle" role="group" aria-label="Map projection">
+      <button id="proj-globe" class="active" title="Globe projection">Globe</button>
+      <button id="proj-flat" title="Flat projection">Flat</button>
+    </div>
+    <button id="passport-btn" title="Your Data Passport — pinned datasets">
+      <span class="passport-icon">🛂</span> Passport <span id="passport-count" class="count-badge">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ======= Left rail (filters) ======= -->
+<aside id="left-rail">
+  <button id="rail-collapse" title="Collapse panel">◂</button>
+  <div class="rail-inner">
+
+    <section class="rail-section" id="section-search">
+      <input id="search-input" type="search" placeholder="Search datasets…  ( / )" autocomplete="off" />
+    </section>
+
+    <section class="rail-section" id="section-presets">
+      <h3>I want to…</h3>
+      <div id="preset-list"><!-- presets injected --></div>
+    </section>
+
+    <section class="rail-section" id="section-source">
+      <h3>Source type</h3>
+      <div id="source-filters"><!-- checkboxes injected --></div>
+    </section>
+
+    <section class="rail-section" id="section-format">
+      <h3>Format</h3>
+      <div id="format-filters"><!-- checkboxes injected --></div>
+    </section>
+
+    <section class="rail-section" id="section-license">
+      <h3>License openness</h3>
+      <label class="slider-row">
+        <input id="license-slider" type="range" min="0" max="1" step="0.2" value="0" />
+        <span id="license-label">any</span>
+      </label>
+    </section>
+
+    <section class="rail-section rail-footnote">
+      <p id="tally">— datasets · — regions</p>
+      <button id="reset-filters">Reset filters</button>
+    </section>
+
+  </div>
+</aside>
+<button id="rail-expand" title="Open filters" hidden>▸ Filters</button>
+
+<!-- ======= Map stage ======= -->
+<main id="stage">
+  <svg id="map" role="img" aria-label="World map of dataset availability"></svg>
+  <button id="global-pill" title="Datasets covering the whole world">
+    🌐 Global <span class="count-badge" id="global-count">0</span>
+  </button>
+  <div id="legend">
+    <span class="legend-label">data availability</span>
+    <div class="legend-ramp"></div>
+    <div class="legend-ends"><span>scarce</span><span>rich</span></div>
+  </div>
+  <div id="tooltip" hidden></div>
+  <p id="hint">Click a region to browse its datasets</p>
+</main>
+
+<!-- ======= Right card rail ======= -->
+<aside id="card-rail" hidden>
+  <header class="rail-header">
+    <div>
+      <h2 id="rail-region-name">Region</h2>
+      <p id="rail-region-sub">— datasets</p>
+    </div>
+    <button id="rail-close" title="Close (Esc)">×</button>
+  </header>
+  <div id="rail-domain-breakdown"><!-- mini domain chips --></div>
+  <div id="card-list"><!-- dataset cards injected --></div>
+</aside>
+
+<!-- ======= Passport drawer ======= -->
+<div id="passport-drawer" hidden>
+  <header class="rail-header">
+    <div>
+      <h2>🛂 Data Passport</h2>
+      <p id="passport-sub">Pin datasets across regions, export one manifest.</p>
+    </div>
+    <button id="passport-close" title="Close">×</button>
+  </header>
+  <div id="passport-list"></div>
+  <footer class="passport-actions">
+    <button id="passport-export" class="primary">⬇ Export manifest (.sh)</button>
+    <button id="passport-copy">Copy manifest</button>
+    <button id="passport-clear" class="danger">Clear</button>
+  </footer>
+</div>
+
+<div id="toast" hidden></div>
+
+<script src="vendor/d3.v7.min.js"></script>
+<script src="vendor/topojson-client.min.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

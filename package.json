@@ -1,0 +1,11 @@
+{
+  "name": "dataset-atlas",
+  "version": "1.0.0",
+  "description": "A map-first atlas for discovering and downloading datasets across domains and regions — Region → Domain → Get in ≤3 clicks.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 4173",
+    "test": "node --test 'tests/*.test.js'"
+  }
+}
