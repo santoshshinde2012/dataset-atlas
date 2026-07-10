@@ -52,11 +52,14 @@ js/
 
 How the SOLID principles land here: each module has one reason to change (**S**); new domains, presets, and projections are registry entries, not code edits (**O**); both projection strategies satisfy one interface the map consumes blindly (**L**); components depend on the store's narrow `getState/select/actions/subscribe` surface (**I**); and persistence/clipboard/notifications are injected ports, so the store is unit-testable with fakes (**D**).
 
-Run the tests with:
+Run the tests and catalog checks with:
 
 ```bash
-npm test   # node --test, no dependencies to install
+npm test           # unit tests (node --test, no dependencies to install)
+npm run validate   # schema-check data/catalog.json after editing it
 ```
+
+CI (GitHub Actions, `.github/workflows/ci.yml`) syntax-checks every module and runs both on push.
 
 ## Features
 

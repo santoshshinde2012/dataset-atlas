@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The Dataset Atlas — find &amp; download data in 3 clicks</title>
 <meta name="description" content="A map-first atlas for discovering and downloading datasets across domains and regions. Region → Domain → Get, in 3 clicks or fewer." />
+<meta name="theme-color" content="#070b14" />
+<meta property="og:title" content="The Dataset Atlas" />
+<meta property="og:description" content="Find and download datasets by world region and domain — in 3 clicks or fewer." />
+<meta property="og:type" content="website" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>" />
 <link rel="stylesheet" href="styles.css" />
 </head>
@@ -34,8 +38,8 @@
 </header>
 
 <!-- ======= Left rail (filters) ======= -->
-<aside id="left-rail">
-  <button id="rail-collapse" title="Collapse panel">◂</button>
+<aside id="left-rail" aria-label="Dataset filters">
+  <button id="rail-collapse" title="Collapse panel" aria-label="Collapse filter panel">◂</button>
   <div class="rail-inner">
 
     <section class="rail-section" id="section-search">
@@ -90,7 +94,7 @@
 </main>
 
 <!-- ======= Right card rail ======= -->
-<aside id="card-rail" hidden>
+<aside id="card-rail" aria-label="Datasets for the selected region" hidden>
   <header class="rail-header">
     <div>
       <h2 id="rail-region-name">Region</h2>
@@ -103,7 +107,7 @@
 </aside>
 
 <!-- ======= Passport drawer ======= -->
-<div id="passport-drawer" hidden>
+<div id="passport-drawer" role="dialog" aria-label="Data Passport" hidden>
   <header class="rail-header">
     <div>
       <h2>🛂 Data Passport</h2>
@@ -119,7 +123,7 @@
   </footer>
 </div>
 
-<div id="toast" hidden></div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
 
 <!-- shown when the module graph or data fails to load (e.g. opened via file://) -->
 <div id="boot-fallback" hidden>

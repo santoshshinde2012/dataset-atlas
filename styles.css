@@ -600,6 +600,13 @@ button {
   to { transform: translate(-50%, 0); opacity: 1; }
 }
 
+/* ============ Reduced motion ============ */
+@media (prefers-reduced-motion: reduce) {
+  .region-node circle.halo { animation: none; }
+  #card-rail, #passport-drawer, #toast { animation: none; }
+  .country { transition: none; }
+}
+
 /* ============ Responsive ============ */
 @media (max-width: 900px) {
   .brand-text p { display: none; }

@@ -244,6 +244,7 @@ export class MapView {
 
   startAutoRotate() {
     if (this.autoTimer || !this.strategy.autoRotates || this.interacted) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let last = 0;
     this.autoTimer = d3.timer((elapsed) => {
       this.rotation[0] += (elapsed - last) * 0.004;
