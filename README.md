@@ -23,7 +23,7 @@ npm start          # serves on http://localhost:4173 (python3 http.server)
 No build step, no `npm install` — the app is dependency-free ES modules with D3 vendored locally, so it also works fully offline.
 
 ```bash
-npm test           # 42 unit tests (node --test, Node >= 22)
+npm test           # 64 unit tests (node --test, Node >= 22)
 npm run validate   # schema-check data/catalog.json after editing it
 npm run refresh    # liveness sweep + source-API freshness bumps + refresh stamp
 ```
@@ -135,12 +135,6 @@ Point any static host at the repo root — GitHub Pages is wired up already; Clo
 | Doc | Contents |
 |---|---|
 | [docs/dataset-atlas-concept-and-research.md](docs/dataset-atlas-concept-and-research.md) | The concept, UX research, and source catalog behind the design |
-| [docs/system-design.md](docs/system-design.md) | Architecture, data model, curation pipeline, security model, testing, roadmap |
+| [docs/system-design.md](docs/system-design.md) | Architecture, data model, curation pipeline, security model, testing, catalog lifecycle |
 | [docs/deployment-free-cloud.md](docs/deployment-free-cloud.md) | Zero-cost deployment on four hosts, step by step |
 | [CLAUDE.md](CLAUDE.md) | Working conventions for the codebase |
-
-## Roadmap status (from the concept doc)
-
-- **Phase 1 — complete**: the curated catalog + map UI, shipped as a static single-page site.
-- **Phase 2 — complete**: the catalog refreshes itself **daily** — liveness sweep, freshness from source APIs (World Bank, CKAN portals, GitHub, figshare, and Kaggle once the optional `KAGGLE_USERNAME`/`KAGGLE_KEY` repo secrets are added), per-entry verified stamps. Safe metadata changes commit straight to `main` behind the validate + test gate and deploy automatically; dead links open a review PR instead. New catalog entries remain agent-assisted curation (the multi-agent verify pipeline described in [docs/system-design.md](docs/system-design.md)) — deliberately not blind automation.
-- **Phase 3 — complete**: use-case **starter bundles** (activate a preset → one click pins its 5 curated datasets into the Passport, ready to export) and **shareable passports** (the Passport's *Share link* carries pins in the URL).

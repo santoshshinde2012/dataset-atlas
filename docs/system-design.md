@@ -118,12 +118,12 @@ The five **DNA metrics** (freshness, coverage span, granularity, size, license o
 
 ## 6. Security model
 
-The catalog is treated as **third-party data** even though it's committed to the repo (defense-in-depth for Phase 2, when entries will come from live APIs).
+The catalog is treated as **third-party data** even though it's committed to the repo — the daily refresh job writes to it from live source APIs, so defense-in-depth at the load boundary is not optional.
 
 | Surface | Control |
 |---|---|
 | DOM injection (XSS) | Every catalog string interpolated into `innerHTML` passes `esc()`; icons come from a fixed registry |
-| `href` injection | Sanitizer rejects any URL not matching `^https?://[^\s\x00-\x1f\x7f]+$` — no `javascript:`, no control bytes |
+| `href` injection | Sanitizer rejects any URL not matching ``^https?://[^\s\x00-\x1f\x7f"'<>\\`]+$`` — no `javascript:`, no control bytes, no quote/angle/backtick characters that could break out of an attribute |
 | Clipboard → terminal | URLs are whitespace/control-free end to end; C0/DEL bytes (ANSI escape injection) rejected at load |
 | Exported shell manifest | Runs as a script, so: `kaggleRef` must match `^[\w.-]+/[\w.-]+$` or it's dropped; prose fields pass `oneLine()` (strips `\r\n#`); URLs pass `oneLineUrl()` (strips `\r\n`, keeps fragments); tests assert every non-command line is a comment |
 | localStorage | Parse failures and quota errors are non-fatal; stored pin ids are pruned against the live catalog at boot |
@@ -141,7 +141,7 @@ Modeled on farmlandatlas.com's interaction grammar: the map is the persistent st
 
 ## 8. Testing and CI
 
-- **39 unit tests** (`node --test`, zero dependencies) over the pure modules: sanitizer (including injection and country-tag cases), facet predicates, manifest hardening, DNA scoring, store behavior (including country-focus ordering), and a **theme-drift test** that fails CI if CSS and config accent colors diverge.
+- **64 unit tests** (`node --test`, zero dependencies) over the pure modules: sanitizer (including injection and country-tag cases), facet predicates, manifest hardening, DNA scoring, store behavior (country-focus ordering, pin import, starter bundles), URL-hash state round-trips, citation/BibTeX generation, access-signal detection, and a **theme-drift test** that fails CI if CSS and config accent colors diverge.
 - **Live verification** during development: every feature exercised in a real browser (projections, filters, pinning, manifest export, keyboard paths, mobile layout).
 - **CI** (GitHub Actions): syntax-check every module → unit tests → catalog validation. No install step — the pipeline is as dependency-free as the app.
 - Three adversarial multi-agent review rounds (4 lenses each, findings verified by independent skeptic agents before being acted on) ran during development; 30 confirmed findings were fixed.
@@ -155,14 +155,21 @@ Modeled on farmlandatlas.com's interaction grammar: the map is the persistent st
 ## 10. Constraints and non-goals (v1)
 
 - No server-side search or personalization — the catalog ships whole (fine to ~5k entries; beyond that, pre-computed indexes or a search service would be warranted).
-- No live freshness — counts and metadata update when the catalog file is regenerated, not in real time.
+- No real-time freshness — counts and metadata update when the daily refresh regenerates the catalog file (§11), not on every page load.
 - Single language (English), single catalog edition.
 
-## 11. Roadmap
+## 11. Catalog lifecycle: how it stays current
 
-| Phase | Scope | Architectural impact |
+The catalog has two update paths — one automated, one editorial — both funneled through the same validate gate, so nothing reaches `main` (or the deployed site) unvalidated.
+
+**Daily automated refresh** (`scripts/refresh-catalog.js` + `refresh.yml`, 05:00 UTC and on demand):
+
+| Step | What happens | Architectural note |
 |---|---|---|
-| **2 — auto-refresh (complete)** | `scripts/refresh-catalog.js` + daily `refresh.yml`: liveness sweep over every URL, freshness bumps from source metadata APIs (World Bank, CKAN portals, GitHub, figshare, Kaggle behind optional secrets — an adapter registry, one entry per host family), per-entry `verified` stamps, `generated` stamp in the UI. Safe changes auto-commit to main behind the validate+test gate; dead links open a review PR | Scheduled CI writing `catalog.json` through the existing validate gate; runtime unchanged |
-| **2 — editorial growth (ongoing)** | New catalog entries via agent-assisted curation rounds (curate → adversarially verify → validate gate), run on demand rather than blind automation | The pipeline in §5; no runtime change |
-| **3 — use-case bundles (complete)** | Each "I want to…" preset carries 5 curated datasets; one click pins the kit into the Passport (bundle URLs CI-validated against the catalog) | `bundle` arrays on the PRESETS registry; `presetBundleIds` selector + `importPins` |
-| **3 — shareable passports (complete)** | The Passport's Share link encodes pins in the URL hash; opening it imports them | url-state `p=` param + `importPins`; no backend |
+| Liveness sweep | Every URL fetched and classified ok / bot-blocked / dead / transient; `ok` entries get a `verified` date stamp (the shield badge on cards) | 8 concurrent workers; bot walls (401/403/405/406/429) count as alive |
+| Freshness enrichment | Source metadata APIs report last-modified dates; `freshnessYear` bumps when the source is newer (living series also extend `coverageEnd`) | An adapter registry — World Bank, CKAN portals, GitHub, figshare, Kaggle (behind optional `KAGGLE_USERNAME`/`KAGGLE_KEY` secrets, silent skip without). New host family = one entry |
+| Ship or escalate | Safe metadata changes auto-commit to `main` behind the validate + test gate and redeploy; dead links open a review PR and turn the run red | Machine-verifiable changes need no human; replacing a dataset does |
+
+**Editorial growth** — new entries come from the agent-assisted curation rounds in §5 (curate → adversarially verify → validate), run on demand. This is deliberate: whether a dataset *belongs* in the atlas is a judgment call, so it is not automated.
+
+The runtime is untouched by all of this — it still just fetches one static JSON file; `generated` and per-entry `verified` stamps are how the automation surfaces in the UI.
