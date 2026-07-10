@@ -166,6 +166,10 @@ async function boot() {
 
   $('#about-link').onclick = () => showAboutPanel(generated);
 
+  // the intro hint has done its job after a while — fade it so it never
+  // lingers over the legend/zoom chrome
+  setTimeout(() => $('#hint').classList.add('hidden'), 15000);
+
   // bottom sheets on phones: swipe down on a panel header to dismiss
   const sheetDismiss = (headerEl, close) => {
     let startY = null;
