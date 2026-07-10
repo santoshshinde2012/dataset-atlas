@@ -90,6 +90,13 @@
   flex-shrink: 0;
   vertical-align: -2px;
 }
+/* the signature duotone under-layer: a soft fill beneath the strokes */
+.icon .duo {
+  fill: currentColor;
+  stroke: none;
+  opacity: 0.16;
+}
+.brand-mark .icon .duo { opacity: 0.38; }
 .chip .icon { width: 13px; height: 13px; color: var(--chip-color, currentColor); }
 .badge .icon { width: 11px; height: 11px; }
 .tt-domain .icon { width: 11px; height: 11px; }
@@ -277,11 +284,16 @@ button {
   overflow: hidden;
 }
 .proj-toggle button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 5px 12px;
   font-size: 12px;
   color: var(--muted);
   background: var(--chip-bg);
 }
+.proj-toggle .icon { width: 13px; height: 13px; }
+.proj-toggle [data-icon] { display: inline-flex; }
 .proj-toggle button.active { background: rgba(var(--accent-rgb), 0.15); color: var(--accent); font-weight: 600; }
 
 #theme-toggle,

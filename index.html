@@ -9,7 +9,7 @@
 <meta property="og:title" content="The Dataset Atlas" />
 <meta property="og:description" content="Find and download datasets by world region and domain — in 3 clicks or fewer." />
 <meta property="og:type" content="website" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230e7490'/%3E%3Cstop offset='1' stop-color='%231290b4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='6' fill='url(%23g)'/%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='4.5 7.5 9 5.7 15 7.5 19.5 5.7 19.5 16.5 15 18.3 9 16.5 4.5 18.3 4.5 7.5'/%3E%3Cline x1='9' y1='5.7' x2='9' y2='16.5'/%3E%3Cline x1='15' y1='7.5' x2='15' y2='18.3'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230e7490'/%3E%3Cstop offset='1' stop-color='%231290b4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='6' fill='url(%23g)'/%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='4.5 7.5 9 5.7 15 7.5 19.5 5.7 19.5 16.5 15 18.3 9 16.5 4.5 18.3 4.5 7.5' fill='rgba(255,255,255,0.14)'/%3E%3Ccircle cx='12' cy='12' r='4.4' opacity='0.6'/%3E%3C/g%3E%3Ccircle cx='12' cy='12' r='2.2' fill='%23ffffff'/%3E%3C/svg%3E" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -17,7 +17,7 @@
 <!-- ======= Top bar ======= -->
 <header id="topbar">
   <div class="brand">
-    <span class="brand-mark" data-icon="map"></span>
+    <span class="brand-mark" data-icon="atlas"></span>
     <div class="brand-text">
       <h1>The Dataset Atlas</h1>
       <p>Region → Domain → Get · data in ≤3 clicks</p>
@@ -26,8 +26,8 @@
 
   <div class="top-actions">
     <div class="proj-toggle" role="group" aria-label="Map projection">
-      <button id="proj-globe" class="active" title="Globe projection">Globe</button>
-      <button id="proj-flat" title="Flat projection">Flat</button>
+      <button id="proj-globe" class="active" title="Globe projection"><span data-icon="globe"></span> Globe</button>
+      <button id="proj-flat" title="Flat projection"><span data-icon="flat-map"></span> Flat</button>
     </div>
     <button id="theme-toggle" title="Switch theme" aria-label="Switch color theme"></button>
     <button id="passport-btn" title="Your Data Passport — pinned datasets">
