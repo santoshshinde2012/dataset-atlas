@@ -1,5 +1,5 @@
 /** Region tooltip: availability summary that follows the pointer. */
-import { REGION_META, DOMAIN_META } from '../config.js';
+import { REGION_META, DOMAIN_META, domainColor } from '../config.js';
 import { esc } from '../utils/text.js';
 import { domainCounts } from '../filters.js';
 import { icon } from '../icons.js';
@@ -7,11 +7,12 @@ import { icon } from '../icons.js';
 export function createTooltip(element, store, countryCodes = {}) {
   function show(event, regionKey, countryId = null) {
     const list = store.select.filtered().filter((d) => d.region === regionKey);
+    const theme = store.getState().theme;
     const chips = Object.entries(domainCounts(list))
       .sort((a, b) => b[1] - a[1])
       .map(([k, n]) => {
-        const m = DOMAIN_META[k];
-        return `<span class="tt-domain" style="color:${m.color};border-color:${m.color}55">${icon(m.icon)} ${n}</span>`;
+        const c = domainColor(k, theme);
+        return `<span class="tt-domain" style="color:${c};border-color:${c}55">${icon(DOMAIN_META[k].icon)} ${n}</span>`;
       }).join('');
 
     const country = countryId ? countryCodes[countryId] : null;

@@ -136,6 +136,7 @@ Modeled on farmlandatlas.com's interaction grammar: the map is the persistent st
 - `prefers-reduced-motion` disables auto-rotation and all animations.
 - Toast is an `aria-live` region; drawers carry dialog roles; the collapsed rail leaves the tab order via `visibility: hidden`.
 - Iconography is a single inline-SVG stroke set (`js/icons.js`) — consistent weight and sizing, tinted by each context's accent, no emoji.
+- Two themes (light default, dark toggle, persisted): a `THEMES` registry in config mirrored by CSS tokens. Both categorical domain palettes and both sequential choropleth ramps were validated computationally (CVD adjacent-pair separation, lightness bands, surface contrast, ramp monotonicity); a CI test fails on config↔CSS drift.
 - Boot failures (file://, missing vendor, data fetch) surface a static fallback via a classic-script watchdog that module-graph errors can't bypass.
 
 ## 8. Testing and CI

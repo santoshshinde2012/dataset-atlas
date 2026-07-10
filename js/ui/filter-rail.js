@@ -51,6 +51,18 @@ export function initFilterRail({ store, generated = null }) {
     const covered = Object.keys(REGION_META).filter((k) => counts[k] > 0).length;
     $('#tally').textContent =
       `${store.select.filtered().length} datasets · ${covered}/${Object.keys(REGION_META).length} regions covered`;
+
+    // active-filter count on the collapsed-rail button, so narrowing is
+    // never invisible when the panel is closed
+    const active =
+      (state.domain !== 'all' ? 1 : 0) +
+      (state.sourceTypes.size < Object.keys(SOURCE_TYPE_META).length ? 1 : 0) +
+      (state.formats.size < store.select.allFormats().length ? 1 : 0) +
+      (state.minOpenness > 0 ? 1 : 0) +
+      (state.search ? 1 : 0);
+    const badge = $('#filter-badge');
+    badge.textContent = active;
+    badge.hidden = active === 0;
   }
 
   store.subscribe(render);

@@ -7,16 +7,17 @@
  * to be touched (open/closed principle).
  */
 
-/** `icon` values are keys into the js/icons.js registry (SVG, not emoji). */
+/** `icon` values are keys into the js/icons.js registry (SVG, not emoji).
+ * Domain colors live in THEMES (they differ per surface); use domainColor(). */
 export const DOMAIN_META = {
-  climate:      { name: 'Climate',      icon: 'climate',      color: '#38bdf8' },
-  health:       { name: 'Health',       icon: 'health',       color: '#fb7185' },
-  economy:      { name: 'Economy',      icon: 'economy',      color: '#fbbf24' },
-  agriculture:  { name: 'Agriculture',  icon: 'agriculture',  color: '#4ade80' },
-  education:    { name: 'Education',    icon: 'education',    color: '#a78bfa' },
-  transport:    { name: 'Transport',    icon: 'transport',    color: '#fb923c' },
-  energy:       { name: 'Energy',       icon: 'energy',       color: '#fde047' },
-  demographics: { name: 'Demographics', icon: 'demographics', color: '#e879f9' },
+  climate:      { name: 'Climate',      icon: 'climate' },
+  health:       { name: 'Health',       icon: 'health' },
+  economy:      { name: 'Economy',      icon: 'economy' },
+  agriculture:  { name: 'Agriculture',  icon: 'agriculture' },
+  education:    { name: 'Education',    icon: 'education' },
+  transport:    { name: 'Transport',    icon: 'transport' },
+  energy:       { name: 'Energy',       icon: 'energy' },
+  demographics: { name: 'Demographics', icon: 'demographics' },
 };
 
 export const REGION_META = {
@@ -56,16 +57,49 @@ export const LICENSE_LABELS = {
 /** Display order for normalized format facets. */
 export const FORMAT_ORDER = ['CSV', 'API', 'JSON', 'XLSX', 'Raster', 'Geo', 'Other'];
 
-export const ACCENT_COLOR = '#38e1ff';
+/**
+ * Theme registry. Both palettes are validated with the data-viz six-checks
+ * validator against the actual panel surfaces (light: worst adjacent CVD
+ * ΔE 21.2; dark: 9.7 with icon+label secondary encoding everywhere).
+ * Sequential ramps are single-hue with monotonic lightness — the step
+ * nearest the surface means "near zero".
+ */
+export const THEMES = {
+  light: {
+    accent: '#0e7490',
+    accentRgb: '14, 116, 144',
+    accentDeep: '#164e63',
+    availRamp: ['#e3f3f7', '#a3d6e2', '#4da2bb', '#0e6076'],
+    noRegionFill: '#e5eaf0',
+    metaThemeColor: '#f3f7fa',
+    domains: {
+      climate: '#2a78d6', health: '#e34948', economy: '#1baf7a', agriculture: '#008300',
+      education: '#4a3aa7', transport: '#eb6834', energy: '#eda100', demographics: '#e87ba4',
+    },
+  },
+  dark: {
+    accent: '#38e1ff',
+    accentRgb: '56, 225, 255',
+    accentDeep: '#17557a',
+    availRamp: ['#111f38', '#164860', '#1e7d9c', '#35c3e0'],
+    noRegionFill: '#0e1626',
+    metaThemeColor: '#070b14',
+    domains: {
+      climate: '#3987e5', health: '#e66767', economy: '#199e70', agriculture: '#008300',
+      education: '#9085e9', transport: '#d95926', energy: '#c98500', demographics: '#d55181',
+    },
+  },
+};
 
-/** Choropleth availability ramp — also drives the on-map legend gradient. */
-export const AVAIL_RAMP = ['#111f38', '#164860', '#1e7d9c', '#35c3e0'];
+export const DEFAULT_THEME = 'light';
 
-/** Fill for countries outside every atlas region (e.g. Antarctica). */
-export const NO_REGION_FILL = '#0e1626';
+/** Resolve a domain's color for the active theme. */
+export const domainColor = (key, theme = DEFAULT_THEME) =>
+  (THEMES[theme] || THEMES[DEFAULT_THEME]).domains[key];
 
-/** Darker accent companion used inside DNA-strip gradients. */
-export const ACCENT_DEEP = '#17557a';
+/** Resolve the accent for the active theme. */
+export const accentColor = (theme = DEFAULT_THEME) =>
+  (THEMES[theme] || THEMES[DEFAULT_THEME]).accent;
 
 /** Reference year for freshness scoring (kept explicit so scoring is deterministic). */
 export const CURRENT_YEAR = 2026;

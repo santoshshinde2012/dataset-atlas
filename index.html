@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,6 +31,7 @@
       <button id="proj-globe" class="active" title="Globe projection">Globe</button>
       <button id="proj-flat" title="Flat projection">Flat</button>
     </div>
+    <button id="theme-toggle" title="Switch theme" aria-label="Switch color theme"></button>
     <button id="passport-btn" title="Your Data Passport — pinned datasets">
       <span data-icon="passport"></span> Passport <span id="passport-count" class="count-badge">0</span>
     </button>
@@ -43,7 +44,10 @@
   <div class="rail-inner">
 
     <section class="rail-section">
-      <input id="search-input" type="search" placeholder="Search datasets…  ( / )" autocomplete="off" aria-label="Search datasets" />
+      <div class="search-wrap">
+        <span data-icon="search"></span>
+        <input id="search-input" type="search" placeholder="Search datasets…  ( / )" autocomplete="off" aria-label="Search datasets" />
+      </div>
     </section>
 
     <section class="rail-section">
@@ -77,7 +81,7 @@
 
   </div>
 </aside>
-<button id="rail-expand" title="Open filters" hidden><span data-icon="chevron-right"></span> Filters</button>
+<button id="rail-expand" title="Open filters" hidden><span data-icon="chevron-right"></span> Filters <span id="filter-badge" class="count-badge" hidden></span></button>
 
 <!-- ======= Map stage ======= -->
 <main id="stage">

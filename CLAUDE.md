@@ -22,6 +22,7 @@ Map-first dataset discovery: Region → Domain → Get in ≤3 clicks. Dependenc
 ## Conventions
 
 - Every string interpolated into innerHTML goes through `esc()`; URLs into `href` only exist post-sanitizer.
+- Theming is token-driven: `THEMES` in `js/config.js` (light default, dark override) mirrored by CSS custom properties (`:root` / `[data-theme="dark"]`); never hardcode a theme color in a component — tests fail on config/CSS drift. New palettes must pass the data-viz six-checks validator on both surfaces.
 - UI components build static DOM once and update counts/classes in place so keyboard focus and scroll survive re-renders.
 - `data/catalog.json` entries were curated and link-verified by multi-agent workflows; run `npm run validate` after any edit and deep-link URLs directly to dataset pages (never portal homepages).
 - Optional `countries` tags (≤4 ISO alpha-2) mark country-specific datasets and drive the map's country-focus behavior; tag only clearly identifiable covered countries, leave region-wide datasets untagged.

@@ -1,5 +1,5 @@
 /** Right card rail: the selected region's dataset cards. */
-import { REGION_META, DOMAIN_META, SOURCE_TYPE_META, GLOBAL_REGION, ACCENT_COLOR, ACCENT_DEEP } from '../config.js';
+import { REGION_META, DOMAIN_META, SOURCE_TYPE_META, GLOBAL_REGION, THEMES, domainColor } from '../config.js';
 import { $, el } from '../utils/dom.js';
 import { esc } from '../utils/text.js';
 import { dnaMetrics } from '../dna.js';
@@ -41,6 +41,7 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
       region,
       state.domain,
       state.focusCountry,
+      state.theme,
       [...state.sourceTypes].sort(),
       [...state.formats].sort(),
       state.minOpenness,
@@ -82,10 +83,11 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
       .filter((d) => d.region === region && store.select.matches(d, ['domain']));
     const bd = $('#rail-domain-breakdown');
     bd.innerHTML = '';
+    const theme = store.getState().theme;
     for (const [key, n] of Object.entries(domainCounts(inRegion)).sort((a, b) => b[1] - a[1])) {
       const m = DOMAIN_META[key];
       const chip = el('button', 'chip' + (activeDomain === key ? ' active' : ''));
-      chip.style.setProperty('--chip-color', m.color);
+      chip.style.setProperty('--chip-color', domainColor(key, theme));
       chip.innerHTML = `${icon(m.icon)} ${esc(m.name)} <span class="chip-count">${n}</span>`;
       chip.onclick = () => store.actions.setDomain(activeDomain === key ? 'all' : key);
       bd.appendChild(chip);
@@ -104,7 +106,9 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
   function datasetCard(d) {
     const card = el('article', 'card');
     card.dataset.id = d.id;
+    const theme = store.getState().theme;
     const dm = DOMAIN_META[d.domain] || {};
+    const dmColor = domainColor(d.domain, theme);
     const sm = SOURCE_TYPE_META[d.sourceType] || {};
     const pinned = store.select.isPinned(d.id);
 
@@ -130,7 +134,7 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
     srcBadge.style.setProperty('--badge-color', sm.color || 'var(--muted)');
     badges.appendChild(srcBadge);
     const domBadge = el('span', 'badge', `${icon(dm.icon || 'file')} ${esc(dm.name || d.domain)}`);
-    domBadge.style.setProperty('--badge-color', dm.color || 'var(--muted)');
+    domBadge.style.setProperty('--badge-color', dmColor || 'var(--muted)');
     badges.appendChild(domBadge);
     for (const f of (d.formats || []).slice(0, 3)) badges.appendChild(el('span', 'badge plain', esc(f)));
     badges.appendChild(el('span', 'badge plain', esc(d.license)));
@@ -145,14 +149,23 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
     get.target = '_blank';
     get.rel = 'noopener';
     actions.appendChild(get);
-    const cli = el('button', 'cli-btn',
-      d.kaggleRef ? `${icon('terminal')} Copy CLI` : `${icon('copy')} Copy link`);
+    const cliLabel = d.kaggleRef ? `${icon('terminal')} Copy CLI` : `${icon('copy')} Copy link`;
+    const cli = el('button', 'cli-btn', cliLabel);
     cli.title = d.kaggleRef
       ? `Copy: kaggle datasets download -d ${d.kaggleRef}`
       : 'Copy dataset URL';
-    cli.onclick = () => copyText(
-      d.kaggleRef ? `kaggle datasets download -d ${d.kaggleRef}` : d.url,
-      d.kaggleRef ? 'Kaggle CLI command copied' : 'Link copied');
+    cli.onclick = () => {
+      copyText(
+        d.kaggleRef ? `kaggle datasets download -d ${d.kaggleRef}` : d.url,
+        d.kaggleRef ? 'Kaggle CLI command copied' : 'Link copied');
+      // transient in-place confirmation on the button itself
+      cli.classList.add('copied');
+      cli.innerHTML = `${icon('check')} Copied`;
+      setTimeout(() => {
+        cli.classList.remove('copied');
+        cli.innerHTML = cliLabel;
+      }, 1600);
+    };
     actions.appendChild(cli);
     card.appendChild(actions);
 
@@ -167,7 +180,8 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
       bar.onclick = () => toast(tip); // hover-less devices get the detail on tap
       const fill = el('div', 'dna-fill');
       fill.style.height = Math.round(value * 100) + '%';
-      fill.style.background = `color-mix(in srgb, ${ACCENT_COLOR} ${Math.round(30 + value * 70)}%, ${ACCENT_DEEP})`;
+      const t = THEMES[store.getState().theme];
+      fill.style.background = `color-mix(in srgb, ${t.accent} ${Math.round(30 + value * 70)}%, ${t.accentDeep})`;
       bar.appendChild(fill);
       bar.appendChild(el('span', '', label));
       strip.appendChild(bar);

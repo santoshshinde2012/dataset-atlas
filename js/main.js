@@ -5,6 +5,7 @@
  */
 import { loadAtlasData } from './catalog.js';
 import { createStore } from './store.js';
+import { THEMES, DEFAULT_THEME } from './config.js';
 import { localPinStorage } from './services/storage.js';
 import { createToast } from './services/toast.js';
 import { createClipboard } from './services/clipboard.js';
@@ -32,7 +33,23 @@ async function boot() {
   );
   window.__atlasBooted = true; // disarms the boot-fallback watchdog in index.html
 
-  const store = createStore({ catalog, pinStorage: localPinStorage });
+  let storedTheme = null;
+  try { storedTheme = localStorage.getItem('atlas-theme'); } catch { /* session-only */ }
+  const store = createStore({
+    catalog,
+    pinStorage: localPinStorage,
+    initialTheme: THEMES[storedTheme] ? storedTheme : DEFAULT_THEME,
+  });
+
+  // theme is applied at the document root; every themed CSS token follows
+  const applyTheme = () => {
+    const theme = store.getState().theme;
+    document.documentElement.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEMES[theme].metaThemeColor);
+    try { localStorage.setItem('atlas-theme', theme); } catch { /* session-only */ }
+  };
+  store.subscribe(applyTheme);
+  applyTheme();
   const toast = createToast($('#toast'));
   const copyText = createClipboard(toast);
   const tooltip = createTooltip($('#tooltip'), store, countryCodes);

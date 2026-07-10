@@ -6,7 +6,7 @@
  * plain {load, save} pins-storage port, so the store stays pure enough to
  * unit-test with a fake (dependency inversion).
  */
-import { SOURCE_TYPE_META, PRESETS, FORMAT_ORDER } from './config.js';
+import { SOURCE_TYPE_META, PRESETS, FORMAT_ORDER, THEMES, DEFAULT_THEME } from './config.js';
 import { filterCatalog, regionCounts, domainCounts, matchesFacets } from './filters.js';
 import { normFormat } from './utils/text.js';
 
@@ -14,8 +14,9 @@ import { normFormat } from './utils/text.js';
  * @param {object} deps
  * @param {object[]} deps.catalog sanitized catalog entries (with ids)
  * @param {{load: () => string[], save: (ids: string[]) => void}} deps.pinStorage
+ * @param {string} [deps.initialTheme] 'light' | 'dark'
  */
-export function createStore({ catalog, pinStorage }) {
+export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME }) {
   const allFormats = [...new Set(catalog.flatMap((d) => (d.formats || []).map(normFormat)))]
     .sort((a, b) => FORMAT_ORDER.indexOf(a) - FORMAT_ORDER.indexOf(b));
 
@@ -34,6 +35,7 @@ export function createStore({ catalog, pinStorage }) {
     preset: null,
     projection: 'globe',
     passportOpen: false,
+    theme: THEMES[initialTheme] ? initialTheme : DEFAULT_THEME,
     pins: new Set(storedPins),
   };
 
@@ -95,6 +97,12 @@ export function createStore({ catalog, pinStorage }) {
       notify();
     },
     setProjection(mode) { state.projection = mode; notify(); },
+    setTheme(theme) {
+      if (THEMES[theme]) { state.theme = theme; notify(); }
+    },
+    toggleTheme() {
+      actions.setTheme(state.theme === 'light' ? 'dark' : 'light');
+    },
     openPassport() { state.passportOpen = true; state.region = null; notify(); },
     closePassport() { state.passportOpen = false; notify(); },
     togglePassport() {

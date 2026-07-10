@@ -4,10 +4,8 @@
  * narrow interface and a projection strategy — never on other UI components.
  */
 import { d3, topojson } from '../lib.js';
-import { REGION_META, ACCENT_COLOR, DOMAIN_META, AVAIL_RAMP, NO_REGION_FILL } from '../config.js';
+import { REGION_META, THEMES, domainColor, accentColor } from '../config.js';
 import { PROJECTIONS } from './projections.js';
-
-const availColor = (t) => d3.interpolateRgbBasis(AVAIL_RAMP)(t * 0.92);
 
 export class MapView {
   /**
@@ -33,6 +31,7 @@ export class MapView {
     this.autoTimer = null;
     this.lastProjectionKey = store.getState().projection;
     this.lastRegion = store.getState().region;
+    this.lastTheme = store.getState().theme;
 
     this.#buildScene();
     this.#paintLegend();
@@ -46,6 +45,14 @@ export class MapView {
 
   get strategy() {
     return PROJECTIONS[this.store.getState().projection] || PROJECTIONS.globe;
+  }
+
+  get themeTokens() {
+    return THEMES[this.store.getState().theme] || THEMES.light;
+  }
+
+  #availColor(t) {
+    return d3.interpolateRgbBasis(this.themeTokens.availRamp)(t * 0.92);
   }
 
   /* ---------- scene construction ---------- */
@@ -125,7 +132,7 @@ export class MapView {
   /** The legend gradient is derived from the same ramp as the choropleth. */
   #paintLegend() {
     const ramp = document.querySelector('.legend-ramp');
-    if (ramp) ramp.style.background = `linear-gradient(90deg, ${AVAIL_RAMP.join(', ')})`;
+    if (ramp) ramp.style.background = `linear-gradient(90deg, ${this.themeTokens.availRamp.join(', ')})`;
   }
 
   #onCountryLeave() {
@@ -182,8 +189,8 @@ export class MapView {
     const max = Math.max(1, ...Object.keys(REGION_META).map((k) => counts[k]));
     this.gCountries.selectAll('path').attr('fill', (d) => {
       const region = this.countryRegion[d.id];
-      if (!region) return NO_REGION_FILL;
-      return availColor(Math.sqrt(counts[region] / max));
+      if (!region) return this.themeTokens.noRegionFill;
+      return this.#availColor(Math.sqrt(counts[region] / max));
     });
   }
 
@@ -192,7 +199,9 @@ export class MapView {
     const max = Math.max(1, ...Object.keys(REGION_META).map((k) => counts[k]));
     const rScale = d3.scaleSqrt().domain([0, max]).range([5, 24]);
     const state = this.store.getState();
-    const domainColor = state.domain === 'all' ? ACCENT_COLOR : DOMAIN_META[state.domain].color;
+    const nodeColor = state.domain === 'all'
+      ? accentColor(state.theme)
+      : domainColor(state.domain, state.theme);
     const s = this.strategy;
 
     const self = this;
@@ -207,8 +216,8 @@ export class MapView {
       g.attr('transform', `translate(${x},${y})`)
         .classed('selected', state.region === key)
         .style('opacity', count === 0 ? 0.35 : 1);
-      g.select('.halo').attr('r', r + 9).attr('fill', domainColor).attr('opacity', 0.14);
-      g.select('.core').attr('r', r).attr('fill', domainColor).attr('fill-opacity', 0.45);
+      g.select('.halo').attr('r', r + 9).attr('fill', nodeColor).attr('opacity', 0.14);
+      g.select('.core').attr('r', r).attr('fill', nodeColor).attr('fill-opacity', 0.45);
       g.select('.node-name').attr('y', -r - 8).text(meta.name);
       g.select('.node-count').attr('y', 4).text(count);
     });
@@ -298,7 +307,11 @@ export class MapView {
   /* ---------- store reaction ---------- */
 
   #onStateChange() {
-    const { projection, region } = this.store.getState();
+    const { projection, region, theme } = this.store.getState();
+    if (theme !== this.lastTheme) {
+      this.lastTheme = theme;
+      this.#paintLegend();
+    }
     if (projection !== this.lastProjectionKey) {
       this.lastProjectionKey = projection;
       this.offsetY = 0;

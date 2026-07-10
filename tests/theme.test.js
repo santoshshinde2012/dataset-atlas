@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { ACCENT_COLOR } from '../js/config.js';
+import { THEMES, DEFAULT_THEME, DOMAIN_META } from '../js/config.js';
 
-// The accent color exists in two mediums — config.js (JS-rendered map/chips)
-// and styles.css (theme variables + rgba literals). This test makes drift
-// between them a CI failure instead of a subtle two-tone UI.
+// Theme tokens exist in two mediums — js/config.js (JS-rendered map/chips/DNA)
+// and styles.css (CSS custom properties). These tests make drift between them
+// a CI failure instead of a subtle two-tone UI.
 
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'styles.css'), 'utf8');
 
@@ -17,26 +17,61 @@ const hexToRgb = (hex) => [
   parseInt(hex.slice(5, 7), 16),
 ];
 
-test('styles.css --accent matches config ACCENT_COLOR', () => {
-  const m = css.match(/--accent:\s*(#[0-9a-fA-F]{6})/);
-  assert.ok(m, 'styles.css must define --accent as a 6-digit hex');
-  assert.equal(m[1].toLowerCase(), ACCENT_COLOR.toLowerCase());
+function cssBlock(selector) {
+  const start = css.indexOf(selector);
+  assert.ok(start >= 0, `styles.css must contain a ${selector} block`);
+  return css.slice(start, css.indexOf('}', css.indexOf('{', start)));
+}
+
+test('light theme: css --accent/--accent-rgb match THEMES.light', () => {
+  const block = cssBlock(':root {');
+  assert.ok(block.includes(`--accent: ${THEMES.light.accent}`), '--accent drifted from config');
+  assert.deepEqual(
+    block.match(/--accent-rgb:\s*([\d,\s]+);/)[1].split(',').map((n) => +n.trim()),
+    hexToRgb(THEMES.light.accent),
+    '--accent-rgb drifted from the light accent hex'
+  );
 });
 
-test('accent-tinted rgba literals in styles.css match config ACCENT_COLOR', () => {
-  const [r, g, b] = hexToRgb(ACCENT_COLOR);
-  // any rgba literal that is "accent-like" (high blue, mid-high green, low-mid red)
-  // must be exactly the accent — catches a config change that misses the CSS
-  const rgbaRe = /rgba\((\d+),\s*(\d+),\s*(\d+)/g;
-  let accentLikeCount = 0;
-  for (const m of css.matchAll(rgbaRe)) {
-    const [cr, cg, cb] = [+m[1], +m[2], +m[3]];
-    const isAccentLike = cb > 200 && cg > 150 && cr < 120;
-    if (isAccentLike) {
-      accentLikeCount++;
-      assert.deepEqual([cr, cg, cb], [r, g, b],
-        `accent-like rgba(${cr}, ${cg}, ${cb}) diverges from ACCENT_COLOR ${ACCENT_COLOR}`);
+test('dark theme: css --accent/--accent-rgb match THEMES.dark', () => {
+  const block = cssBlock(':root[data-theme="dark"]');
+  assert.ok(block.includes(`--accent: ${THEMES.dark.accent}`), 'dark --accent drifted from config');
+  assert.deepEqual(
+    block.match(/--accent-rgb:\s*([\d,\s]+);/)[1].split(',').map((n) => +n.trim()),
+    hexToRgb(THEMES.dark.accent),
+    'dark --accent-rgb drifted from the dark accent hex'
+  );
+});
+
+test('no raw accent rgba literals remain in styles.css (all via var(--accent-rgb))', () => {
+  for (const theme of Object.values(THEMES)) {
+    const [r, g, b] = hexToRgb(theme.accent);
+    assert.ok(!css.includes(`rgba(${r}, ${g}, ${b}`),
+      `hardcoded accent rgba for ${theme.accent} found — use rgba(var(--accent-rgb), …)`);
+  }
+});
+
+test('theme registry is complete for every domain and both surfaces', () => {
+  assert.ok(THEMES[DEFAULT_THEME]);
+  for (const [name, t] of Object.entries(THEMES)) {
+    for (const key of ['accent', 'accentRgb', 'accentDeep', 'noRegionFill', 'metaThemeColor']) {
+      assert.ok(t[key], `${name}.${key} missing`);
+    }
+    assert.equal(t.availRamp.length, 4, `${name}.availRamp must have 4 stops`);
+    for (const domain of Object.keys(DOMAIN_META)) {
+      assert.match(t.domains[domain] || '', /^#[0-9a-f]{6}$/i, `${name} missing color for ${domain}`);
     }
   }
-  assert.ok(accentLikeCount > 0, 'expected accent-tinted rgba literals in styles.css');
+});
+
+test('sequential ramps are monotonic in luminance (near-zero recedes toward surface)', () => {
+  const lum = (hex) => {
+    const [r, g, b] = hexToRgb(hex).map((v) => v / 255)
+      .map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const lightLs = THEMES.light.availRamp.map(lum);
+  const darkLs = THEMES.dark.availRamp.map(lum);
+  assert.ok(lightLs.every((l, i) => i === 0 || l < lightLs[i - 1]), 'light ramp must darken with magnitude');
+  assert.ok(darkLs.every((l, i) => i === 0 || l > darkLs[i - 1]), 'dark ramp must brighten with magnitude');
 });
