@@ -17,7 +17,8 @@
    "coverageStart": 2009,
    "coverageEnd": 2013,
    "granularity": "point",
-   "approxSizeMB": 2000
+   "approxSizeMB": 2000,
+   "verified": "2026-07-10"
   },
   {
    "title": "Ethiopia Socioeconomic Panel Survey ESS5 2021/22 (LSMS-ISA)",
@@ -40,7 +41,8 @@
    "approxSizeMB": 200,
    "countries": [
     "ET"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Crop Production in India (Kaggle)",
@@ -63,7 +65,8 @@
    "approxSizeMB": 15,
    "countries": [
     "IN"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Crop Recommendation Dataset (Kaggle)",
@@ -86,7 +89,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "IN"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "India — District-wise Crop Production",
@@ -132,7 +136,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "SG"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Crop production in EU standard humidity (APRO_CPSH1)",
@@ -154,7 +159,8 @@
    "coverageStart": 2000,
    "coverageEnd": 2026,
    "granularity": "country",
-   "approxSizeMB": 5
+   "approxSizeMB": 5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Eurostat: Crop Production in EU Standard Humidity (apro_cpsh1)",
@@ -175,7 +181,8 @@
    "coverageStart": 2000,
    "coverageEnd": 2026,
    "granularity": "country",
-   "approxSizeMB": 20
+   "approxSizeMB": 20,
+   "verified": "2026-07-10"
   },
   {
    "title": "Agricultural Land (% of Land Area) — World Bank",
@@ -197,7 +204,8 @@
    "coverageStart": 1961,
    "coverageEnd": 2026,
    "granularity": "country",
-   "approxSizeMB": 1
+   "approxSizeMB": 1,
+   "verified": "2026-07-10"
   },
   {
    "title": "Crop Yields (Our World in Data)",
@@ -216,7 +224,8 @@
    "coverageStart": 1961,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 5
+   "approxSizeMB": 5,
+   "verified": "2026-07-10"
   },
   {
    "title": "FAOSTAT: Crops and Livestock Products (QCL)",
@@ -236,7 +245,8 @@
    "coverageStart": 1961,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 40
+   "approxSizeMB": 40,
+   "verified": "2026-07-10"
   },
   {
    "title": "Global Food & Agriculture Statistics (UN on Kaggle)",
@@ -256,7 +266,8 @@
    "coverageStart": 1961,
    "coverageEnd": 2013,
    "granularity": "country",
-   "approxSizeMB": 1500
+   "approxSizeMB": 1500,
+   "verified": "2026-07-10"
   },
   {
    "title": "Brazil Municipal Agricultural Production (PAM) — SIDRA Table 5457",
@@ -280,7 +291,8 @@
    "approxSizeMB": 300,
    "countries": [
     "BR"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Colombia — Evaluaciones Agropecuarias Municipales (EVA) 2019–2024, Base Agrícola",
@@ -305,7 +317,8 @@
    "approxSizeMB": 20,
    "countries": [
     "CO"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Bahrain agriculture production indicators",
@@ -329,7 +342,8 @@
    "approxSizeMB": 0.01,
    "countries": [
     "BH"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Qatar crop production, area and average yield",
@@ -353,7 +367,8 @@
    "approxSizeMB": 0.05,
    "countries": [
     "QA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "USDA Cropland Data Layer (CropScape)",
@@ -375,7 +390,8 @@
    "approxSizeMB": 2000,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "USDA NASS Quick Stats Agricultural Database",
@@ -398,7 +414,8 @@
    "approxSizeMB": 4000,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Agricultural Commodities, Australia (ABS)",
@@ -420,7 +437,8 @@
    "approxSizeMB": 20,
    "countries": [
     "AU"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Agricultural Production Statistics: Year to June 2025 (New Zealand)",
@@ -442,7 +460,8 @@
    "approxSizeMB": 0.1,
    "countries": [
     "NZ"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "CHIRPS Monthly Rainfall over Africa (Digital Earth Africa)",
@@ -461,7 +480,8 @@
    "coverageStart": 1981,
    "coverageEnd": 2026,
    "granularity": "grid",
-   "approxSizeMB": 1200
+   "approxSizeMB": 1200,
+   "verified": "2026-07-10"
   },
   {
    "title": "Ethiopia: Rainfall Indicators at Subnational Level",
@@ -506,7 +526,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "SG"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Sub-Divisional Monthly Rainfall of India, 1901-2017",
@@ -550,7 +571,8 @@
    "coverageStart": 1950,
    "coverageEnd": 2026,
    "granularity": "grid",
-   "approxSizeMB": 5000
+   "approxSizeMB": 5000,
+   "verified": "2026-07-10"
   },
   {
    "title": "ERA5 Reanalysis (Copernicus CDS)",
@@ -571,7 +593,8 @@
    "coverageStart": 1940,
    "coverageEnd": 2026,
    "granularity": "grid",
-   "approxSizeMB": 100000
+   "approxSizeMB": 100000,
+   "verified": "2026-07-10"
   },
   {
    "title": "Eurostat: Greenhouse Gas Emissions by Source Sector (env_air_gge)",
@@ -592,7 +615,8 @@
    "coverageStart": 1990,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 5
+   "approxSizeMB": 5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Climate Change: Earth Surface Temperature Data",
@@ -612,7 +636,8 @@
    "coverageStart": 1750,
    "coverageEnd": 2013,
    "granularity": "city",
-   "approxSizeMB": 88
+   "approxSizeMB": 88,
+   "verified": "2026-07-10"
   },
   {
    "title": "ERA5 Monthly Averaged Reanalysis (Single Levels)",
@@ -633,7 +658,8 @@
    "coverageStart": 1940,
    "coverageEnd": 2026,
    "granularity": "grid",
-   "approxSizeMB": 2000
+   "approxSizeMB": 2000,
+   "verified": "2026-07-10"
   },
   {
    "title": "NASA NEX-GDDP-CMIP6 Downscaled Climate Projections",
@@ -653,7 +679,8 @@
    "coverageStart": 1950,
    "coverageEnd": 2100,
    "granularity": "grid",
-   "approxSizeMB": 30000000
+   "approxSizeMB": 30000000,
+   "verified": "2026-07-10"
   },
   {
    "title": "Our World in Data: CO2 and Greenhouse Gas Emissions",
@@ -674,7 +701,8 @@
    "coverageStart": 1750,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 20
+   "approxSizeMB": 20,
+   "verified": "2026-07-10"
   },
   {
    "title": "Significant Earthquakes, 1965–2016",
@@ -694,7 +722,8 @@
    "coverageStart": 1965,
    "coverageEnd": 2016,
    "granularity": "point",
-   "approxSizeMB": 3
+   "approxSizeMB": 3,
+   "verified": "2026-07-10"
   },
   {
    "title": "Forest Fires in Brazil",
@@ -717,7 +746,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "BR"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "PRODES Deforestation Monitoring (TerraBrasilis)",
@@ -739,7 +769,8 @@
    "approxSizeMB": 2000,
    "countries": [
     "BR"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Annual Relative Humidity and Rainfall – Qatar",
@@ -763,7 +794,8 @@
    "approxSizeMB": 0.01,
    "countries": [
     "QA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Saudi Arabia Hourly Climate Integrated Surface Data",
@@ -788,7 +820,8 @@
    "approxSizeMB": 200,
    "countries": [
     "SA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "1.88 Million US Wildfires",
@@ -811,7 +844,8 @@
    "approxSizeMB": 170,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "NOAA Storm Events Database",
@@ -833,7 +867,8 @@
    "approxSizeMB": 700,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "ACORN-SAT: Australian Climate Observations Reference Network",
@@ -877,7 +912,8 @@
    "approxSizeMB": 0.05,
    "countries": [
     "NZ"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Nigeria - Subnational Population Statistics (HDX)",
@@ -919,7 +955,8 @@
    "coverageStart": 2000,
    "coverageEnd": 2020,
    "granularity": "grid",
-   "approxSizeMB": 1000
+   "approxSizeMB": 1000,
+   "verified": "2026-07-10"
   },
   {
    "title": "India: State/UT-wise Area, Districts and Villages (Census 2001 & 2011)",
@@ -965,7 +1002,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "SG"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Eurostat: Population on 1 January by age and sex (demo_pjan)",
@@ -986,7 +1024,8 @@
    "coverageStart": 1960,
    "coverageEnd": 2025,
    "granularity": "country",
-   "approxSizeMB": 15
+   "approxSizeMB": 15,
+   "verified": "2026-07-10"
   },
   {
    "title": "Population on 1 January by age and sex (DEMO_PJAN)",
@@ -1008,7 +1047,8 @@
    "coverageStart": 1960,
    "coverageEnd": 2025,
    "granularity": "country",
-   "approxSizeMB": 6
+   "approxSizeMB": 6,
+   "verified": "2026-07-10"
   },
   {
    "title": "Our World in Data: Population & Demography Explorer",
@@ -1027,7 +1067,8 @@
    "coverageStart": 1950,
    "coverageEnd": 2100,
    "granularity": "country",
-   "approxSizeMB": 10
+   "approxSizeMB": 10,
+   "verified": "2026-07-10"
   },
   {
    "title": "UN World Population Prospects 2024",
@@ -1047,7 +1088,8 @@
    "coverageStart": 1950,
    "coverageEnd": 2100,
    "granularity": "country",
-   "approxSizeMB": 150
+   "approxSizeMB": 150,
+   "verified": "2026-07-10"
   },
   {
    "title": "World Bank: Population, total (SP.POP.TOTL)",
@@ -1069,7 +1111,8 @@
    "coverageStart": 1960,
    "coverageEnd": 2026,
    "granularity": "country",
-   "approxSizeMB": 0.5
+   "approxSizeMB": 0.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "World Population Dataset (Kaggle)",
@@ -1089,7 +1132,8 @@
    "coverageStart": 1970,
    "coverageEnd": 2022,
    "granularity": "country",
-   "approxSizeMB": 0.5
+   "approxSizeMB": 0.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Brazil - Subnational Population Statistics (HDX)",
@@ -1132,7 +1176,8 @@
    "coverageStart": 1990,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 60
+   "approxSizeMB": 60,
+   "verified": "2026-07-10"
   },
   {
    "title": "Mexico - Subnational Population Statistics (HDX)",
@@ -1155,7 +1200,8 @@
    "approxSizeMB": 2,
    "countries": [
     "MX"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Qatar Population by Municipality and Age Groups",
@@ -1179,7 +1225,8 @@
    "approxSizeMB": 0.15,
    "countries": [
     "QA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Saudi Census 2022: Riyadh Region Population by Age, Citizenship, Gender and Governorate",
@@ -1203,7 +1250,8 @@
    "approxSizeMB": 0.2,
    "countries": [
     "SA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "US Census Demographic Data (Kaggle)",
@@ -1226,7 +1274,8 @@
    "approxSizeMB": 30,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "US County Population Estimates, Vintage 2025",
@@ -1249,7 +1298,8 @@
    "approxSizeMB": 3,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "ABS Regional Population, Australia",
@@ -1272,7 +1322,8 @@
    "approxSizeMB": 2.5,
    "countries": [
     "AU"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Pacific Population Estimates and Projections (DF_POP_PROJ)",
@@ -1293,7 +1344,8 @@
    "coverageStart": 1950,
    "coverageEnd": 2050,
    "granularity": "country",
-   "approxSizeMB": 6
+   "approxSizeMB": 6,
+   "verified": "2026-07-10"
   },
   {
    "title": "Africa Development Indicators",
@@ -1313,7 +1365,8 @@
    "coverageStart": 1960,
    "coverageEnd": 2012,
    "granularity": "country",
-   "approxSizeMB": 50
+   "approxSizeMB": 50,
+   "verified": "2026-07-10"
   },
   {
    "title": "Africa Economic, Banking and Systemic Crisis Data",
@@ -1333,7 +1386,8 @@
    "coverageStart": 1860,
    "coverageEnd": 2014,
    "granularity": "country",
-   "approxSizeMB": 0.5
+   "approxSizeMB": 0.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Kiva Crowdfunding Loans",
@@ -1353,7 +1407,8 @@
    "coverageStart": 2014,
    "coverageEnd": 2017,
    "granularity": "admin",
-   "approxSizeMB": 205
+   "approxSizeMB": 205,
+   "verified": "2026-07-10"
   },
   {
    "title": "Indian Startup Funding",
@@ -1376,7 +1431,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "IN"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Singapore Consumer Price Index (CPI), 2024 Base Year, Monthly",
@@ -1399,7 +1455,8 @@
    "approxSizeMB": 1,
    "countries": [
     "SG"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Eurostat: GDP and Main Components (nama_10_gdp)",
@@ -1420,7 +1477,8 @@
    "coverageStart": 1975,
    "coverageEnd": 2025,
    "granularity": "country",
-   "approxSizeMB": 20
+   "approxSizeMB": 20,
+   "verified": "2026-07-10"
   },
   {
    "title": "Eurostat: HICP Inflation, Monthly Indices and Rates (prc_hicp_minr)",
@@ -1441,7 +1499,8 @@
    "coverageStart": 1996,
    "coverageEnd": 2026,
    "granularity": "country",
-   "approxSizeMB": 34
+   "approxSizeMB": 34,
+   "verified": "2026-07-10"
   },
   {
    "title": "GDP per Capita (PPP, constant 2021 international-$)",
@@ -1461,7 +1520,8 @@
    "coverageStart": 1990,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 2
+   "approxSizeMB": 2,
+   "verified": "2026-07-10"
   },
   {
    "title": "Global Inflation Dataset",
@@ -1481,7 +1541,8 @@
    "coverageStart": 1980,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 0.5
+   "approxSizeMB": 0.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Maddison Project Database 2023",
@@ -1501,7 +1562,8 @@
    "coverageStart": 1,
    "coverageEnd": 2022,
    "granularity": "country",
-   "approxSizeMB": 3
+   "approxSizeMB": 3,
+   "verified": "2026-07-10"
   },
   {
    "title": "World Development Indicators",
@@ -1522,7 +1584,8 @@
    "coverageStart": 1960,
    "coverageEnd": 2025,
    "granularity": "country",
-   "approxSizeMB": 270
+   "approxSizeMB": 270,
+   "verified": "2026-07-10"
   },
   {
    "title": "World Development Indicators (WDI)",
@@ -1543,7 +1606,8 @@
    "coverageStart": 1960,
    "coverageEnd": 2025,
    "granularity": "country",
-   "approxSizeMB": 270
+   "approxSizeMB": 270,
+   "verified": "2026-07-10"
   },
   {
    "title": "Argentina — Producto Interno Bruto a precios de mercado, precios constantes base 2004",
@@ -1565,7 +1629,8 @@
    "approxSizeMB": 1,
    "countries": [
     "AR"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Brazilian E-Commerce Public Dataset by Olist",
@@ -1588,7 +1653,8 @@
    "approxSizeMB": 50,
    "countries": [
     "BR"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Bahrain quarterly GDP growth by economic activity",
@@ -1612,7 +1678,8 @@
    "approxSizeMB": 0.1,
    "countries": [
     "BH"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "World Bank GDP growth (annual %) - Middle East, North Africa, Afghanistan & Pakistan",
@@ -1633,7 +1700,8 @@
    "coverageStart": 1961,
    "coverageEnd": 2025,
    "granularity": "country",
-   "approxSizeMB": 0.3
+   "approxSizeMB": 0.3,
+   "verified": "2026-07-10"
   },
   {
    "title": "Canada: Monthly GDP at Basic Prices by Industry (Table 36-10-0434-01)",
@@ -1656,7 +1724,8 @@
    "approxSizeMB": 30,
    "countries": [
     "CA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "GDP by County (BEA Regional Accounts)",
@@ -1680,7 +1749,8 @@
    "approxSizeMB": 60,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Australian National Accounts: National Income, Expenditure and Product",
@@ -1703,7 +1773,8 @@
    "approxSizeMB": 10,
    "countries": [
     "AU"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Gross Domestic Product for Pacific Island Countries and Territories (DF_NATIONAL_ACCOUNTS)",
@@ -1724,7 +1795,8 @@
    "coverageStart": 2005,
    "coverageEnd": 2025,
    "granularity": "country",
-   "approxSizeMB": 1
+   "approxSizeMB": 1,
+   "verified": "2026-07-10"
   },
   {
    "title": "Primary School Enrolment Ratio — Sub-Saharan Africa",
@@ -1745,7 +1817,8 @@
    "coverageStart": 1970,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 3
+   "approxSizeMB": 3,
+   "verified": "2026-07-10"
   },
   {
    "title": "South Africa School Masterlist (EMIS)",
@@ -1767,7 +1840,8 @@
    "approxSizeMB": 50,
    "countries": [
     "ZA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Education in India (DISE District & State Statistics)",
@@ -1790,7 +1864,8 @@
    "approxSizeMB": 15,
    "countries": [
     "IN"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Government Expenditure on Education, Annual (Singapore)",
@@ -1813,7 +1888,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "SG"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Open University Learning Analytics Dataset (OULAD)",
@@ -1836,7 +1912,8 @@
    "approxSizeMB": 45,
    "countries": [
     "GB"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Pupils and Students Enrolled by Education Level, Sex and Age (educ_uoe_enra02)",
@@ -1857,7 +1934,8 @@
    "coverageStart": 2012,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 10
+   "approxSizeMB": 10,
+   "verified": "2026-07-10"
   },
   {
    "title": "Cross-Country Literacy Rates",
@@ -1877,7 +1955,8 @@
    "coverageStart": 1475,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 0.5
+   "approxSizeMB": 0.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Education Statistics (EdStats)",
@@ -1898,7 +1977,8 @@
    "coverageStart": 1970,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 40
+   "approxSizeMB": 40,
+   "verified": "2026-07-10"
   },
   {
    "title": "Government Expenditure on Education (% of GDP)",
@@ -1920,7 +2000,8 @@
    "coverageStart": 1970,
    "coverageEnd": 2025,
    "granularity": "country",
-   "approxSizeMB": 0.5
+   "approxSizeMB": 0.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "OECD PISA 2022 Database",
@@ -1941,7 +2022,8 @@
    "coverageStart": 2022,
    "coverageEnd": 2022,
    "granularity": "point",
-   "approxSizeMB": 2000
+   "approxSizeMB": 2000,
+   "verified": "2026-07-10"
   },
   {
    "title": "World University Rankings",
@@ -1961,7 +2043,8 @@
    "coverageStart": 2005,
    "coverageEnd": 2016,
    "granularity": "point",
-   "approxSizeMB": 3
+   "approxSizeMB": 3,
+   "verified": "2026-07-10"
   },
   {
    "title": "Censo Escolar Microdata (Brazil School Census)",
@@ -1984,7 +2067,8 @@
    "approxSizeMB": 500,
    "countries": [
     "BR"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Colombia — MEN estadísticas de educación preescolar, básica y media por municipio",
@@ -2009,7 +2093,8 @@
    "approxSizeMB": 4,
    "countries": [
     "CO"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Bahrain School Students by Academic Level, School Sector and Sex",
@@ -2033,7 +2118,8 @@
    "approxSizeMB": 0.05,
    "countries": [
     "BH"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Qatar Students, Schools, Grades and Teachers by Level of Education",
@@ -2057,7 +2143,8 @@
    "approxSizeMB": 0.1,
    "countries": [
     "QA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "College Scorecard",
@@ -2080,7 +2167,8 @@
    "approxSizeMB": 470,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "HarvardX Person-Course De-Identified Dataset (AY2013)",
@@ -2099,7 +2187,8 @@
    "coverageStart": 2012,
    "coverageEnd": 2013,
    "granularity": "point",
-   "approxSizeMB": 40
+   "approxSizeMB": 40,
+   "verified": "2026-07-10"
   },
   {
    "title": "School Locations 2025 (Victoria, Australia)",
@@ -2121,7 +2210,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "AU"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Schools, Australia (ABS)",
@@ -2143,7 +2233,8 @@
    "approxSizeMB": 15,
    "countries": [
     "AU"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Africa Electricity Transmission & Distribution Grid Map",
@@ -2163,7 +2254,8 @@
    "coverageStart": 2017,
    "coverageEnd": 2017,
    "granularity": "point",
-   "approxSizeMB": 40
+   "approxSizeMB": 40,
+   "verified": "2026-07-10"
   },
   {
    "title": "RePP Africa – Renewable Power Plant Database",
@@ -2182,7 +2274,8 @@
    "coverageStart": 2022,
    "coverageEnd": 2022,
    "granularity": "point",
-   "approxSizeMB": 0.9
+   "approxSizeMB": 0.9,
+   "verified": "2026-07-10"
   },
   {
    "title": "Electricity Generation and Consumption, Annual — Singapore",
@@ -2205,7 +2298,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "SG"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Solar Power Generation Data (India) — Kaggle",
@@ -2228,7 +2322,8 @@
    "approxSizeMB": 2,
    "countries": [
     "IN"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Eurostat — Complete Energy Balances (nrg_bal_c)",
@@ -2250,7 +2345,8 @@
    "coverageStart": 1990,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 40
+   "approxSizeMB": 40,
+   "verified": "2026-07-10"
   },
   {
    "title": "Eurostat — Energy Statistics",
@@ -2271,7 +2367,8 @@
    "coverageStart": 1990,
    "coverageEnd": 2025,
    "granularity": "country",
-   "approxSizeMB": 120
+   "approxSizeMB": 120,
+   "verified": "2026-07-10"
   },
   {
    "title": "Open Power System Data — European Time Series",
@@ -2292,7 +2389,8 @@
    "coverageStart": 2015,
    "coverageEnd": 2020,
    "granularity": "country",
-   "approxSizeMB": 250
+   "approxSizeMB": 250,
+   "verified": "2026-07-10"
   },
   {
    "title": "Access to Electricity (% of Population) — World Bank",
@@ -2314,7 +2412,8 @@
    "coverageStart": 1990,
    "coverageEnd": 2026,
    "granularity": "country",
-   "approxSizeMB": 0.5
+   "approxSizeMB": 0.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Global Power Plant Database (WRI)",
@@ -2333,7 +2432,8 @@
    "coverageStart": 2013,
    "coverageEnd": 2019,
    "granularity": "point",
-   "approxSizeMB": 10
+   "approxSizeMB": 10,
+   "verified": "2026-07-10"
   },
   {
    "title": "International Energy Statistics (UN) — Kaggle",
@@ -2353,7 +2453,8 @@
    "coverageStart": 1990,
    "coverageEnd": 2014,
    "granularity": "country",
-   "approxSizeMB": 8
+   "approxSizeMB": 8,
+   "verified": "2026-07-10"
   },
   {
    "title": "Our World in Data — Energy Dataset",
@@ -2374,7 +2475,8 @@
    "coverageStart": 1900,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 15
+   "approxSizeMB": 15,
+   "verified": "2026-07-10"
   },
   {
    "title": "Carga de Energia — Brazilian Grid Load (ONS)",
@@ -2398,7 +2500,8 @@
    "approxSizeMB": 5,
    "countries": [
     "BR"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Latin America Energy Tracker (Global Energy Monitor)",
@@ -2417,7 +2520,8 @@
    "coverageStart": 2023,
    "coverageEnd": 2026,
    "granularity": "point",
-   "approxSizeMB": 20
+   "approxSizeMB": 20,
+   "verified": "2026-07-10"
   },
   {
    "title": "Beirut Rooftop Solar Potential Mapping",
@@ -2441,7 +2545,8 @@
    "approxSizeMB": 16.3,
    "countries": [
     "LB"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Saudi Arabia Electricity Consumption by Sectors",
@@ -2465,7 +2570,8 @@
    "approxSizeMB": 0.1,
    "countries": [
     "SA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "EIA-923: Power Plant Operations (United States)",
@@ -2487,7 +2593,8 @@
    "approxSizeMB": 15,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Hourly Energy Consumption (PJM) — Kaggle",
@@ -2510,7 +2617,8 @@
    "approxSizeMB": 12,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Open Energy Data Initiative (OEDI) Data Lake — AWS",
@@ -2534,7 +2642,8 @@
    "approxSizeMB": 500000,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Australian Petroleum Statistics",
@@ -2556,7 +2665,8 @@
    "approxSizeMB": 3,
    "countries": [
     "AU"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "New Zealand Electricity Statistics (MBIE)",
@@ -2578,7 +2688,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "NZ"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Health Facilities in Sub-Saharan Africa",
@@ -2617,7 +2728,8 @@
    "coverageStart": 2007,
    "coverageEnd": 2017,
    "granularity": "country",
-   "approxSizeMB": 0.2
+   "approxSizeMB": 0.2,
+   "verified": "2026-07-10"
   },
   {
    "title": "COVID-19 in India",
@@ -2640,7 +2752,8 @@
    "approxSizeMB": 2.4,
    "countries": [
     "IN"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Weekly Infectious Disease Bulletin Cases (Singapore)",
@@ -2663,7 +2776,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "SG"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Causes of death - standardised death rate by NUTS 2 region (HLTH_CD_ASDR2)",
@@ -2685,7 +2799,8 @@
    "coverageStart": 2011,
    "coverageEnd": 2023,
    "granularity": "admin",
-   "approxSizeMB": 35
+   "approxSizeMB": 35,
+   "verified": "2026-07-10"
   },
   {
    "title": "ONS National life tables, UK",
@@ -2707,7 +2822,8 @@
    "approxSizeMB": 0.6,
    "countries": [
     "GB"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Life Expectancy (WHO) — Kaggle",
@@ -2727,7 +2843,8 @@
    "coverageStart": 2000,
    "coverageEnd": 2015,
    "granularity": "country",
-   "approxSizeMB": 0.3
+   "approxSizeMB": 0.3,
+   "verified": "2026-07-10"
   },
   {
    "title": "Our World in Data COVID-19 dataset",
@@ -2748,7 +2865,8 @@
    "coverageStart": 2020,
    "coverageEnd": 2026,
    "granularity": "country",
-   "approxSizeMB": 75
+   "approxSizeMB": 75,
+   "verified": "2026-07-10"
   },
   {
    "title": "WHO Global Health Observatory",
@@ -2768,7 +2886,8 @@
    "coverageStart": 2000,
    "coverageEnd": 2026,
    "granularity": "country",
-   "approxSizeMB": 50
+   "approxSizeMB": 50,
+   "verified": "2026-07-10"
   },
   {
    "title": "WHO Global Health Observatory: Life expectancy at birth",
@@ -2788,7 +2907,8 @@
    "coverageStart": 2000,
    "coverageEnd": 2021,
    "granularity": "country",
-   "approxSizeMB": 1
+   "approxSizeMB": 1,
+   "verified": "2026-07-10"
   },
   {
    "title": "World Bank Health Nutrition and Population Statistics",
@@ -2809,7 +2929,8 @@
    "coverageStart": 1960,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 30
+   "approxSizeMB": 30,
+   "verified": "2026-07-10"
   },
   {
    "title": "COVID-19 patient pre-condition dataset (Mexico)",
@@ -2832,7 +2953,8 @@
    "approxSizeMB": 20,
    "countries": [
     "MX"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "InRad COVID-19 X-Ray and CT Scans (Brazil)",
@@ -2855,7 +2977,8 @@
    "approxSizeMB": 2000,
    "countries": [
     "BR"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Crude Birth, Death and Maternal Mortality Rates – Qatar",
@@ -2879,7 +3002,8 @@
    "approxSizeMB": 0.01,
    "countries": [
     "QA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Israel Ministry of Health COVID-19 Database",
@@ -2902,7 +3026,8 @@
    "approxSizeMB": 350,
    "countries": [
     "IL"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "CDC PLACES: Local Data for Better Health, County Data",
@@ -2926,7 +3051,8 @@
    "approxSizeMB": 40,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "U.S. Chronic Disease Indicators (CDI)",
@@ -2950,7 +3076,8 @@
    "approxSizeMB": 150,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Causes of Death, Australia",
@@ -2973,7 +3100,8 @@
    "approxSizeMB": 8,
    "countries": [
     "AU"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Queensland COVID-19 Case Line List - Age Groups",
@@ -2995,7 +3123,8 @@
    "approxSizeMB": 45,
    "countries": [
     "AU"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Africa Road Network (gROADS v1)",
@@ -3015,7 +3144,8 @@
    "coverageStart": 2010,
    "coverageEnd": 2010,
    "granularity": "point",
-   "approxSizeMB": 90
+   "approxSizeMB": 90,
+   "verified": "2026-07-10"
   },
   {
    "title": "Road Traffic Accidents in Addis Ababa",
@@ -3038,7 +3168,8 @@
    "approxSizeMB": 2,
    "countries": [
     "ET"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Annual Motor Vehicle Population by Vehicle Type (Singapore)",
@@ -3061,7 +3192,8 @@
    "approxSizeMB": 0.5,
    "countries": [
     "SG"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Asian Transport Outlook (ATO) National Database",
@@ -3080,7 +3212,8 @@
    "coverageStart": 2000,
    "coverageEnd": 2024,
    "granularity": "country",
-   "approxSizeMB": 6.5
+   "approxSizeMB": 6.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Railway Passenger Transport (rail_pa_total, Eurostat)",
@@ -3101,7 +3234,8 @@
    "coverageStart": 2004,
    "coverageEnd": 2025,
    "granularity": "country",
-   "approxSizeMB": 1
+   "approxSizeMB": 1,
+   "verified": "2026-07-10"
   },
   {
    "title": "Road Safety Open Data (STATS19, Great Britain)",
@@ -3124,7 +3258,8 @@
    "approxSizeMB": 4000,
    "countries": [
     "GB"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Air Transport, Passengers Carried",
@@ -3145,7 +3280,8 @@
    "coverageStart": 1970,
    "coverageEnd": 2026,
    "granularity": "country",
-   "approxSizeMB": 0.5
+   "approxSizeMB": 0.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Death Rate from Road Traffic Injuries",
@@ -3166,7 +3302,8 @@
    "coverageStart": 2000,
    "coverageEnd": 2019,
    "granularity": "country",
-   "approxSizeMB": 0.5
+   "approxSizeMB": 0.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Estimated Road Traffic Death Rate (WHO GHO)",
@@ -3187,7 +3324,8 @@
    "coverageStart": 2021,
    "coverageEnd": 2021,
    "granularity": "country",
-   "approxSizeMB": 1
+   "approxSizeMB": 1,
+   "verified": "2026-07-10"
   },
   {
    "title": "OpenFlights Flight Route Database",
@@ -3207,7 +3345,8 @@
    "coverageStart": 2012,
    "coverageEnd": 2012,
    "granularity": "point",
-   "approxSizeMB": 2.5
+   "approxSizeMB": 2.5,
+   "verified": "2026-07-10"
   },
   {
    "title": "Buenos Aires Public Bike Share (Ecobici) Trips",
@@ -3231,7 +3370,8 @@
    "approxSizeMB": 800,
    "countries": [
     "AR"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Voo Regular Ativo (VRA) - Brazilian Scheduled Flights (ANAC)",
@@ -3254,7 +3394,8 @@
    "approxSizeMB": 1800,
    "countries": [
     "BR"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Bahrain Vehicles Registered in Use",
@@ -3278,7 +3419,8 @@
    "approxSizeMB": 0.05,
    "countries": [
     "BH"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Qatar Air Traffic Data: Aircraft, Passengers and Cargo",
@@ -3302,7 +3444,8 @@
    "approxSizeMB": 0.05,
    "countries": [
     "QA"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "2015 Flight Delays and Cancellations (US DOT)",
@@ -3325,7 +3468,8 @@
    "approxSizeMB": 200,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "New York City TLC Trip Record Data",
@@ -3347,7 +3491,8 @@
    "approxSizeMB": 30000,
    "countries": [
     "US"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Crash Analysis System (CAS) Data, New Zealand",
@@ -3372,7 +3517,8 @@
    "approxSizeMB": 250,
    "countries": [
     "NZ"
-   ]
+   ],
+   "verified": "2026-07-10"
   },
   {
    "title": "Crash data from Queensland roads",
@@ -3394,7 +3540,8 @@
    "approxSizeMB": 210,
    "countries": [
     "AU"
-   ]
+   ],
+   "verified": "2026-07-10"
   }
  ],
  "generated": "2026-07-10"

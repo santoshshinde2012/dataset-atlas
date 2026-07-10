@@ -78,6 +78,15 @@
 
 [hidden] { display: none !important; }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 :is(button, a, input, [tabindex]):focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -446,7 +455,8 @@ button {
 .rail-footnote { border-top: 1px solid var(--panel-border); padding-top: 12px; }
 #tally { font-size: 11.5px; color: var(--muted); margin-bottom: 8px; }
 #catalog-stamp { font-size: 10.5px; color: var(--muted); opacity: 0.8; margin: -4px 0 8px; }
-#reset-filters {
+.footnote-row { display: flex; gap: 6px; }
+#reset-filters, #about-link {
   font-size: 11.5px;
   color: var(--muted);
   border: 1px solid var(--panel-border);
@@ -454,7 +464,26 @@ button {
   border-radius: 8px;
   transition: border-color 0.15s, color 0.15s;
 }
-#reset-filters:hover { color: var(--text); border-color: var(--accent-dim); }
+#reset-filters:hover, #about-link:hover { color: var(--text); border-color: var(--accent-dim); }
+
+#changes-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
+  background: rgba(var(--accent-rgb), 0.08);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: left;
+  transition: background 0.15s;
+}
+#changes-pill:hover { background: rgba(var(--accent-rgb), 0.16); }
+#changes-pill.active { background: var(--accent); color: var(--panel-solid); }
+#changes-pill .icon { width: 12px; height: 12px; }
 
 /* ============ Map stage ============ */
 #stage {
@@ -670,7 +699,33 @@ button {
   padding: 10px 16px;
   border-bottom: 1px solid var(--panel-border);
 }
-#rail-domain-breakdown .chip { font-size: 11px; padding: 3px 9px; }
+#rail-domain-breakdown .chip { font-size: 11px; padding: 3px 9px; height: auto; }
+
+#rail-tools {
+  display: flex;
+  gap: 10px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--panel-border);
+}
+.rail-tool { flex: 1; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.rail-tool > span {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.rail-tool select {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 7px;
+  padding: 4px 6px;
+}
 
 #card-list {
   overflow-y: auto;
@@ -682,6 +737,26 @@ button {
 #card-list::-webkit-scrollbar { width: 8px; }
 #card-list::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 4px; }
 .empty-note { color: var(--muted); font-size: 12.5px; text-align: center; padding: 30px 10px; }
+
+.empty-state { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-bottom: 16px; }
+.empty-state .empty-note { padding-bottom: 0; }
+.active-filter-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-border);
+  background: var(--chip-bg);
+  color: var(--text);
+  font-size: 12px;
+  transition: border-color 0.15s, color 0.15s;
+}
+.filter-chip .icon { width: 11px; height: 11px; }
+.filter-chip:hover { border-color: var(--danger); color: var(--danger); }
+.filter-chip.reset-all { border-color: rgba(var(--accent-rgb), 0.5); color: var(--accent); }
+.filter-chip.reset-all:hover { background: rgba(var(--accent-rgb), 0.1); }
 
 .card-group-label {
   display: flex;
@@ -717,9 +792,9 @@ button {
   box-shadow: 0 6px 18px rgba(23, 36, 52, 0.1);
 }
 
-.card-top { display: flex; align-items: flex-start; gap: 8px; }
-.card-title { font-size: 13px; font-weight: 600; line-height: 1.35; flex: 1; }
-.pin-btn {
+.card-top { display: flex; align-items: flex-start; gap: 4px; }
+.card-title { font-size: 13px; font-weight: 600; line-height: 1.35; flex: 1; margin-right: 4px; }
+.card-icon-btn {
   flex: 0 0 auto;
   display: grid;
   place-items: center;
@@ -729,8 +804,9 @@ button {
   opacity: 0.55;
   transition: opacity 0.15s, background 0.15s;
 }
-.pin-btn:hover { opacity: 1; background: var(--hover-wash); }
-.pin-btn.pinned { opacity: 1; }
+.card-icon-btn:hover { opacity: 1; background: var(--hover-wash); }
+.card-icon-btn.pinned { opacity: 1; color: var(--accent); }
+.pin-btn.pinned .icon { color: var(--accent); fill: rgba(var(--accent-rgb), 0.25); }
 
 .card-badges { display: flex; flex-wrap: wrap; gap: 5px; margin: 7px 0 6px; }
 .badge {
@@ -750,6 +826,14 @@ button {
   --badge-color: var(--accent);
   background: rgba(var(--accent-rgb), 0.1);
 }
+.badge.change-badge {
+  --badge-color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.12);
+}
+.badge.access-badge { --badge-color: #b45309; background: rgba(180, 83, 9, 0.1); }
+:root[data-theme="dark"] .badge.access-badge { --badge-color: #fbbf24; background: rgba(251, 191, 36, 0.12); }
+.badge.verified-badge { --badge-color: #0a7a3d; background: rgba(10, 122, 61, 0.08); }
+:root[data-theme="dark"] .badge.verified-badge { --badge-color: #4ade80; background: rgba(74, 222, 128, 0.1); }
 
 .card-desc { font-size: 12px; color: var(--muted); line-height: 1.45; margin-bottom: 9px; }
 
@@ -821,13 +905,13 @@ button {
 .passport-item button:hover { color: var(--danger); }
 
 .passport-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
   padding: 12px;
   border-top: 1px solid var(--panel-border);
 }
 .passport-actions button {
-  flex: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -839,6 +923,7 @@ button {
   font-weight: 600;
   transition: border-color 0.15s, background 0.15s, transform 0.15s;
 }
+.passport-actions .danger { grid-column: 1 / -1; }
 .passport-actions button:hover { transform: translateY(-1px); }
 .passport-actions .icon { width: 13px; height: 13px; }
 .passport-actions .primary {
@@ -849,6 +934,161 @@ button {
 .passport-actions .primary:hover { background: var(--btn-primary-hover); }
 .passport-actions .danger:hover { border-color: var(--danger); color: var(--danger); }
 .passport-actions button.copied { border-color: var(--accent); color: var(--accent); }
+
+/* ============ Zoom controls ============ */
+/* bottom-right, stacked above the legend — the left edge belongs to the
+   filter rail, which would bury them */
+#zoom-controls {
+  position: absolute;
+  right: 12px;
+  bottom: 88px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  z-index: 20;
+  transition: right 0.2s ease;
+}
+@media (min-width: 700px) {
+  body.rail-open #zoom-controls { right: calc(var(--right-panel-max) + 24px); }
+}
+#zoom-controls button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  color: var(--muted);
+}
+#zoom-controls button:hover { background: var(--hover-wash); color: var(--text); }
+#zoom-controls button:first-child { border-bottom: 1px solid var(--panel-border); }
+
+/* ============ Welcome card ============ */
+#welcome-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -52%);
+  width: min(400px, calc(100vw - 32px));
+  padding: 22px;
+  background: var(--panel-solid);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  z-index: 80;
+}
+#welcome-card h2 { font-size: 17px; margin-bottom: 14px; }
+.welcome-steps { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
+.welcome-steps li { display: flex; align-items: flex-start; gap: 10px; }
+.welcome-steps .icon { width: 18px; height: 18px; color: var(--accent); margin-top: 2px; }
+.welcome-steps b { display: block; font-size: 13px; }
+.welcome-steps span { font-size: 12px; color: var(--muted); }
+.welcome-actions { display: flex; gap: 8px; }
+.welcome-actions button {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--panel-border);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.welcome-actions .primary {
+  background: var(--btn-primary-bg);
+  border-color: var(--btn-primary-border);
+  color: var(--btn-primary-text);
+}
+.welcome-actions .primary:hover { background: var(--btn-primary-hover); }
+
+/* ============ Compare tray & modal ============ */
+#compare-tray {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: 1px solid var(--btn-primary-border);
+  font-size: 12.5px;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+  z-index: 50;
+  transition: transform 0.15s;
+}
+#compare-tray:hover { transform: translateX(-50%) translateY(-1px); }
+#compare-tray .count-badge { background: rgba(255, 255, 255, 0.25); color: inherit; }
+:root[data-theme="dark"] #compare-tray .count-badge { background: rgba(0, 0, 0, 0.25); }
+
+#compare-modal, #about-panel {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 18, 28, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 85;
+  padding: 20px;
+}
+.compare-inner {
+  width: min(880px, 100%);
+  max-height: min(80vh, 640px);
+  display: flex;
+  flex-direction: column;
+  background: var(--panel-solid);
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+#compare-table-wrap { overflow: auto; padding: 4px 16px 16px; }
+.compare-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.compare-table th, .compare-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--panel-border);
+  vertical-align: top;
+  min-width: 130px;
+}
+.compare-table tbody th, .compare-table thead th:first-child { min-width: 90px; }
+.compare-table tbody th {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.compare-domain { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; }
+.compare-name { font-size: 12.5px; font-weight: 600; margin-top: 3px; }
+.compare-actions-cell { white-space: nowrap; }
+.compare-actions-cell .get-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: 1px solid var(--btn-primary-border);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.compare-remove { color: var(--muted); vertical-align: middle; margin-left: 6px; }
+.compare-remove:hover { color: var(--danger); }
+.about-body { padding: 6px 18px 18px; overflow-y: auto; font-size: 13px; line-height: 1.6; color: var(--text); }
+.about-body p { margin-bottom: 10px; }
+.about-body a { color: var(--accent); }
 
 /* ============ Boot fallback ============ */
 #boot-fallback {
@@ -890,7 +1130,7 @@ button {
   .country { transition: none; }
   .chip, .preset, .card, .card-actions a, .card-actions button,
   .passport-actions button, #global-pill, #rail-expand, #theme-toggle, #passport-btn,
-  .dock-chip, .dock-chip .dock-label { transition: none; }
+  .dock-chip, .dock-chip .dock-label, .filter-chip, #compare-tray, #changes-pill { transition: none; }
 }
 
 /* ============ Responsive ============ */
@@ -913,4 +1153,62 @@ button {
 }
 @media (max-width: 640px) {
   #topbar { flex-wrap: wrap; padding: 8px 12px; }
+
+  /* right panels become bottom sheets so the map stays visible */
+  #card-rail, #passport-drawer {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: min(62dvh, 560px);
+    border-radius: 16px 16px 0 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    animation: sheet-up 0.24s ease;
+  }
+  .rail-header { cursor: grab; }
+  #compare-modal, #about-panel { padding: 0; align-items: end; }
+  #compare-modal .compare-inner, #about-panel .compare-inner {
+    max-height: 80dvh;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+  }
+  #welcome-card { width: calc(100vw - 24px); }
+}
+@keyframes sheet-up {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+/* ============ Touch ergonomics ============ */
+@media (pointer: coarse) {
+  /* labels can't be hovered into view — keep them on */
+  .dock-chip .dock-label { max-width: 110px; opacity: 1; }
+  .dock-chip { height: 40px; }
+  .card-icon-btn, #rail-collapse { width: 36px; height: 36px; }
+  .rail-header button { width: 36px; height: 36px; }
+  #zoom-controls button { width: 42px; height: 42px; }
+  .card-actions a, .card-actions button { padding: 10px 8px; }
+  .filter-row { padding: 8px 2px; }
+  #theme-toggle, #passport-btn, .proj-toggle button { min-height: 40px; }
+}
+
+/* keep floating chrome above the iOS home indicator / toolbars */
+#legend { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+#zoom-controls { bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
+#hint { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
+#compare-tray { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+#toast { bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+
+/* a bottom sheet owns the bottom edge on phones — the tray yields to it */
+@media (max-width: 640px) {
+  body.rail-open #compare-tray { display: none; }
+}
+
+/* re-assert reduced motion AFTER the mobile block so the sheet animation
+   cannot override it (equal specificity, later source order wins) */
+@media (prefers-reduced-motion: reduce) {
+  #card-rail, #passport-drawer { animation: none; }
 }

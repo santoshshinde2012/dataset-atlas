@@ -5,6 +5,8 @@ import { REGION_META, DOMAIN_META, GLOBAL_REGION, domainColor } from '../config.
 import { $, el } from '../utils/dom.js';
 import { esc } from '../utils/text.js';
 import { manifestText } from '../manifest.js';
+import { bibliographyFor } from '../citation.js';
+import { serializeState } from '../url-state.js';
 import { icon } from '../icons.js';
 
 export function initPassport({ store, toast, copyText }) {
@@ -36,6 +38,25 @@ export function initPassport({ store, toast, copyText }) {
     }, 1600);
   };
   $('#passport-clear').onclick = () => store.actions.clearPins();
+  $('#passport-bib').onclick = () => {
+    const pinned = store.select.pinnedDatasets();
+    if (!pinned.length) return toast('Pin some datasets first');
+    const blob = new Blob([bibliographyFor(pinned, new Date().toISOString().slice(0, 10))], { type: 'text/plain' });
+    const a = el('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'references.bib';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('references.bib exported');
+  };
+  $('#passport-share').onclick = () => {
+    const pinned = store.select.pinnedDatasets();
+    if (!pinned.length) return toast('Pin some datasets first');
+    const params = new URLSearchParams(serializeState(store.getState(), store.select.allFormats()));
+    params.set('p', pinned.map((d) => d.id).join('.'));
+    const url = `${location.origin}${location.pathname}#${params.toString()}`;
+    copyText(url, 'Share link copied — pins included');
+  };
 
   function render() {
     drawer.hidden = !store.getState().passportOpen;

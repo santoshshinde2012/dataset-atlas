@@ -19,6 +19,8 @@ export const FACETS = {
   format: (d, s) => (d.formats || []).some((f) => s.formats.has(normFormat(f))),
   license: (d, s) => (d.licenseOpenness ?? 0) >= s.minOpenness,
   search: (d, s) => !s.search || haystack(d).includes(s.search),
+  changed: (d, s) => !s.onlyChanged ||
+    !s.changes || s.changes.newIds.has(d.id) || s.changes.updatedIds.has(d.id),
 };
 
 /**

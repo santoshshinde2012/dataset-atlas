@@ -105,13 +105,16 @@ const ADAPTERS = [
 /* ---------- run ---------- */
 
 const report = { ok: 0, blocked: 0, transient: [], dead: [], bumped: [] };
+const today = new Date().toISOString().slice(0, 10);
 const queue = [...catalog];
 const workers = Array.from({ length: 8 }, async () => {
   for (let d = queue.shift(); d; d = queue.shift()) {
     const { status } = await get(d.url);
     const cls = classify(status);
-    if (cls === 'ok') report.ok++;
-    else if (cls === 'blocked') report.blocked++;
+    if (cls === 'ok') {
+      report.ok++;
+      d.verified = today; // per-entry provenance stamp shown as a card badge
+    } else if (cls === 'blocked') report.blocked++;
     else report[cls === 'dead' ? 'dead' : 'transient'].push(`${status} ${d.title} — ${d.url}`);
 
     const u = new URL(d.url);

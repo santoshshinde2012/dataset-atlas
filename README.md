@@ -36,12 +36,17 @@ npm run refresh    # liveness sweep + source-API freshness bumps + refresh stamp
 
 Power features:
 
-- **Country focus** — click a specific country (say, India) and its datasets sort to the top of the region rail with a country badge; the hover tooltip shows the country-specific count. 85 entries carry verified country tags.
-- **Dataset DNA** — the five-bar strip on each card compares freshness, coverage span, granularity, size, and license openness at a glance (tap a bar for the detail).
-- **Data Passport** — pin datasets across regions, then export one reproducible `data-passport.sh` manifest with all URLs, Kaggle CLI commands, and `kagglehub` one-liners.
-- **Filters rail** — use-case presets ("I want to… forecast crop yields"), source type, format, license-openness slider, and search (`/`). When the rail is collapsed, a badge shows how many filters are active.
-- **Themes** — light (default) and dark, one click on the sun/moon toggle, remembered across visits. Both palettes are validated for colorblind-safe separation and surface contrast.
-- **Keyboard** — `/` focuses search, `Esc` closes panels, Tab/Enter selects regions. Reduced-motion preferences disable the ambient globe rotation and animations.
+- **Country focus** — click a specific country (say, India) and its datasets group to the top of the region rail with a country badge; a Country selector makes the same move keyboard-friendly. 85 entries carry verified country tags.
+- **Shareable URLs** — every view (domain, region, country, filters, sort, projection) lives in the URL hash: bookmark it, cite it, send it. The Passport's *Share link* even carries your pinned collection to a colleague.
+- **Search anywhere** — type with no region selected and a results rail opens grouped by region; no dead ends.
+- **Compare tray** — shortlist up to four datasets and see them side by side (license, coverage, granularity, size, access) with download one click away.
+- **Dataset DNA & provenance** — the five-bar strip compares freshness, coverage span, granularity, size, and license openness; shield badges show when each link was last verified by the weekly pipeline, and lock badges warn about account/sign-up walls *before* you click out. "About this data" explains the whole pipeline in-app.
+- **Data Passport** — pin datasets across regions, then export a reproducible `data-passport.sh` manifest and a `references.bib` (per-card BibTeX copy too).
+- **Filters rail** — use-case presets, source type, format, license-openness slider, search (`/`), a sort control (freshness/coverage/openness/size/A–Z), and a "new or updated since your last visit" filter powered by the weekly refresh. A badge shows active-filter count when the rail is collapsed; empty states offer removable filter chips.
+- **Mobile-first ergonomics** — bottom-sheet panels with swipe-to-dismiss, pinch/double-tap/button zoom, always-visible dock labels, and safe-area-aware chrome.
+- **Themes** — light (default) and dark, one click, remembered. Both palettes validated for colorblind-safe separation and surface contrast.
+- **Keyboard & screen readers** — `/` focuses search, `Esc` closes panels in order, Tab/Enter selects regions, focus lands in opened panels, and filter changes are announced via a live region. Reduced motion disables rotation and animations.
+- **First-visit guide** — a one-time three-step card with a "Try India" shortcut.
 
 ## What's inside
 

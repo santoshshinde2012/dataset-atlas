@@ -30,13 +30,29 @@ export function initFilterRail({ store, generated = null }) {
 
   $('#rail-collapse').onclick = () => setCollapsed(true);
   $('#rail-expand').onclick = () => setCollapsed(false);
+  $('#changes-pill').onclick = () =>
+    store.actions.setOnlyChanged(!store.getState().onlyChanged);
   if (innerWidth < 700) setCollapsed(true); // map-first on small screens
 
   function render() {
     const state = store.getState();
 
+    // inputs mirror store state so URL-restored or programmatic changes show
+    if ($('#search-input').value !== state.search) $('#search-input').value = state.search;
+    if (+$('#license-slider').value !== state.minOpenness) $('#license-slider').value = state.minOpenness;
+
     [...$('#preset-list').children].forEach((b, i) =>
       b.classList.toggle('active', state.preset === i));
+
+    // "new since your last visit" pill under the tally
+    const pill = $('#changes-pill');
+    const changeCount = store.select.changeCount();
+    pill.hidden = changeCount === 0;
+    if (changeCount) {
+      pill.classList.toggle('active', state.onlyChanged);
+      pill.querySelector('span:last-child').textContent =
+        `${changeCount} new or updated since your last visit`;
+    }
 
     updateFacet($('#source-filters'), state.sourceTypes, (key) =>
       store.select.catalog().filter((d) => d.sourceType === key && store.select.matches(d, ['source'])).length);

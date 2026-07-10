@@ -10,13 +10,24 @@ import { SOURCE_TYPE_META, PRESETS, FORMAT_ORDER, THEMES, DEFAULT_THEME } from '
 import { filterCatalog, regionCounts, domainCounts, matchesFacets } from './filters.js';
 import { normFormat } from './utils/text.js';
 
+/** Sort comparators for dataset lists (country-focus always wins first). */
+const SORTERS = {
+  freshness: (a, b) => (b.freshnessYear || 0) - (a.freshnessYear || 0),
+  coverage: (a, b) => ((b.coverageEnd || 0) - (b.coverageStart || 0)) - ((a.coverageEnd || 0) - (a.coverageStart || 0)),
+  openness: (a, b) => (b.licenseOpenness || 0) - (a.licenseOpenness || 0),
+  size: (a, b) => (a.approxSizeMB || 0) - (b.approxSizeMB || 0),
+  title: (a, b) => a.title.localeCompare(b.title),
+};
+
 /**
  * @param {object} deps
  * @param {object[]} deps.catalog sanitized catalog entries (with ids)
  * @param {{load: () => string[], save: (ids: string[]) => void}} deps.pinStorage
  * @param {string} [deps.initialTheme] 'light' | 'dark'
+ * @param {{newIds?: Set<string>, updatedIds?: Set<string>}} [deps.changes]
+ *        catalog diff vs the user's last visit (computed in main.js)
  */
-export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME }) {
+export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME, changes = {} }) {
   const allFormats = [...new Set(catalog.flatMap((d) => (d.formats || []).map(normFormat)))]
     .sort((a, b) => FORMAT_ORDER.indexOf(a) - FORMAT_ORDER.indexOf(b));
 
@@ -37,10 +48,21 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME 
     passportOpen: false,
     theme: THEMES[initialTheme] ? initialTheme : DEFAULT_THEME,
     pins: new Set(storedPins),
+    sort: 'freshness',
+    compare: new Set(),            // dataset ids in the compare tray (session-only)
+    compareOpen: false,
+    onlyChanged: false,            // filter to new/updated since last visit
+    changes: {
+      newIds: changes.newIds || new Set(),
+      updatedIds: changes.updatedIds || new Set(),
+    },
   };
 
   const listeners = new Set();
-  const notify = () => listeners.forEach((fn) => fn());
+  // isolate subscribers: one throwing listener must not silence the rest
+  const notify = () => listeners.forEach((fn) => {
+    try { fn(); } catch (err) { console.error(err); }
+  });
 
   const select = {
     catalog: () => catalog,
@@ -52,15 +74,28 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME 
     regionDatasets: (region) => {
       const focus = state.focusCountry;
       const covers = (d) => (focus && (d.countries || []).includes(focus) ? 1 : 0);
+      const by = SORTERS[state.sort] || SORTERS.freshness;
       return filterCatalog(catalog, state)
         .filter((d) => d.region === region)
-        .sort((a, b) => covers(b) - covers(a) || (b.freshnessYear || 0) - (a.freshnessYear || 0));
+        .sort((a, b) => covers(b) - covers(a) || by(a, b));
     },
+    /** All filtered datasets grouped for the search-anywhere rail. */
+    searchResults: () => {
+      const by = SORTERS[state.sort] || SORTERS.freshness;
+      return filterCatalog(catalog, state).sort(by);
+    },
+    compareDatasets: () => catalog.filter((d) => state.compare.has(d.id)),
+    changeCount: () => state.changes.newIds.size + state.changes.updatedIds.size,
+    changeKind: (id) =>
+      state.changes.newIds.has(id) ? 'new'
+        : state.changes.updatedIds.has(id) ? 'updated' : null,
     /** Filtered datasets tagged as covering a specific country (cca2). */
     countryDatasets: (cca2) =>
       filterCatalog(catalog, state).filter((d) => (d.countries || []).includes(cca2)),
     pinnedDatasets: () => catalog.filter((d) => state.pins.has(d.id)),
     isPinned: (id) => state.pins.has(id),
+    /** Which right-rail view applies: 'region' | 'search' | null. */
+    railMode: () => (state.region ? 'region' : state.search ? 'search' : null),
   };
 
   const actions = {
@@ -121,6 +156,39 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME 
       pinStorage.save([]);
       notify();
     },
+    /** Merge pin ids from a shared URL; returns how many were added. */
+    importPins(ids) {
+      const valid = [...new Set(ids)].filter((id) => catalogIds.has(id) && !state.pins.has(id));
+      for (const id of valid) state.pins.add(id);
+      if (valid.length) {
+        pinStorage.save([...state.pins]);
+        notify();
+      }
+      return valid.length;
+    },
+    setSort(key) {
+      if (SORTERS[key]) { state.sort = key; notify(); }
+    },
+    toggleCompare(id) {
+      if (state.compare.has(id)) {
+        state.compare.delete(id);
+        if (state.compare.size === 0) state.compareOpen = false; // no ghost open state
+      } else if (state.compare.size < 4) state.compare.add(id);
+      else return false; // tray full
+      notify();
+      return true;
+    },
+    setCompareOpen(open) { state.compareOpen = !!open; notify(); },
+    clearCompare() { state.compare.clear(); state.compareOpen = false; notify(); },
+    setOnlyChanged(on) { state.onlyChanged = !!on; notify(); },
+    enableAllSources() {
+      Object.keys(SOURCE_TYPE_META).forEach((k) => state.sourceTypes.add(k));
+      notify();
+    },
+    enableAllFormats() {
+      allFormats.forEach((f) => state.formats.add(f));
+      notify();
+    },
     resetFilters() {
       state.domain = 'all';
       state.sourceTypes = new Set(Object.keys(SOURCE_TYPE_META));
@@ -128,6 +196,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME 
       state.minOpenness = 0;
       state.search = '';
       state.preset = null;
+      state.onlyChanged = false;
       notify();
     },
   };

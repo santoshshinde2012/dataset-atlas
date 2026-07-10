@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>The Dataset Atlas — find &amp; download data in 3 clicks</title>
 <meta name="description" content="A map-first atlas for discovering and downloading datasets across domains and regions. Region → Domain → Get, in 3 clicks or fewer." />
 <meta name="theme-color" content="#070b14" />
@@ -74,7 +74,11 @@
     <section class="rail-section rail-footnote">
       <p id="tally">— datasets · — regions</p>
       <p id="catalog-stamp" hidden></p>
-      <button id="reset-filters">Reset filters</button>
+      <button id="changes-pill" hidden><span data-icon="sparkles"></span><span></span></button>
+      <div class="footnote-row">
+        <button id="reset-filters">Reset filters</button>
+        <button id="about-link">About this data</button>
+      </div>
     </section>
 
   </div>
@@ -85,6 +89,10 @@
 <main id="stage">
   <svg id="map" role="group" aria-label="World map of dataset availability"></svg>
   <nav id="domain-dock" aria-label="Domain filters"><!-- dock chips injected --></nav>
+  <div id="zoom-controls" role="group" aria-label="Map zoom">
+    <button id="zoom-in" title="Zoom in" aria-label="Zoom in" data-icon="plus"></button>
+    <button id="zoom-out" title="Zoom out" aria-label="Zoom out" data-icon="minus"></button>
+  </div>
   <button id="global-pill" title="Datasets covering the whole world">
     <span data-icon="globe"></span> Global <span class="count-badge" id="global-count">0</span>
   </button>
@@ -101,12 +109,28 @@
 <aside id="card-rail" aria-label="Datasets for the selected region" hidden>
   <header class="rail-header">
     <div>
-      <h2 id="rail-region-name">Region</h2>
+      <h2 id="rail-region-name" tabindex="-1">Region</h2>
       <p id="rail-region-sub">— datasets</p>
     </div>
     <button id="rail-close" title="Close (Esc)" aria-label="Close panel" data-icon="close"></button>
   </header>
   <div id="rail-domain-breakdown"><!-- mini domain chips --></div>
+  <div id="rail-tools">
+    <label class="rail-tool">
+      <span>Sort</span>
+      <select id="sort-select" aria-label="Sort datasets">
+        <option value="freshness">Freshest first</option>
+        <option value="coverage">Longest coverage</option>
+        <option value="openness">Most open license</option>
+        <option value="size">Smallest download</option>
+        <option value="title">A – Z</option>
+      </select>
+    </label>
+    <label class="rail-tool" id="country-tool" hidden>
+      <span>Country</span>
+      <select id="country-select" aria-label="Focus a country"></select>
+    </label>
+  </div>
   <div id="card-list"><!-- dataset cards injected --></div>
 </aside>
 
@@ -122,12 +146,30 @@
   <div id="passport-list"></div>
   <footer class="passport-actions">
     <button id="passport-export" class="primary"><span data-icon="download"></span> Export manifest</button>
-    <button id="passport-copy"><span data-icon="copy"></span> Copy</button>
-    <button id="passport-clear" class="danger"><span data-icon="trash"></span> Clear</button>
+    <button id="passport-share"><span data-icon="share"></span> Share link</button>
+    <button id="passport-copy"><span data-icon="copy"></span> Copy manifest</button>
+    <button id="passport-bib"><span data-icon="quote"></span> Export .bib</button>
+    <button id="passport-clear" class="danger"><span data-icon="trash"></span> Clear pins</button>
   </footer>
 </div>
 
 <div id="toast" role="status" aria-live="polite" hidden></div>
+<div id="sr-status" class="visually-hidden" aria-live="polite"></div>
+
+<!-- compare tray trigger + modal (populated by js/ui/compare.js) -->
+<button id="compare-tray" hidden><span data-icon="compare"></span> Compare <span id="compare-count" class="count-badge">0</span></button>
+<div id="compare-modal" role="dialog" aria-label="Compare datasets" hidden>
+  <div class="compare-inner">
+    <header class="rail-header">
+      <div><h2 tabindex="-1" id="compare-title"><span data-icon="compare"></span> Compare datasets</h2></div>
+      <button id="compare-close" title="Close" aria-label="Close comparison" data-icon="close"></button>
+    </header>
+    <div id="compare-table-wrap"></div>
+  </div>
+</div>
+
+<!-- first-visit orientation card (populated by js/ui/welcome.js) -->
+<div id="welcome-card" role="dialog" aria-label="Welcome to the Dataset Atlas" hidden></div>
 
 <!-- shown when the module graph or data fails to load (e.g. opened via file://) -->
 <div id="boot-fallback" hidden>

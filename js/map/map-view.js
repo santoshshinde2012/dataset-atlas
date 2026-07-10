@@ -37,10 +37,13 @@ export class MapView {
     this.#paintLegend();
     this.applyProjection();
     this.#attachInteractions();
+    this.#attachZoomControls();
     this.startAutoRotate();
 
     store.subscribe(() => this.#onStateChange());
     this.repaint();
+    // a deep link may arrive with a region already selected — center it
+    if (this.lastRegion && REGION_META[this.lastRegion]) this.focusRegion(this.lastRegion);
   }
 
   get strategy() {
@@ -155,7 +158,10 @@ export class MapView {
     badge.append('rect');
     badge.append('text');
 
-    this.svg.on('click', () => this.store.actions.selectRegion(null));
+    this.svg.on('click', (event) => {
+      if (event.detail > 1) return; // part of a double-click zoom, not a deselect
+      this.store.actions.selectRegion(null);
+    });
   }
 
   #onCountryEnter(event, d) {
@@ -274,7 +280,8 @@ export class MapView {
       const r = rScale(count);
       g.attr('transform', `translate(${x},${y})`)
         .classed('selected', state.region === key)
-        .style('opacity', count === 0 ? 0.35 : 1);
+        .style('opacity', count === 0 ? 0.35 : 1)
+        .attr('aria-label', `Browse ${meta.name} datasets — ${count} matching`);
       g.select('.halo').attr('r', r + 9).attr('fill', nodeColor).attr('opacity', 0.14);
       g.select('.core').attr('r', r).attr('fill', nodeColor).attr('fill-opacity', 0.4);
       g.select('.node-name').attr('y', -r - 10).text(meta.name);
@@ -322,6 +329,7 @@ export class MapView {
         this.svg.interrupt('focus');
       })
       .on('drag', (event) => {
+        if (this.pinching) return; // two fingers = zoom, not rotation
         const k = 75 / (this.baseScale * this.scaleK);
         const dyPan = this.strategy.applyDrag(this.rotation, event.dx, event.dy, k);
         if (dyPan) this.offsetY = this.clampOffsetY(this.offsetY + dyPan);
@@ -332,13 +340,62 @@ export class MapView {
     this.svg.on('wheel', (event) => {
       event.preventDefault();
       this.stopAutoRotate();
-      const factor = Math.pow(1.0016, -event.deltaY);
-      this.scaleK = Math.max(0.7, Math.min(6, this.scaleK * factor));
-      this.offsetY = this.clampOffsetY(this.offsetY);
-      this.render();
+      this.zoomBy(Math.pow(1.0016, -event.deltaY));
     }, { passive: false });
 
+    // pinch zoom: two-finger distance ratio. Registered in the CAPTURE phase
+    // so the handlers run before d3-drag's bubble-phase touch handlers (which
+    // otherwise swallow the gesture); the pinching flag suppresses rotation.
+    const node = this.svg.node();
+    let pinchDist = 0;
+    node.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        this.pinching = true;
+        pinchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY);
+      }
+    }, { passive: true, capture: true });
+    node.addEventListener('touchmove', (e) => {
+      if (this.pinching && e.touches.length === 2) {
+        e.preventDefault();
+        e.stopImmediatePropagation(); // keep d3-drag from fighting the pinch
+        this.stopAutoRotate();
+        const d = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY);
+        if (pinchDist > 0) this.zoomBy(d / pinchDist);
+        pinchDist = d;
+      }
+    }, { passive: false, capture: true });
+    const endPinch = (e) => {
+      if (!e.touches || e.touches.length < 2) this.pinching = false;
+    };
+    node.addEventListener('touchend', endPinch, { capture: true });
+    node.addEventListener('touchcancel', endPinch, { capture: true });
+
+    // double-tap / double-click steps the zoom in
+    this.svg.on('dblclick', (event) => {
+      event.preventDefault();
+      this.stopAutoRotate();
+      this.zoomBy(1.5);
+    });
+
     addEventListener('resize', () => this.applyProjection());
+  }
+
+  /** Multiply the zoom factor, clamped, and re-render. */
+  zoomBy(factor) {
+    this.scaleK = Math.max(0.7, Math.min(6, this.scaleK * factor));
+    this.offsetY = this.clampOffsetY(this.offsetY);
+    this.render();
+  }
+
+  #attachZoomControls() {
+    const zin = document.getElementById('zoom-in');
+    const zout = document.getElementById('zoom-out');
+    if (zin) zin.onclick = () => { this.stopAutoRotate(); this.zoomBy(1.35); };
+    if (zout) zout.onclick = () => { this.stopAutoRotate(); this.zoomBy(1 / 1.35); };
   }
 
   startAutoRotate() {

@@ -114,6 +114,87 @@ test('regionDatasets sorts by freshness descending', () => {
   assert.deepEqual(asia.map((d) => d.title), ['A']);
 });
 
+test('sort control reorders datasets (A–Z, openness)', () => {
+  const raw = { datasets: [
+    { ...rawCatalog.datasets[0], title: 'Zeta', url: 'https://x.com/z', licenseOpenness: 1, freshnessYear: 2020 },
+    { ...rawCatalog.datasets[0], title: 'Alpha', url: 'https://x.com/a', licenseOpenness: 0.4, freshnessYear: 2026 },
+  ] };
+  const store = createStore({ catalog: buildCatalog(raw), pinStorage: fakeStorage() });
+  store.actions.setSort('title');
+  assert.deepEqual(store.select.regionDatasets('asia').map((d) => d.title), ['Alpha', 'Zeta']);
+  store.actions.setSort('openness');
+  assert.deepEqual(store.select.regionDatasets('asia').map((d) => d.title), ['Zeta', 'Alpha']);
+  store.actions.setSort('nonsense');
+  assert.equal(store.getState().sort, 'openness', 'unknown sort keys are ignored');
+});
+
+test('removing the last compare item also closes the modal (no ghost state)', () => {
+  const store = mkStore();
+  const id = store.select.catalog()[0].id;
+  store.actions.toggleCompare(id);
+  store.actions.setCompareOpen(true);
+  store.actions.toggleCompare(id); // remove last item while modal is open
+  assert.equal(store.getState().compareOpen, false);
+});
+
+test('a throwing subscriber does not silence later subscribers', () => {
+  const store = mkStore();
+  let laterRan = false;
+  store.subscribe(() => { throw new Error('boom'); });
+  store.subscribe(() => { laterRan = true; });
+  store.actions.setSearch('x');
+  assert.equal(laterRan, true);
+});
+
+test('compare tray holds at most four and clears', () => {
+  const store = mkStore();
+  const [a, b] = store.select.catalog();
+  assert.equal(store.actions.toggleCompare(a.id), true);
+  assert.equal(store.actions.toggleCompare(b.id), true);
+  assert.deepEqual(store.select.compareDatasets().map((d) => d.id).sort(), [a.id, b.id].sort());
+  assert.equal(store.actions.toggleCompare(a.id), true, 'toggling off succeeds');
+  assert.equal(store.getState().compare.size, 1);
+  store.actions.clearCompare();
+  assert.equal(store.getState().compare.size, 0);
+});
+
+test('visit-changes filter narrows to new/updated ids', () => {
+  const catalog = buildCatalog(rawCatalog);
+  const store = createStore({
+    catalog,
+    pinStorage: fakeStorage(),
+    changes: { newIds: new Set([catalog[0].id]), updatedIds: new Set() },
+  });
+  assert.equal(store.select.changeCount(), 1);
+  assert.equal(store.select.changeKind(catalog[0].id), 'new');
+  store.actions.setOnlyChanged(true);
+  assert.deepEqual(store.select.filtered().map((d) => d.id), [catalog[0].id]);
+  store.actions.resetFilters();
+  assert.equal(store.getState().onlyChanged, false);
+});
+
+test('importPins merges only known ids and reports the count', () => {
+  const storage = fakeStorage();
+  const store = createStore({ catalog: buildCatalog(rawCatalog), pinStorage: storage });
+  const id = store.select.catalog()[0].id;
+  assert.equal(store.actions.importPins([id, 'ghost-id', id]), 1);
+  assert.deepEqual(storage.peek(), [id]);
+  assert.equal(store.actions.importPins([id]), 0, 'already-pinned ids are not re-imported');
+});
+
+test('railMode reflects region vs search-anywhere', () => {
+  const store = mkStore();
+  assert.equal(store.select.railMode(), null);
+  store.actions.setSearch('who');
+  assert.equal(store.select.railMode(), 'search');
+  store.actions.selectRegion('asia');
+  assert.equal(store.select.railMode(), 'region');
+  store.actions.selectRegion(null);
+  assert.equal(store.select.railMode(), 'search');
+  store.actions.setSearch('');
+  assert.equal(store.select.railMode(), null);
+});
+
 test('country focus sorts covering datasets first and clears with the region', () => {
   const raw = {
     datasets: [

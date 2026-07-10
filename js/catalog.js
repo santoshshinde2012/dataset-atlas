@@ -21,10 +21,11 @@ const clean = (s) => String(s).replace(/[\x00-\x1f\x7f]/g, ' ');
 export function sanitizeEntry(d) {
   if (!d || typeof d !== 'object') return null;
   // require a whitespace/control-free http(s) URL end to end — a newline in a
-  // copied URL would paste as multiple terminal lines, and C0/DEL bytes could
-  // smuggle terminal escape sequences through Copy link or the manifest
+  // copied URL would paste as multiple terminal lines, C0/DEL bytes could
+  // smuggle terminal escapes through Copy link or the manifest, and quotes or
+  // angle brackets could break out of an href attribute
   const url = typeof d.url === 'string' ? d.url.trim() : '';
-  if (!/^https?:\/\/[^\s\x00-\x1f\x7f]+$/i.test(url)) return null;
+  if (!/^https?:\/\/[^\s\x00-\x1f\x7f"'<>\\`]+$/i.test(url)) return null;
   if (!DOMAIN_META[d.domain]) return null;
   if (d.region !== GLOBAL_REGION && !REGION_META[d.region]) return null;
   const e = { ...d };
@@ -45,6 +46,8 @@ export function sanitizeEntry(d) {
   e.countries = Array.isArray(d.countries)
     ? d.countries.filter((c) => /^[A-Z]{2}$/.test(String(c))).slice(0, 4)
     : [];
+  // optional provenance stamp written by the refresh pipeline
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(e.verified || '')) delete e.verified;
   return e;
 }
 
@@ -53,7 +56,8 @@ export function buildCatalog(raw) {
   return (raw.datasets || raw)
     .map(sanitizeEntry)
     .filter(Boolean)
-    .map((d) => ({ ...d, id: d.id || hashId(d.url) }));
+    // ids reach data-* attributes and URLs, so only the hashId shape is trusted
+    .map((d) => ({ ...d, id: /^d[a-z0-9]+$/.test(d.id || '') ? d.id : hashId(d.url) }));
 }
 
 /** Fetch and build the catalog plus map data. Browser-only (uses fetch). */
@@ -69,6 +73,6 @@ export async function loadAtlasData(base = '') {
     countryRegion,
     countryCodes, // ISO-numeric id -> { cca2, name }
     catalog: buildCatalog(rawCatalog),
-    generated: typeof rawCatalog.generated === 'string' ? rawCatalog.generated : null,
+    generated: /^\d{4}-\d{2}-\d{2}$/.test(rawCatalog.generated || '') ? rawCatalog.generated : null,
   };
 }
