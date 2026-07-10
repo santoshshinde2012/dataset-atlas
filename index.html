@@ -121,8 +121,21 @@
 
 <div id="toast" hidden></div>
 
+<!-- shown when the module graph or data fails to load (e.g. opened via file://) -->
+<div id="boot-fallback" hidden>
+  <p>Could not load the atlas.<br>
+     Serve this folder over HTTP — e.g. <code>python3 -m http.server 4173</code> — and reload.</p>
+</div>
+
 <script src="vendor/d3.v7.min.js"></script>
 <script src="vendor/topojson-client.min.js"></script>
+<script>
+  // module-graph failures (file://, vendor 404, parse errors) never reach
+  // boot().catch — this classic-script watchdog covers them
+  setTimeout(function () {
+    if (!window.__atlasBooted) document.getElementById('boot-fallback').hidden = false;
+  }, 3000);
+</script>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -264,7 +264,6 @@ button {
 #map:active { cursor: grabbing; }
 
 .country { stroke: rgba(7, 11, 20, 0.85); stroke-width: 0.5; transition: fill 0.3s ease; }
-.country.dim-region { opacity: 0.35; }
 .region-hover .country:not(.hovered-region) { opacity: 0.45; }
 
 .graticule { fill: none; stroke: rgba(148, 163, 184, 0.07); stroke-width: 0.5; }
@@ -346,7 +345,7 @@ button {
 .legend-ramp {
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(90deg, #13233f, #17557a, #38e1ff);
+  /* gradient is set by MapView from the same ramp that paints the map */
 }
 .legend-ends { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--muted); margin-top: 3px; }
 
@@ -567,6 +566,18 @@ button {
 }
 .passport-actions .primary:hover { background: rgba(56, 225, 255, 0.25); }
 .passport-actions .danger:hover { border-color: var(--danger); color: var(--danger); }
+
+/* ============ Boot fallback ============ */
+#boot-fallback {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  z-index: 99;
+}
+#boot-fallback p { color: var(--muted); font-size: 14px; text-align: center; line-height: 1.7; }
+#boot-fallback code { color: var(--accent); }
 
 /* ============ Toast ============ */
 #toast {

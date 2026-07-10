@@ -21,9 +21,10 @@ const clean = (s) => String(s).replace(/[\x00-\x1f\x7f]/g, ' ');
 export function sanitizeEntry(d) {
   if (!d || typeof d !== 'object') return null;
   // require a whitespace/control-free http(s) URL end to end — a newline in a
-  // copied URL would paste as multiple terminal lines
+  // copied URL would paste as multiple terminal lines, and C0/DEL bytes could
+  // smuggle terminal escape sequences through Copy link or the manifest
   const url = typeof d.url === 'string' ? d.url.trim() : '';
-  if (!/^https?:\/\/\S+$/i.test(url)) return null;
+  if (!/^https?:\/\/[^\s\x00-\x1f\x7f]+$/i.test(url)) return null;
   if (!DOMAIN_META[d.domain]) return null;
   if (d.region !== GLOBAL_REGION && !REGION_META[d.region]) return null;
   const e = { ...d };

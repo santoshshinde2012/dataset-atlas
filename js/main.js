@@ -18,6 +18,7 @@ import { $ } from './utils/dom.js';
 
 async function boot() {
   const { world, countryRegion, catalog } = await loadAtlasData();
+  window.__atlasBooted = true; // disarms the boot-fallback watchdog in index.html
 
   const store = createStore({ catalog, pinStorage: localPinStorage });
   const toast = createToast($('#toast'));
@@ -55,9 +56,5 @@ async function boot() {
 
 boot().catch((err) => {
   console.error(err);
-  document.body.insertAdjacentHTML('beforeend',
-    `<div style="position:fixed;inset:0;display:grid;place-items:center;background:#070b14;z-index:99">
-       <p style="color:#8b98ad;font-size:14px;text-align:center">
-         Could not load atlas data.<br>Serve this folder over HTTP (e.g. <code>python3 -m http.server</code>) and reload.
-       </p></div>`);
+  document.getElementById('boot-fallback').hidden = false;
 });

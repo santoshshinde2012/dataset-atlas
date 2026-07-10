@@ -4,7 +4,7 @@
  * catalog strings are comment-hardened and kaggleRef is only ever included
  * after the catalog sanitizer's whitelist check (see catalog.js).
  */
-import { oneLine } from './utils/text.js';
+import { oneLine, oneLineUrl } from './utils/text.js';
 
 export function manifestText(list) {
   const lines = [
@@ -21,7 +21,7 @@ export function manifestText(list) {
     lines.push('# ── Direct sources — open in a browser, or curl where the URL is a file ──');
     direct.forEach((d, i) => {
       lines.push(`#  ${i + 1}. ${oneLine(d.title)} — ${oneLine(d.source)} [${oneLine(d.license)}]`);
-      lines.push(`#     ${oneLine(d.url)}`);
+      lines.push(`#     ${oneLineUrl(d.url)}`);
     });
     lines.push('');
   }

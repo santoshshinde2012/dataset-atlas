@@ -4,10 +4,9 @@
  * narrow interface and a projection strategy — never on other UI components.
  */
 import { d3, topojson } from '../lib.js';
-import { REGION_META, ACCENT_COLOR, DOMAIN_META } from '../config.js';
+import { REGION_META, ACCENT_COLOR, DOMAIN_META, AVAIL_RAMP } from '../config.js';
 import { PROJECTIONS } from './projections.js';
 
-const AVAIL_RAMP = ['#111f38', '#164860', '#1e7d9c', '#35c3e0'];
 const availColor = (t) => d3.interpolateRgbBasis(AVAIL_RAMP)(t * 0.92);
 
 export class MapView {
@@ -35,6 +34,7 @@ export class MapView {
     this.lastRegion = store.getState().region;
 
     this.#buildScene();
+    this.#paintLegend();
     this.applyProjection();
     this.#attachInteractions();
     this.startAutoRotate();
@@ -120,6 +120,12 @@ export class MapView {
     this.tooltip.show(event, region);
   }
 
+  /** The legend gradient is derived from the same ramp as the choropleth. */
+  #paintLegend() {
+    const ramp = document.querySelector('.legend-ramp');
+    if (ramp) ramp.style.background = `linear-gradient(90deg, ${AVAIL_RAMP.join(', ')})`;
+  }
+
   #onCountryLeave() {
     this.gCountries.classed('region-hover', false);
     this.gCountries.selectAll('.country').classed('hovered-region', false);
@@ -135,6 +141,7 @@ export class MapView {
     const s = this.strategy;
     this.projection = s.create(d3).rotate(s.rotate(this.rotation));
     this.baseScale = s.baseScale(this.width, this.height);
+    this.offsetY = this.clampOffsetY(this.offsetY); // pan bounds change with viewport/scale
     this.geoPath = d3.geoPath(this.projection);
     this.render();
   }
@@ -245,12 +252,18 @@ export class MapView {
     });
   }
 
-  stopAutoRotate() {
-    this.interacted = true;
+  /** Halt the timer without recording a user interaction (programmatic pauses). */
+  #haltTimer() {
     if (this.autoTimer) {
       this.autoTimer.stop();
       this.autoTimer = null;
     }
+  }
+
+  /** User pointer interaction: halt and never auto-resume. */
+  stopAutoRotate() {
+    this.interacted = true;
+    this.#haltTimer();
   }
 
   focusRegion(key) {
@@ -286,8 +299,11 @@ export class MapView {
     if (projection !== this.lastProjectionKey) {
       this.lastProjectionKey = projection;
       this.offsetY = 0;
-      this.stopAutoRotate();
+      // a projection toggle is not a map interaction: ambient rotation may
+      // resume when the user returns to the globe untouched
+      this.#haltTimer();
       this.applyProjection();
+      this.startAutoRotate();
     }
     if (region !== this.lastRegion) {
       this.lastRegion = region;

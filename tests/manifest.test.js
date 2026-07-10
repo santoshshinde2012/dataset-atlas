@@ -44,6 +44,14 @@ test('newlines in catalog strings cannot escape shell comments', () => {
   }
 });
 
+test('URL fragments survive intact in the manifest', () => {
+  const text = manifestText([{
+    title: 'FAOSTAT QCL', source: 'FAO', license: 'CC BY 4.0',
+    url: 'https://www.fao.org/faostat/en/#data/QCL',
+  }]);
+  assert.ok(text.includes('https://www.fao.org/faostat/en/#data/QCL'));
+});
+
 test('empty passport still produces a valid header', () => {
   const text = manifestText([]);
   assert.ok(text.includes('0 datasets'));

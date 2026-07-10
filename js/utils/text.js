@@ -4,8 +4,12 @@
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-/** Collapse newlines and comment-breaking characters for shell-comment safety. */
+/** Collapse newlines and comment-breaking characters for shell-comment safety (prose fields). */
 export const oneLine = (s) => String(s).replace(/[\r\n#]+/g, ' ').trim();
+
+/** URL-safe variant: strip only line breaks — '#' is a legitimate fragment marker
+ * and harmless inside an already-commented shell line. */
+export const oneLineUrl = (s) => String(s).replace(/[\r\n]+/g, '');
 
 /** Stable short id derived from a string (djb2, base36). */
 export function hashId(str) {

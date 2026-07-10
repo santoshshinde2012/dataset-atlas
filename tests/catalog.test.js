@@ -51,6 +51,12 @@ test('sanitizeEntry normalizes malformed fields instead of crashing', () => {
 test('sanitizeEntry rejects URLs with embedded whitespace or control characters', () => {
   assert.equal(sanitizeEntry({ ...valid, url: 'https://example.com/a\nrm -rf ~' }), null);
   assert.equal(sanitizeEntry({ ...valid, url: 'https://example.com/a b' }), null);
+  // non-whitespace control bytes (terminal escape injection) are rejected too
+  assert.equal(sanitizeEntry({ ...valid, url: 'https://example.com/\x1b]0;owned\x07data.csv' }), null);
+  assert.equal(sanitizeEntry({ ...valid, url: 'https://example.com/a\x7fb' }), null);
+  // fragments are legitimate
+  assert.equal(sanitizeEntry({ ...valid, url: 'https://www.fao.org/faostat/en/#data/QCL' }).url,
+    'https://www.fao.org/faostat/en/#data/QCL');
   // leading/trailing whitespace is tolerated and trimmed
   assert.equal(sanitizeEntry({ ...valid, url: '  https://example.com/ok  ' }).url, 'https://example.com/ok');
 });
