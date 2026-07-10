@@ -33,6 +33,9 @@ async function boot() {
     Object.values(countryCodes).map((c) => [c.cca2, c.name])
   );
   window.__atlasBooted = true; // disarms the boot-fallback watchdog in index.html
+  // on slow connections the watchdog may already have fired before boot
+  // finished — a successful boot must clear the overlay again
+  document.getElementById('boot-fallback').hidden = true;
 
   let storedTheme = null;
   try { storedTheme = localStorage.getItem('atlas-theme'); } catch { /* session-only */ }
