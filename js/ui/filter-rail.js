@@ -3,7 +3,11 @@ import { SOURCE_TYPE_META, PRESETS, LICENSE_LABELS, REGION_META } from '../confi
 import { $, el } from '../utils/dom.js';
 import { esc, normFormat } from '../utils/text.js';
 
-export function initFilterRail({ store }) {
+export function initFilterRail({ store, generated = null }) {
+  if (generated) {
+    $('#catalog-stamp').textContent = `Catalog refreshed ${generated}`;
+    $('#catalog-stamp').hidden = false;
+  }
   buildPresets(store);
   buildFacet(
     $('#source-filters'),

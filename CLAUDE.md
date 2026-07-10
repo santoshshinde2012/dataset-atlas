@@ -7,6 +7,7 @@ Map-first dataset discovery: Region → Domain → Get in ≤3 clicks. Dependenc
 - `npm start` — serve on http://localhost:4173 (or use the `.claude/launch.json` "atlas" preview config)
 - `npm test` — unit tests (node --test, zero dependencies)
 - `npm run validate` — schema-check `data/catalog.json` after editing it
+- `npm run refresh` — liveness sweep + source-API freshness bumps + `generated` stamp (also runs weekly via `.github/workflows/refresh.yml`)
 
 ## Architecture (SOLID ES modules)
 

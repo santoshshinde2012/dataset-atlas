@@ -26,7 +26,7 @@ function hydrateIcons() {
 
 async function boot() {
   hydrateIcons(); // static chrome icons appear while data loads
-  const { world, countryRegion, catalog } = await loadAtlasData();
+  const { world, countryRegion, catalog, generated } = await loadAtlasData();
   window.__atlasBooted = true; // disarms the boot-fallback watchdog in index.html
 
   const store = createStore({ catalog, pinStorage: localPinStorage });
@@ -38,7 +38,7 @@ async function boot() {
 
   initPassport({ store, toast, copyText });
   initTopbar({ store, onPassportToggle: store.actions.togglePassport });
-  initFilterRail({ store });
+  initFilterRail({ store, generated });
   initCardRail({ store, toast, copyText });
 
   // single writer for the shared right-edge layout state

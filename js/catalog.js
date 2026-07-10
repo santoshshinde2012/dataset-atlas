@@ -59,5 +59,10 @@ export async function loadAtlasData(base = '') {
     fetch(`${base}data/country-regions.json`).then((r) => r.json()),
     fetch(`${base}data/catalog.json`).then((r) => r.json()),
   ]);
-  return { world, countryRegion, catalog: buildCatalog(rawCatalog) };
+  return {
+    world,
+    countryRegion,
+    catalog: buildCatalog(rawCatalog),
+    generated: typeof rawCatalog.generated === 'string' ? rawCatalog.generated : null,
+  };
 }

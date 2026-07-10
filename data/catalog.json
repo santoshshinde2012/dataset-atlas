@@ -178,9 +178,9 @@
    ],
    "license": "CC BY 4.0",
    "licenseOpenness": 0.8,
-   "freshnessYear": 2025,
+   "freshnessYear": 2026,
    "coverageStart": 1961,
-   "coverageEnd": 2023,
+   "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 1
   },
@@ -285,6 +285,48 @@
    "coverageEnd": 2024,
    "granularity": "admin",
    "approxSizeMB": 20
+  },
+  {
+   "title": "Bahrain agriculture production indicators",
+   "description": "Annual production quantities (tons) for vegetables, fruits, dates and greenhouse crops in Bahrain, 2015-2025. National series from the Information & eGovernment Authority open data portal; updated June 2026.",
+   "domain": "agriculture",
+   "region": "middle-east",
+   "source": "Bahrain Open Data Portal (iGA)",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.bh/explore/dataset/03-agriculture-production/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "Bahrain Government Open Data License",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2015,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 0.01
+  },
+  {
+   "title": "Qatar crop production, area and average yield",
+   "description": "Annual production (tonnes), cropped area (hectares) and average yield for Qatar's cereals, vegetables, fruits & dates and green fodder, 2014-2023. Published by the National Planning Council; updated June 2026.",
+   "domain": "agriculture",
+   "region": "middle-east",
+   "source": "Qatar Open Data Portal",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.qa/explore/dataset/production-area-and-average-yield-of-crops/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "Qatar Open Data License (CC BY 4.0)",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2014,
+   "coverageEnd": 2023,
+   "granularity": "country",
+   "approxSizeMB": 0.05
   },
   {
    "title": "USDA Cropland Data Layer (CropScape)",
@@ -646,6 +688,49 @@
    "approxSizeMB": 2000
   },
   {
+   "title": "Annual Relative Humidity and Rainfall – Qatar",
+   "description": "Annual total rainfall (mm) and minimum/maximum relative humidity (%) for the State of Qatar, 2014-2022, compiled by the National Planning Council's environmental statistics department; updated annually.",
+   "domain": "climate",
+   "region": "middle-east",
+   "source": "State of Qatar Open Data Portal (National Planning Council)",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.qa/explore/dataset/annual-relative-humidity-and-rainfall-qatar/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 2014,
+   "coverageEnd": 2022,
+   "granularity": "country",
+   "approxSizeMB": 0.01
+  },
+  {
+   "title": "Saudi Arabia Hourly Climate Integrated Surface Data",
+   "description": "Hourly NOAA Integrated Surface Data for Saudi weather stations: air temperature, dew point, wind, visibility, sky ceiling and sea-level pressure. 1.47M station-level records, 2020-2025; refreshed annually on KAPSARC.",
+   "domain": "climate",
+   "region": "middle-east",
+   "source": "KAPSARC Data Portal (NOAA Integrated Surface Data)",
+   "sourceType": "research",
+   "url": "https://datasource.kapsarc.org/explore/dataset/saudi-hourly-weather-data/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX",
+    "GeoJSON"
+   ],
+   "license": "Public Domain (NOAA)",
+   "licenseOpenness": 1,
+   "freshnessYear": 2026,
+   "coverageStart": 2020,
+   "coverageEnd": 2025,
+   "granularity": "point",
+   "approxSizeMB": 200
+  },
+  {
    "title": "1.88 Million US Wildfires",
    "description": "Spatial database of 1.88 million US wildfire records, 1992-2015, with discovery date, final fire size, cause and point location, compiled for the national Fire Program Analysis system. Single SQLite file.",
    "domain": "climate",
@@ -736,9 +821,9 @@
    ],
    "license": "CC BY 3.0 IGO",
    "licenseOpenness": 0.8,
-   "freshnessYear": 2022,
+   "freshnessYear": 2026,
    "coverageStart": 2022,
-   "coverageEnd": 2022,
+   "coverageEnd": 2026,
    "granularity": "admin",
    "approxSizeMB": 1
   },
@@ -899,9 +984,9 @@
    ],
    "license": "CC BY 4.0",
    "licenseOpenness": 0.8,
-   "freshnessYear": 2025,
+   "freshnessYear": 2026,
    "coverageStart": 1960,
-   "coverageEnd": 2025,
+   "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 0.5
   },
@@ -939,9 +1024,9 @@
    ],
    "license": "CC BY 3.0 IGO",
    "licenseOpenness": 0.8,
-   "freshnessYear": 2022,
+   "freshnessYear": 2026,
    "coverageStart": 2022,
-   "coverageEnd": 2022,
+   "coverageEnd": 2026,
    "granularity": "admin",
    "approxSizeMB": 5
   },
@@ -979,11 +1064,53 @@
    ],
    "license": "CC BY 3.0 IGO",
    "licenseOpenness": 0.8,
-   "freshnessYear": 2024,
+   "freshnessYear": 2026,
    "coverageStart": 2024,
-   "coverageEnd": 2024,
+   "coverageEnd": 2026,
    "granularity": "admin",
    "approxSizeMB": 2
+  },
+  {
+   "title": "Qatar Population by Municipality and Age Groups",
+   "description": "Qatar population disaggregated by municipality and age group, annual series 2014-2023 (1,440 records), published by the National Planning Council on the State of Qatar's official open data portal.",
+   "domain": "demographics",
+   "region": "middle-east",
+   "source": "Qatar Open Data Portal (National Planning Council)",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.qa/explore/dataset/population-by-municipality-and-age-groups/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2014,
+   "coverageEnd": 2023,
+   "granularity": "admin",
+   "approxSizeMB": 0.15
+  },
+  {
+   "title": "Saudi Census 2022: Riyadh Region Population by Age, Citizenship, Gender and Governorate",
+   "description": "Saudi 2022 Census population for the Ar Riyadh region by governorate, citizenship, gender, and age group, with aggregate totals for other regions and all of KSA (2,140 records). Published by the Royal Commission for Riyadh City from GASTAT census data.",
+   "domain": "demographics",
+   "region": "middle-east",
+   "source": "Royal Commission for Riyadh City Open Data",
+   "sourceType": "gov-portal",
+   "url": "https://opendata.rcrc.gov.sa/explore/dataset/population-by-age-citizenship-gender-and-governorate-2022/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "KSA Open Data License",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 2022,
+   "coverageEnd": 2022,
+   "granularity": "admin",
+   "approxSizeMB": 0.2
   },
   {
    "title": "US Census Demographic Data (Kaggle)",
@@ -1350,6 +1477,48 @@
    "approxSizeMB": 50
   },
   {
+   "title": "Bahrain quarterly GDP growth by economic activity",
+   "description": "Quarterly GDP growth rates (%) at constant prices by economic sector for Bahrain, Q1 2011 to Q4 2025. 1,380 records published by the Information & eGovernment Authority; updated quarterly, last April 2026.",
+   "domain": "economy",
+   "region": "middle-east",
+   "source": "Bahrain Open Data Portal (iGA)",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.bh/explore/dataset/8-qaurterly-growth-kp/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "Bahrain Government Open Data License",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2011,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 0.1
+  },
+  {
+   "title": "World Bank GDP growth (annual %) - Middle East, North Africa, Afghanistan & Pakistan",
+   "description": "Annual real GDP growth, 1961-2025, for the World Bank's Middle East, North Africa (incl. Afghanistan & Pakistan) aggregate and each economy in it, from World Development Indicators. CSV, XML and Excel downloads.",
+   "domain": "economy",
+   "region": "middle-east",
+   "source": "World Bank",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG?locations=ZQ",
+   "formats": [
+    "CSV",
+    "XML",
+    "XLSX"
+   ],
+   "license": "CC BY-4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1961,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 0.3
+  },
+  {
    "title": "Canada: Monthly GDP at Basic Prices by Industry (Table 36-10-0434-01)",
    "description": "Monthly real GDP at basic prices by NAICS industry for Canada, Jan 1997 onward, chained 2017 dollars, seasonally adjusted. Statistics Canada table 36-10-0434-01; full-table CSV and SDMX download.",
    "domain": "economy",
@@ -1699,6 +1868,48 @@
    "approxSizeMB": 4
   },
   {
+   "title": "Bahrain School Students by Academic Level, School Sector and Sex",
+   "description": "Student enrolment in Bahrain's public and private schools by academic level, school sector and sex, academic years 2009/10-2022/23; 144 records from the Ministry of Education on the Bahrain Open Data Portal.",
+   "domain": "education",
+   "region": "middle-east",
+   "source": "Bahrain Open Data Portal (Ministry of Education)",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.bh/explore/dataset/12-school-students-by-level-type-of-school-and-sex-12/information/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "Bahrain Government Open Data License",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 2009,
+   "coverageEnd": 2023,
+   "granularity": "country",
+   "approxSizeMB": 0.05
+  },
+  {
+   "title": "Qatar Students, Schools, Grades and Teachers by Level of Education",
+   "description": "Students, schools, classes and teachers in Qatar's public schools by education level and school type, academic years 2013/14-2021/22; 576 records published on the State of Qatar Open Data portal.",
+   "domain": "education",
+   "region": "middle-east",
+   "source": "State of Qatar Open Data Portal (National Planning Council)",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.qa/explore/dataset/students-schools-grades-and-teachers-by-level-of-education/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2013,
+   "coverageEnd": 2022,
+   "granularity": "country",
+   "approxSizeMB": 0.1
+  },
+  {
    "title": "College Scorecard",
    "description": "Institution-level data on ~6,500 US colleges 1996-97 to 2025-26: enrollment, costs, student aid, completion, cumulative debt and post-graduation earnings, plus field-of-study files by CIP code.",
    "domain": "education",
@@ -1934,9 +2145,9 @@
    ],
    "license": "CC BY 4.0",
    "licenseOpenness": 0.8,
-   "freshnessYear": 2025,
+   "freshnessYear": 2026,
    "coverageStart": 1990,
-   "coverageEnd": 2023,
+   "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 0.5
   },
@@ -2039,6 +2250,48 @@
    "coverageEnd": 2026,
    "granularity": "point",
    "approxSizeMB": 20
+  },
+  {
+   "title": "Beirut Rooftop Solar Potential Mapping",
+   "description": "Building-level rooftop solar potential for a sample area of Beirut: suitable roof area, installable PV capacity, and estimated yearly generation. Derived from 0.5 m satellite imagery; on World Bank ENERGYDATA.INFO.",
+   "domain": "energy",
+   "region": "middle-east",
+   "source": "World Bank ENERGYDATA.INFO",
+   "sourceType": "intl-org",
+   "url": "https://energydata.info/dataset/beirut-rooftop-solar-potential-mapping",
+   "formats": [
+    "SHP",
+    "CSV",
+    "XLS"
+   ],
+   "license": "CC0 1.0",
+   "licenseOpenness": 1,
+   "freshnessYear": 2022,
+   "coverageStart": 2020,
+   "coverageEnd": 2020,
+   "granularity": "point",
+   "approxSizeMB": 16.3
+  },
+  {
+   "title": "Saudi Arabia Electricity Consumption by Sectors",
+   "description": "Saudi Arabia's annual electricity consumption by sector (residential, commercial, industrial, governmental, agriculture), 2005-2021. Sourced from the Saudi Central Bank (SAMA) via KAPSARC's open energy data portal.",
+   "domain": "energy",
+   "region": "middle-east",
+   "source": "KAPSARC Data Portal (Saudi Central Bank)",
+   "sourceType": "research",
+   "url": "https://datasource.kapsarc.org/explore/dataset/electricity-consumption-by-sectors/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "Public Domain",
+   "licenseOpenness": 1,
+   "freshnessYear": 2026,
+   "coverageStart": 2005,
+   "coverageEnd": 2021,
+   "granularity": "country",
+   "approxSizeMB": 0.1
   },
   {
    "title": "EIA-923: Power Plant Operations (United States)",
@@ -2151,7 +2404,7 @@
    ],
    "license": "Creative Commons Attribution (CC BY)",
    "licenseOpenness": 0.8,
-   "freshnessYear": 2019,
+   "freshnessYear": 2025,
    "coverageStart": 2019,
    "coverageEnd": 2019,
    "granularity": "point",
@@ -2293,9 +2546,9 @@
    ],
    "license": "CC BY 4.0",
    "licenseOpenness": 0.8,
-   "freshnessYear": 2024,
+   "freshnessYear": 2026,
    "coverageStart": 2020,
-   "coverageEnd": 2024,
+   "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 75
   },
@@ -2399,6 +2652,47 @@
    "coverageEnd": 2020,
    "granularity": "point",
    "approxSizeMB": 2000
+  },
+  {
+   "title": "Crude Birth, Death and Maternal Mortality Rates – Qatar",
+   "description": "Annual crude birth and death rates, natural increase, maternal mortality per 100,000 live births, and share of medically supervised deliveries in Qatar, 2001-2022, from the National Planning Council.",
+   "domain": "health",
+   "region": "middle-east",
+   "source": "State of Qatar Open Data Portal (National Planning Council)",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.qa/explore/dataset/crude-birth-and-death-rates-natural-increase-rate-and-maternal-mortality-rate/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2001,
+   "coverageEnd": 2022,
+   "granularity": "country",
+   "approxSizeMB": 0.01
+  },
+  {
+   "title": "Israel Ministry of Health COVID-19 Database",
+   "description": "Official Israel Ministry of Health COVID-19 repository: 48 resources on lab tests, confirmed cases, hospitalizations, deaths and vaccinations by locality, age and sex, March 2020 to May 2023.",
+   "domain": "health",
+   "region": "middle-east",
+   "source": "data.gov.il (Israel Ministry of Health)",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.il/dataset/covid-19",
+   "formats": [
+    "CSV",
+    "XLSX"
+   ],
+   "license": "Israel open government data license",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 2020,
+   "coverageEnd": 2023,
+   "granularity": "city",
+   "approxSizeMB": 350
   },
   {
    "title": "CDC PLACES: Local Data for Better Health, County Data",
@@ -2616,9 +2910,9 @@
    ],
    "license": "CC BY 4.0",
    "licenseOpenness": 0.8,
-   "freshnessYear": 2025,
+   "freshnessYear": 2026,
    "coverageStart": 1970,
-   "coverageEnd": 2023,
+   "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 0.5
   },
@@ -2726,6 +3020,48 @@
    "approxSizeMB": 1800
   },
   {
+   "title": "Bahrain Vehicles Registered in Use",
+   "description": "Annual counts of vehicles registered and in use in Bahrain, 2018-2025; 184 yearly records published on the Bahrain Open Data Portal, last refreshed April 2026.",
+   "domain": "transport",
+   "region": "middle-east",
+   "source": "Bahrain Open Data Portal (General Directorate of Traffic)",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.bh/explore/dataset/01-vehicle-registered-in-use/information/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "Bahrain Government Open Data License",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2018,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 0.05
+  },
+  {
+   "title": "Qatar Air Traffic Data: Aircraft, Passengers and Cargo",
+   "description": "Monthly aircraft movements, passenger and cargo traffic for Qatar, 2018-2024; 84 monthly records from the Civil Aviation Authority on the State of Qatar Open Data portal.",
+   "domain": "transport",
+   "region": "middle-east",
+   "source": "State of Qatar Open Data Portal (Civil Aviation Authority)",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.gov.qa/explore/dataset/air-traffic-data/",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 2018,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 0.05
+  },
+  {
    "title": "2015 Flight Delays and Cancellations (US DOT)",
    "description": "On-time performance for ~5.8M US domestic flights in 2015 from DOT Bureau of Transportation Statistics: flights.csv with carrier, origin/destination, departure/arrival delays, cancellation causes; plus airline and airport lookup tables.",
    "domain": "transport",
@@ -2805,5 +3141,6 @@
    "granularity": "point",
    "approxSizeMB": 210
   }
- ]
+ ],
+ "generated": "2026-07-10"
 }

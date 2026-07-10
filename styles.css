@@ -275,6 +275,7 @@ button {
 
 .rail-footnote { border-top: 1px solid var(--panel-border); padding-top: 12px; }
 #tally { font-size: 11.5px; color: var(--muted); margin-bottom: 8px; }
+#catalog-stamp { font-size: 10.5px; color: var(--muted); opacity: 0.8; margin: -4px 0 8px; }
 #reset-filters {
   font-size: 11.5px;
   color: var(--muted);

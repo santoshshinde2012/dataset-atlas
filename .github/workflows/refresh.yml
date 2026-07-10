@@ -1,0 +1,58 @@
+name: Refresh catalog
+
+on:
+  schedule:
+    - cron: '0 5 * * 1' # every Monday 05:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Refresh liveness + freshness
+        id: refresh
+        # dead links make the step fail AFTER writing the report — keep going
+        # so a PR with the freshness bumps is still opened for review
+        continue-on-error: true
+        run: npm run refresh
+
+      - name: Validate refreshed catalog
+        run: npm run validate
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Open PR when anything changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet; then
+            echo "catalog already current"
+            exit 0
+          fi
+          BRANCH="catalog-refresh-$(date +%Y%m%d)"
+          git config user.name "atlas-refresh-bot"
+          git config user.email "actions@github.com"
+          git checkout -b "$BRANCH"
+          git add data/catalog.json
+          git commit -m "Automated catalog refresh: liveness sweep + freshness bumps"
+          git push -u origin "$BRANCH"
+          gh pr create \
+            --title "Automated catalog refresh $(date +%Y-%m-%d)" \
+            --body "Weekly refresh: URL liveness sweep and source-API freshness updates. Dead links (if any) are listed in the workflow log — replace or drop those entries before merging." \
+            --base main --head "$BRANCH"
+
+      - name: Fail visibly when dead links were found
+        if: steps.refresh.outcome == 'failure'
+        run: |
+          echo "::error::Dead links detected — see the refresh step log and the opened PR"
+          exit 1

@@ -24,7 +24,8 @@ export const REGION_META = {
   'latin-america': { name: 'Latin America', centroid: [-62, -14] },
   'europe':        { name: 'Europe',        centroid: [14, 50] },
   'africa':        { name: 'Africa',        centroid: [21, 3] },
-  'asia':          { name: 'Asia',          centroid: [88, 34] },
+  'middle-east':   { name: 'Middle East',   centroid: [45, 27] },
+  'asia':          { name: 'Asia',          centroid: [95, 33] },
   'oceania':       { name: 'Oceania',       centroid: [140, -26] },
 };
 

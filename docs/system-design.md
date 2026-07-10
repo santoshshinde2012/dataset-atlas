@@ -29,7 +29,7 @@ flowchart LR
     B --> C[Merge · dedup · gap-fill]
     C --> D[npm run validate<br/>schema + editorial rules]
   end
-  D --> E[(data/catalog.json<br/>139 entries)]
+  D --> E[(data/catalog.json<br/>155 entries)]
   subgraph Runtime["Runtime SPA (static hosting)"]
     E --> F[catalog.js<br/>sanitize + normalize]
     F --> G[store.js<br/>state · actions · selectors]
@@ -76,7 +76,7 @@ A ~120-line hand-rolled pub/sub store (no framework):
 
 - **State**: `domain`, `sourceTypes`, `formats`, `minOpenness`, `search`, `region`, `preset`, `projection`, `passportOpen`, `pins`.
 - **Actions** mutate state, persist side effects through injected ports, then `notify()`. Cross-cutting rules live in actions (e.g. selecting a region closes the passport drawer; changing domain clears a mismatched preset).
-- **Selectors** derive filtered lists and faceted counts on demand — with a 139-entry catalog, recomputation is microseconds; no memoization needed.
+- **Selectors** derive filtered lists and faceted counts on demand — with a 155-entry catalog, recomputation is microseconds; no memoization needed.
 - **Rendering**: components build static DOM once and update counts/classes in place on each notify, so keyboard focus and scroll positions survive re-renders. The card rail keys its rebuild on a signature of all filter inputs, letting pin toggles skip the rebuild entirely.
 
 ### Map rendering
@@ -94,7 +94,7 @@ One catalog entry (validated by `js/catalog.js` at load and `npm run validate` a
 {
   "title": "…", "description": "…",
   "domain": "climate|health|economy|agriculture|education|transport|energy|demographics",
-  "region": "global|north-america|latin-america|europe|africa|asia|oceania",
+  "region": "global|north-america|latin-america|europe|africa|middle-east|asia|oceania",
   "source": "World Bank", "sourceType": "kaggle|intl-org|gov-portal|research|ngo",
   "url": "https://… (deep link to the dataset page, never a portal homepage)",
   "kaggleRef": "owner/slug  (Kaggle only, regex-whitelisted)",
@@ -158,6 +158,7 @@ Modeled on farmlandatlas.com's interaction grammar: the map is the persistent st
 
 | Phase | Scope | Architectural impact |
 |---|---|---|
-| **2 — auto-enrichment** | Nightly job hits Kaggle (`datasets_list`), World Bank, and HDX APIs to refresh counts/freshness and propose new entries | A scheduled CI workflow writing `catalog.json` via the existing validate gate; the runtime is unchanged |
+| **2 — auto-refresh (shipped)** | `scripts/refresh-catalog.js` + weekly `refresh.yml`: liveness sweep over every URL, freshness bumps from source metadata APIs (World Bank, CKAN portals, GitHub, figshare — an adapter registry, one entry per host family), `generated` stamp surfaced in the UI, PR opened for review when anything changed | Scheduled CI writing `catalog.json` through the existing validate gate; runtime unchanged |
+| **2 — remaining** | Kaggle API enrichment (requires an API token secret) and automated new-entry proposals | New adapters in the refresh registry; curation agents on a schedule |
 | **3 — use-case bundles** | "I want to…" flows that pre-assemble 3–5 datasets into a one-click passport | New `bundles` registry in config; passport accepts a preset list |
 | **3 — shareable passports** | Pins encoded in the URL hash for link sharing | Store serializes pins to `location.hash`; no backend needed |

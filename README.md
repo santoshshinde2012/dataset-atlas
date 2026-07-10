@@ -61,9 +61,10 @@ Run the tests and catalog checks with:
 ```bash
 npm test           # unit tests (node --test, no dependencies to install)
 npm run validate   # schema-check data/catalog.json after editing it
+npm run refresh    # liveness sweep + source-API freshness bumps + generated stamp
 ```
 
-CI (GitHub Actions, `.github/workflows/ci.yml`) syntax-checks every module and runs both on push.
+CI (GitHub Actions, `.github/workflows/ci.yml`) syntax-checks every module and runs tests + validation on push. A second workflow (`refresh.yml`) runs the refresh weekly and opens a PR when links died or sources published newer data — the catalog stays current without a backend.
 
 ## Features
 
@@ -83,7 +84,7 @@ Each entry in `data/catalog.json`:
 {
   "title": "…", "description": "…",
   "domain": "climate|health|economy|agriculture|education|transport|energy|demographics",
-  "region": "global|north-america|latin-america|europe|africa|asia|oceania",
+  "region": "global|north-america|latin-america|europe|africa|middle-east|asia|oceania",
   "source": "Kaggle", "sourceType": "kaggle|intl-org|gov-portal|research|ngo",
   "url": "https://… (deep link to the dataset page)",
   "kaggleRef": "owner/slug (Kaggle only)",
@@ -95,5 +96,5 @@ Each entry in `data/catalog.json`:
 
 ## Roadmap (from the concept doc)
 
-- **Phase 2** — auto-enrich the catalog via the Kaggle API (`datasets_list`) and HDX/World Bank APIs so counts and freshness update themselves.
+- **Phase 2 — shipped**: `npm run refresh` + the weekly `refresh.yml` workflow keep links verified and freshness current from source APIs (World Bank, CKAN portals, GitHub, figshare); the UI shows the last refresh date. Remaining: Kaggle API enrichment (needs an API token) and automated new-entry proposals.
 - **Phase 3** — full use-case-first entry flow ("I want to…" bundles) and shareable Data Passports.
