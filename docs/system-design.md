@@ -29,7 +29,7 @@ flowchart LR
     B --> C[Merge · dedup · gap-fill]
     C --> D[npm run validate<br/>schema + editorial rules]
   end
-  D --> E[(data/catalog.json<br/>118 entries)]
+  D --> E[(data/catalog.json<br/>139 entries)]
   subgraph Runtime["Runtime SPA (static hosting)"]
     E --> F[catalog.js<br/>sanitize + normalize]
     F --> G[store.js<br/>state · actions · selectors]
@@ -76,7 +76,7 @@ A ~120-line hand-rolled pub/sub store (no framework):
 
 - **State**: `domain`, `sourceTypes`, `formats`, `minOpenness`, `search`, `region`, `preset`, `projection`, `passportOpen`, `pins`.
 - **Actions** mutate state, persist side effects through injected ports, then `notify()`. Cross-cutting rules live in actions (e.g. selecting a region closes the passport drawer; changing domain clears a mismatched preset).
-- **Selectors** derive filtered lists and faceted counts on demand — with a 118-entry catalog, recomputation is microseconds; no memoization needed.
+- **Selectors** derive filtered lists and faceted counts on demand — with a 139-entry catalog, recomputation is microseconds; no memoization needed.
 - **Rendering**: components build static DOM once and update counts/classes in place on each notify, so keyboard focus and scroll positions survive re-renders. The card rail keys its rebuild on a signature of all filter inputs, letting pin toggles skip the rebuild entirely.
 
 ### Map rendering

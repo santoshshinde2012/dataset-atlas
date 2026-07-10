@@ -345,6 +345,25 @@
    "approxSizeMB": 20
   },
   {
+   "title": "Agricultural Production Statistics: Year to June 2025 (New Zealand)",
+   "description": "Final results of Stats NZ's 2025 Agricultural Production Survey: livestock numbers, arable crops, and forestry at national and regional council level, year ended June 2025. Downloadable Excel tables.",
+   "domain": "agriculture",
+   "region": "oceania",
+   "source": "Stats NZ (Statistics New Zealand)",
+   "sourceType": "gov-portal",
+   "url": "https://www.stats.govt.nz/information-releases/agricultural-production-statistics-year-to-june-2025/",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2002,
+   "coverageEnd": 2025,
+   "granularity": "admin",
+   "approxSizeMB": 0.1
+  },
+  {
    "title": "CHIRPS Monthly Rainfall over Africa (Digital Earth Africa)",
    "description": "Monthly rainfall rasters (CHIRPS v2.0) for Africa at 0.05 degree (~5 km), 1981 to present, blending satellite infrared with station gauge data. Cloud-optimized GeoTIFFs hosted by Digital Earth Africa.",
    "domain": "climate",
@@ -1169,6 +1188,27 @@
    "approxSizeMB": 20
   },
   {
+   "title": "Eurostat: HICP Inflation, Monthly Indices and Rates (prc_hicp_minr)",
+   "description": "Harmonised Index of Consumer Prices for EU, EFTA and candidate countries: monthly indices (2015=100, 2025=100) and annual/monthly/12-month inflation rates, ECOICOP ver.2, 1996-2026. Dataset code prc_hicp_minr.",
+   "domain": "economy",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/web/products-datasets/-/prc_hicp_minr",
+   "formats": [
+    "TSV",
+    "CSV",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1996,
+   "coverageEnd": 2026,
+   "granularity": "country",
+   "approxSizeMB": 34
+  },
+  {
    "title": "GDP per Capita (PPP, constant 2021 international-$)",
    "description": "Country-year GDP per capita in constant 2021 international-$ (PPP), 1990-2024, for ~190 economies. World Bank WDI data processed by Our World in Data; full or filtered CSV download plus API.",
    "domain": "economy",
@@ -1756,6 +1796,25 @@
    "approxSizeMB": 40
   },
   {
+   "title": "RePP Africa – Renewable Power Plant Database",
+   "description": "Georeferenced, curated database of 2,478 existing, under-construction, and proposed hydropower (1,074), solar (1,128), and wind (276) plants across Africa with coordinates, capacity (MW), and status; compiled Nov 2022.",
+   "domain": "energy",
+   "region": "africa",
+   "source": "Peters et al., Scientific Data (Springer Nature figshare)",
+   "sourceType": "research",
+   "url": "https://springernature.figshare.com/articles/dataset/RePP_Africa/20122733",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "CC0 1.0",
+   "licenseOpenness": 1,
+   "freshnessYear": 2023,
+   "coverageStart": 2022,
+   "coverageEnd": 2022,
+   "granularity": "point",
+   "approxSizeMB": 0.9
+  },
+  {
    "title": "Electricity Generation and Consumption, Annual — Singapore",
    "description": "Singapore's annual electricity generated and consumed in GWh, 1975-2025, with consumption broken down by sector (industrial, commerce, transport, households); 18 series compiled by SINGSTAT from EMA data.",
    "domain": "energy",
@@ -1961,6 +2020,25 @@
    "coverageEnd": 2026,
    "granularity": "admin",
    "approxSizeMB": 5
+  },
+  {
+   "title": "Latin America Energy Tracker (Global Energy Monitor)",
+   "description": "Project-level database of ~18,000 energy facilities in 31 Latin American and Caribbean countries: coal, oil, gas, solar, wind, hydro, geothermal, nuclear. Includes capacity, status, ownership and coordinates.",
+   "domain": "energy",
+   "region": "latin-america",
+   "source": "Global Energy Monitor",
+   "sourceType": "ngo",
+   "url": "https://globalenergymonitor.org/projects/latin-america-energy-tracker/",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2023,
+   "coverageEnd": 2026,
+   "granularity": "point",
+   "approxSizeMB": 20
   },
   {
    "title": "EIA-923: Power Plant Operations (United States)",
