@@ -44,7 +44,15 @@ export function initTopbar({ store, onPassportToggle }) {
     $('#theme-toggle').innerHTML = icon(state.theme === 'light' ? 'moon' : 'sun');
     $('#theme-toggle').title = state.theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme';
     $('#passport-count').textContent = state.pins.size;
+    syncChipOverflow();
   }
+
+  // edge fade only when the strip genuinely scrolls, so the last chip is
+  // never faded out on wide screens where everything fits
+  function syncChipOverflow() {
+    nav.classList.toggle('overflowing', nav.scrollWidth > nav.clientWidth + 1);
+  }
+  addEventListener('resize', syncChipOverflow);
 
   store.subscribe(render);
   render();

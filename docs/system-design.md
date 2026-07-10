@@ -82,7 +82,7 @@ A ~120-line hand-rolled pub/sub store (no framework):
 ### Map rendering
 
 - D3 `geoOrthographic` (draggable globe with ambient auto-rotation until first pointer interaction) and `geoNaturalEarth1` (flat, horizontal rotation + clamped vertical pan) behind the strategy interface.
-- Countries are a **choropleth of region-level data availability**: fill = ramp(√(regionCount/maxCount)) recomputed live on every filter change. Region nodes are sized by √count and colored by the active domain.
+- Countries are a **choropleth of region-level data availability**: fill = ramp(√(regionCount/maxCount)) recomputed live on every filter change. The ramp's hue follows the **active domain** (Agriculture paints greens, Climate blues — single-hue tint→shade derived from the validated domain color, cached per domain+theme), and the legend gradient/label follow it. Region nodes are sized by √count, colored by the active domain, with counts in solid pill badges.
 - Selecting a region tweens rotation (shortest longitude arc) — and in flat mode a vertical pan — to center it.
 - Country→region mapping is precomputed (`data/country-regions.json`, ISO-numeric → region) from UN M49 region data, so the runtime does no geometry classification.
 

@@ -4,7 +4,7 @@
  * narrow interface and a projection strategy — never on other UI components.
  */
 import { d3, topojson } from '../lib.js';
-import { REGION_META, THEMES, domainColor, accentColor } from '../config.js';
+import { REGION_META, DOMAIN_META, THEMES, domainColor, accentColor } from '../config.js';
 import { PROJECTIONS } from './projections.js';
 
 export class MapView {
@@ -51,8 +51,40 @@ export class MapView {
     return THEMES[this.store.getState().theme] || THEMES.light;
   }
 
+  /**
+   * The choropleth ramp follows the ACTIVE DOMAIN's hue — selecting
+   * Agriculture paints the world in greens, Climate in blues — so the map
+   * itself identifies what you are looking at. Ramps stay single-hue
+   * tint→shade (monotonic lightness), derived from the validated domain
+   * color; 'all domains' uses the validated accent ramp from THEMES.
+   */
+  #rampFor(domainKey) {
+    const theme = this.store.getState().theme;
+    if (domainKey === 'all') return this.themeTokens.availRamp;
+    const cacheKey = `${theme}:${domainKey}`;
+    if (!this.rampCache) this.rampCache = new Map();
+    if (!this.rampCache.has(cacheKey)) {
+      const c = domainColor(domainKey, theme);
+      const ramp = theme === 'light'
+        ? [
+            d3.interpolateRgb('#f2f6f9', c)(0.14),
+            d3.interpolateRgb('#f2f6f9', c)(0.45),
+            c,
+            d3.interpolateRgb(c, '#101b26')(0.35),
+          ]
+        : [
+            d3.interpolateRgb('#0c1424', c)(0.18),
+            d3.interpolateRgb('#0c1424', c)(0.48),
+            c,
+            d3.interpolateRgb(c, '#ffffff')(0.3),
+          ];
+      this.rampCache.set(cacheKey, ramp);
+    }
+    return this.rampCache.get(cacheKey);
+  }
+
   #availColor(t) {
-    return d3.interpolateRgbBasis(this.themeTokens.availRamp)(t * 0.92);
+    return d3.interpolateRgbBasis(this.#rampFor(this.store.getState().domain))(t * 0.92);
   }
 
   /* ---------- scene construction ---------- */
@@ -135,10 +167,17 @@ export class MapView {
     this.tooltip.show(event, region, d.id);
   }
 
-  /** The legend gradient is derived from the same ramp as the choropleth. */
+  /** The legend gradient and label follow the active domain's ramp. */
   #paintLegend() {
+    const { domain } = this.store.getState();
     const ramp = document.querySelector('.legend-ramp');
-    if (ramp) ramp.style.background = `linear-gradient(90deg, ${this.themeTokens.availRamp.join(', ')})`;
+    if (ramp) ramp.style.background = `linear-gradient(90deg, ${this.#rampFor(domain).join(', ')})`;
+    const label = document.querySelector('.legend-label');
+    if (label) {
+      label.textContent = domain === 'all'
+        ? 'data availability'
+        : `${DOMAIN_META[domain].name} data availability`;
+    }
   }
 
   #onCountryLeave() {
@@ -324,9 +363,10 @@ export class MapView {
   /* ---------- store reaction ---------- */
 
   #onStateChange() {
-    const { projection, region, theme } = this.store.getState();
-    if (theme !== this.lastTheme) {
+    const { projection, region, theme, domain } = this.store.getState();
+    if (theme !== this.lastTheme || domain !== this.lastDomain) {
       this.lastTheme = theme;
+      this.lastDomain = domain;
       this.#paintLegend();
     }
     if (projection !== this.lastProjectionKey) {
