@@ -4,6 +4,7 @@ import { $, el } from '../utils/dom.js';
 import { esc } from '../utils/text.js';
 import { dnaMetrics } from '../dna.js';
 import { domainCounts } from '../filters.js';
+import { icon } from '../icons.js';
 
 export function initCardRail({ store, toast, copyText }) {
   const rail = $('#card-rail');
@@ -52,7 +53,9 @@ export function initCardRail({ store, toast, copyText }) {
     lastRenderedKey = key;
 
     const isGlobal = region === GLOBAL_REGION;
-    $('#rail-region-name').textContent = isGlobal ? '🌐 Global datasets' : REGION_META[region].name;
+    $('#rail-region-name').innerHTML = isGlobal
+      ? `${icon('globe')} Global datasets`
+      : esc(REGION_META[region].name);
     $('#rail-region-sub').textContent =
       `${datasets.length} dataset${datasets.length === 1 ? '' : 's'}` +
       (state.domain !== 'all' ? ` · ${DOMAIN_META[state.domain].name}` : '');
@@ -77,7 +80,7 @@ export function initCardRail({ store, toast, copyText }) {
       const m = DOMAIN_META[key];
       const chip = el('button', 'chip' + (activeDomain === key ? ' active' : ''));
       chip.style.setProperty('--chip-color', m.color);
-      chip.innerHTML = `${m.icon} ${esc(m.name)} <span class="chip-count">${n}</span>`;
+      chip.innerHTML = `${icon(m.icon)} ${esc(m.name)} <span class="chip-count">${n}</span>`;
       chip.onclick = () => store.actions.setDomain(activeDomain === key ? 'all' : key);
       bd.appendChild(chip);
     }
@@ -101,11 +104,12 @@ export function initCardRail({ store, toast, copyText }) {
 
     const top = el('div', 'card-top');
     top.appendChild(el('h3', 'card-title', esc(d.title)));
-    const pin = el('button', 'pin-btn' + (pinned ? ' pinned' : ''), '📌');
+    const pin = el('button', 'pin-btn' + (pinned ? ' pinned' : ''), icon('pin'));
     pin.title = pinned ? 'Remove from Data Passport' : 'Pin to Data Passport';
+    pin.setAttribute('aria-label', pin.title);
     pin.onclick = () => {
       const nowPinned = store.actions.togglePin(d.id);
-      toast(nowPinned ? 'Pinned to Data Passport 🛂' : 'Removed from Passport');
+      toast(nowPinned ? 'Pinned to Data Passport' : 'Removed from Passport');
     };
     top.appendChild(pin);
     card.appendChild(top);
@@ -114,7 +118,7 @@ export function initCardRail({ store, toast, copyText }) {
     const srcBadge = el('span', 'badge', esc(d.source));
     srcBadge.style.setProperty('--badge-color', sm.color || 'var(--muted)');
     badges.appendChild(srcBadge);
-    const domBadge = el('span', 'badge', `${dm.icon || ''} ${esc(dm.name || d.domain)}`);
+    const domBadge = el('span', 'badge', `${icon(dm.icon || 'file')} ${esc(dm.name || d.domain)}`);
     domBadge.style.setProperty('--badge-color', dm.color || 'var(--muted)');
     badges.appendChild(domBadge);
     for (const f of (d.formats || []).slice(0, 3)) badges.appendChild(el('span', 'badge plain', esc(f)));
@@ -125,12 +129,13 @@ export function initCardRail({ store, toast, copyText }) {
     card.appendChild(dnaStrip(d));
 
     const actions = el('div', 'card-actions');
-    const get = el('a', 'get-btn', 'Get data ↗');
+    const get = el('a', 'get-btn', `Get data ${icon('external')}`);
     get.href = d.url;
     get.target = '_blank';
     get.rel = 'noopener';
     actions.appendChild(get);
-    const cli = el('button', 'cli-btn', d.kaggleRef ? '⌘ Copy CLI' : '🔗 Copy link');
+    const cli = el('button', 'cli-btn',
+      d.kaggleRef ? `${icon('terminal')} Copy CLI` : `${icon('copy')} Copy link`);
     cli.title = d.kaggleRef
       ? `Copy: kaggle datasets download -d ${d.kaggleRef}`
       : 'Copy dataset URL';

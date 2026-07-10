@@ -15,8 +15,17 @@ import { initFilterRail, setCollapsed } from './ui/filter-rail.js';
 import { initCardRail } from './ui/card-rail.js';
 import { initPassport } from './ui/passport.js';
 import { $ } from './utils/dom.js';
+import { icon } from './icons.js';
+
+/** Hydrate static [data-icon] placeholders in index.html with inline SVGs. */
+function hydrateIcons() {
+  document.querySelectorAll('[data-icon]').forEach((node) => {
+    node.innerHTML = icon(node.dataset.icon);
+  });
+}
 
 async function boot() {
+  hydrateIcons(); // static chrome icons appear while data loads
   const { world, countryRegion, catalog } = await loadAtlasData();
   window.__atlasBooted = true; // disarms the boot-fallback watchdog in index.html
 

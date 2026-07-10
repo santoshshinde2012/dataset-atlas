@@ -7,15 +7,16 @@
  * to be touched (open/closed principle).
  */
 
+/** `icon` values are keys into the js/icons.js registry (SVG, not emoji). */
 export const DOMAIN_META = {
-  climate:      { name: 'Climate',      icon: '🌦', color: '#38bdf8' },
-  health:       { name: 'Health',       icon: '🩺', color: '#fb7185' },
-  economy:      { name: 'Economy',      icon: '💹', color: '#fbbf24' },
-  agriculture:  { name: 'Agriculture',  icon: '🌾', color: '#4ade80' },
-  education:    { name: 'Education',    icon: '🎓', color: '#a78bfa' },
-  transport:    { name: 'Transport',    icon: '🚆', color: '#fb923c' },
-  energy:       { name: 'Energy',       icon: '⚡', color: '#fde047' },
-  demographics: { name: 'Demographics', icon: '👥', color: '#e879f9' },
+  climate:      { name: 'Climate',      icon: 'climate',      color: '#38bdf8' },
+  health:       { name: 'Health',       icon: 'health',       color: '#fb7185' },
+  economy:      { name: 'Economy',      icon: 'economy',      color: '#fbbf24' },
+  agriculture:  { name: 'Agriculture',  icon: 'agriculture',  color: '#4ade80' },
+  education:    { name: 'Education',    icon: 'education',    color: '#a78bfa' },
+  transport:    { name: 'Transport',    icon: 'transport',    color: '#fb923c' },
+  energy:       { name: 'Energy',       icon: 'energy',       color: '#fde047' },
+  demographics: { name: 'Demographics', icon: 'demographics', color: '#e879f9' },
 };
 
 export const REGION_META = {

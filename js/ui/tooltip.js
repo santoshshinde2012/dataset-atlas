@@ -2,6 +2,7 @@
 import { REGION_META, DOMAIN_META } from '../config.js';
 import { esc } from '../utils/text.js';
 import { domainCounts } from '../filters.js';
+import { icon } from '../icons.js';
 
 export function createTooltip(element, store) {
   function show(event, regionKey) {
@@ -10,7 +11,7 @@ export function createTooltip(element, store) {
       .sort((a, b) => b[1] - a[1])
       .map(([k, n]) => {
         const m = DOMAIN_META[k];
-        return `<span class="tt-domain" style="color:${m.color};border-color:${m.color}55">${m.icon} ${n}</span>`;
+        return `<span class="tt-domain" style="color:${m.color};border-color:${m.color}55">${icon(m.icon)} ${n}</span>`;
       }).join('');
     element.innerHTML = `
       <div class="tt-title">${esc(REGION_META[regionKey].name)}</div>

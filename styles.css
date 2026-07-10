@@ -21,6 +21,31 @@
 
 [hidden] { display: none !important; }
 
+/* ============ Icons ============ */
+.icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  vertical-align: -2px;
+}
+.chip .icon { width: 13px; height: 13px; color: var(--chip-color, currentColor); }
+.badge .icon { width: 11px; height: 11px; }
+.tt-domain .icon { width: 11px; height: 11px; }
+.brand-mark .icon {
+  width: 22px;
+  height: 22px;
+  color: var(--accent);
+  filter: drop-shadow(0 0 8px rgba(56, 225, 255, 0.35));
+}
+.pin-btn .icon { width: 14px; height: 14px; }
+.pin-btn.pinned .icon { color: var(--accent); fill: rgba(56, 225, 255, 0.25); }
+.get-btn .icon { width: 12px; height: 12px; }
+.rail-header h2 .icon { width: 17px; height: 17px; color: var(--accent); vertical-align: -3px; }
+#rail-close .icon, #passport-close .icon { width: 15px; height: 15px; }
+.passport-item .pi-icon .icon { width: 16px; height: 16px; }
+.passport-item button .icon { width: 13px; height: 13px; }
+#rail-collapse .icon { width: 13px; height: 13px; }
+
 html, body {
   height: 100%;
   overflow: hidden;
@@ -54,7 +79,7 @@ button {
 }
 
 .brand { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
-.brand-mark { font-size: 24px; filter: drop-shadow(0 0 8px rgba(56, 225, 255, 0.35)); }
+.brand-mark { display: inline-flex; }
 .brand-text h1 { font-size: 15px; font-weight: 700; letter-spacing: 0.2px; white-space: nowrap; }
 .brand-text p { font-size: 11px; color: var(--muted); white-space: nowrap; }
 
@@ -162,11 +187,12 @@ button {
   position: absolute;
   top: 8px;
   right: 8px;
+  display: grid;
+  place-items: center;
   width: 22px;
   height: 22px;
   border-radius: 6px;
   color: var(--muted);
-  font-size: 12px;
 }
 #rail-collapse:hover { background: rgba(148, 163, 184, 0.1); color: var(--text); }
 
@@ -175,6 +201,9 @@ button {
   top: calc(var(--topbar-h) + 12px);
   left: 12px;
   z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 8px 12px;
   background: var(--panel);
   border: 1px solid var(--panel-border);
@@ -382,7 +411,15 @@ button {
 #tooltip .tt-title { font-weight: 700; margin-bottom: 2px; }
 #tooltip .tt-sub { color: var(--muted); font-size: 11px; }
 #tooltip .tt-domains { margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px; }
-#tooltip .tt-domain { font-size: 10px; padding: 1px 6px; border-radius: 999px; border: 1px solid var(--panel-border); }
+#tooltip .tt-domain {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-border);
+}
 
 /* ============ Right card rail ============ */
 #card-rail {
@@ -415,13 +452,14 @@ button {
 }
 .rail-header h2 { font-size: 16px; }
 .rail-header p { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.rail-header h2 { display: flex; align-items: center; gap: 7px; }
 .rail-header button {
-  font-size: 20px;
+  display: grid;
+  place-items: center;
   color: var(--muted);
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  line-height: 1;
 }
 .rail-header button:hover { background: rgba(148, 163, 184, 0.1); color: var(--text); }
 
@@ -459,10 +497,11 @@ button {
 .card-title { font-size: 13px; font-weight: 600; line-height: 1.35; flex: 1; }
 .pin-btn {
   flex: 0 0 auto;
+  display: grid;
+  place-items: center;
   width: 26px;
   height: 26px;
   border-radius: 7px;
-  font-size: 13px;
   opacity: 0.55;
   transition: all 0.15s;
 }
@@ -471,6 +510,9 @@ button {
 
 .card-badges { display: flex; flex-wrap: wrap; gap: 5px; margin: 7px 0 6px; }
 .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 10px;
   padding: 2px 7px;
   border-radius: 999px;
@@ -541,10 +583,11 @@ button {
   border-radius: 9px;
   font-size: 12.5px;
 }
+.passport-item .pi-icon { display: inline-flex; flex-shrink: 0; }
 .passport-item .pi-meta { flex: 1; min-width: 0; }
 .passport-item .pi-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .passport-item .pi-sub { color: var(--muted); font-size: 11px; }
-.passport-item button { color: var(--muted); font-size: 15px; }
+.passport-item button { display: grid; place-items: center; color: var(--muted); }
 .passport-item button:hover { color: var(--danger); }
 
 .passport-actions {
@@ -555,12 +598,17 @@ button {
 }
 .passport-actions button {
   flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   padding: 8px 10px;
   border-radius: 8px;
   border: 1px solid var(--panel-border);
   font-size: 12px;
   font-weight: 600;
 }
+.passport-actions .icon { width: 13px; height: 13px; }
 .passport-actions .primary {
   background: rgba(56, 225, 255, 0.14);
   border-color: rgba(56, 225, 255, 0.4);

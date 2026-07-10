@@ -5,6 +5,7 @@ import { REGION_META, DOMAIN_META, GLOBAL_REGION } from '../config.js';
 import { $, el } from '../utils/dom.js';
 import { esc } from '../utils/text.js';
 import { manifestText } from '../manifest.js';
+import { icon } from '../icons.js';
 
 export function initPassport({ store, toast, copyText }) {
   const drawer = $('#passport-drawer');
@@ -39,20 +40,22 @@ export function initPassport({ store, toast, copyText }) {
     const box = $('#passport-list');
     box.innerHTML = '';
     if (!pinned.length) {
-      box.appendChild(el('p', 'empty-note', 'Nothing pinned yet.<br>Use 📌 on any dataset card.'));
+      box.appendChild(el('p', 'empty-note', 'Nothing pinned yet.<br>Use the bookmark button on any dataset card.'));
       return;
     }
     for (const d of pinned) {
       const item = el('div', 'passport-item');
+      const dm = DOMAIN_META[d.domain];
       const regionName = d.region === GLOBAL_REGION ? 'Global' : (REGION_META[d.region]?.name || d.region);
       item.innerHTML = `
-        <span>${DOMAIN_META[d.domain]?.icon || '📄'}</span>
+        <span class="pi-icon" style="color:${dm?.color || 'var(--muted)'}">${icon(dm?.icon || 'file')}</span>
         <div class="pi-meta">
           <div class="pi-title">${esc(d.title)}</div>
           <div class="pi-sub">${esc(d.source)} · ${esc(regionName)}</div>
         </div>`;
-      const rm = el('button', '', '×');
+      const rm = el('button', '', icon('close'));
       rm.title = 'Remove';
+      rm.setAttribute('aria-label', `Remove ${d.title}`);
       rm.onclick = () => store.actions.togglePin(d.id);
       item.appendChild(rm);
       box.appendChild(item);

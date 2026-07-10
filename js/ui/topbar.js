@@ -2,24 +2,25 @@
 import { DOMAIN_META, ACCENT_COLOR } from '../config.js';
 import { $, el } from '../utils/dom.js';
 import { esc } from '../utils/text.js';
+import { icon } from '../icons.js';
 
 export function initTopbar({ store, onPassportToggle }) {
   const nav = $('#domain-chips');
 
   // chips are built once; refresh() only updates counts/active state so
   // keyboard focus survives re-renders
-  const mkChip = (key, label, icon, color) => {
+  const mkChip = (key, label, iconName, color) => {
     const b = el('button', 'chip');
     b.dataset.key = key;
     b.style.setProperty('--chip-color', color);
-    b.innerHTML = `${icon} ${esc(label)} <span class="chip-count"></span>`;
+    b.innerHTML = `${icon(iconName)} ${esc(label)} <span class="chip-count"></span>`;
     b.onclick = () => {
       const { domain } = store.getState();
       store.actions.setDomain(domain === key ? 'all' : key);
     };
     nav.appendChild(b);
   };
-  mkChip('all', 'All domains', '✦', ACCENT_COLOR);
+  mkChip('all', 'All domains', 'layers', ACCENT_COLOR);
   for (const [key, m] of Object.entries(DOMAIN_META)) mkChip(key, m.name, m.icon, m.color);
 
   $('#proj-globe').onclick = () => store.actions.setProjection('globe');

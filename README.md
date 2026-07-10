@@ -1,4 +1,4 @@
-# 🗺️ The Dataset Atlas
+# The Dataset Atlas
 
 **A map-first experience for discovering and downloading datasets across domains and regions — in 3 clicks or fewer: Region → Domain → Get.**
 
@@ -15,7 +15,7 @@ python3 -m http.server 4173
 # then open http://localhost:4173
 ```
 
-Deploy by pointing any static host (GitHub Pages, Netlify, Cloudflare Pages) at the repo root.
+Deploy by pointing any static host (GitHub Pages, Netlify, Cloudflare Pages) at the repo root — see the [free-cloud deployment guide](docs/deployment-free-cloud.md); a GitHub Pages workflow is already included.
 
 ## What's inside
 
@@ -29,6 +29,8 @@ Deploy by pointing any static host (GitHub Pages, Netlify, Cloudflare Pages) at 
 | `data/country-regions.json` | ISO-numeric country code → atlas region mapping |
 | `vendor/` | Local copies of D3 v7 and topojson-client (works offline) |
 | `docs/dataset-atlas-concept-and-research.md` | Concept, UX research, and source catalog behind the design |
+| `docs/system-design.md` | System design: architecture, data model, security, testing, roadmap |
+| `docs/deployment-free-cloud.md` | Zero-cost deployment guide (GitHub Pages, Cloudflare, Netlify, Vercel) |
 
 ## Architecture
 
@@ -70,7 +72,7 @@ CI (GitHub Actions, `.github/workflows/ci.yml`) syntax-checks every module and r
 - **Left rail filters** — use-case presets ("I want to… forecast crop yields"), source type, format, and a license-openness slider.
 - **Card rail** — click a region for its dataset cards: source badge, formats, license, description, and a **DNA strip** (freshness, coverage span, granularity, size, license openness at a glance).
 - **Low-click download** — every card has *Get data* (deep link, opens the dataset page directly) and *Copy CLI* (`kaggle datasets download -d owner/slug`) or *Copy link*.
-- **🛂 Data Passport** — pin datasets across regions and export one reproducible manifest (`data-passport.sh`) with all URLs, Kaggle CLI commands, and `kagglehub` one-liners.
+- **Data Passport** — pin datasets across regions and export one reproducible manifest (`data-passport.sh`) with all URLs, Kaggle CLI commands, and `kagglehub` one-liners.
 - **Keyboard** — `/` focuses search, `Esc` closes panels.
 
 ## Catalog schema

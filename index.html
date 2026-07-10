@@ -9,7 +9,7 @@
 <meta property="og:title" content="The Dataset Atlas" />
 <meta property="og:description" content="Find and download datasets by world region and domain — in 3 clicks or fewer." />
 <meta property="og:type" content="website" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%23070b14'/%3E%3Cg fill='none' stroke='%2338e1ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='4 7.5 9 5.5 15 7.5 20 5.5 20 16.5 15 18.5 9 16.5 4 18.5 4 7.5'/%3E%3Cline x1='9' y1='5.5' x2='9' y2='16.5'/%3E%3Cline x1='15' y1='7.5' x2='15' y2='18.5'/%3E%3C/g%3E%3C/svg%3E" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -17,7 +17,7 @@
 <!-- ======= Top bar ======= -->
 <header id="topbar">
   <div class="brand">
-    <span class="brand-mark">🗺️</span>
+    <span class="brand-mark" data-icon="map"></span>
     <div class="brand-text">
       <h1>The Dataset Atlas</h1>
       <p>Region → Domain → Get · data in ≤3 clicks</p>
@@ -32,14 +32,14 @@
       <button id="proj-flat" title="Flat projection">Flat</button>
     </div>
     <button id="passport-btn" title="Your Data Passport — pinned datasets">
-      <span>🛂</span> Passport <span id="passport-count" class="count-badge">0</span>
+      <span data-icon="passport"></span> Passport <span id="passport-count" class="count-badge">0</span>
     </button>
   </div>
 </header>
 
 <!-- ======= Left rail (filters) ======= -->
 <aside id="left-rail" aria-label="Dataset filters">
-  <button id="rail-collapse" title="Collapse panel" aria-label="Collapse filter panel">◂</button>
+  <button id="rail-collapse" title="Collapse panel" aria-label="Collapse filter panel" data-icon="chevron-left"></button>
   <div class="rail-inner">
 
     <section class="rail-section">
@@ -76,13 +76,13 @@
 
   </div>
 </aside>
-<button id="rail-expand" title="Open filters" hidden>▸ Filters</button>
+<button id="rail-expand" title="Open filters" hidden><span data-icon="chevron-right"></span> Filters</button>
 
 <!-- ======= Map stage ======= -->
 <main id="stage">
   <svg id="map" role="group" aria-label="World map of dataset availability"></svg>
   <button id="global-pill" title="Datasets covering the whole world">
-    🌐 Global <span class="count-badge" id="global-count">0</span>
+    <span data-icon="globe"></span> Global <span class="count-badge" id="global-count">0</span>
   </button>
   <div id="legend">
     <span class="legend-label">data availability</span>
@@ -100,7 +100,7 @@
       <h2 id="rail-region-name">Region</h2>
       <p id="rail-region-sub">— datasets</p>
     </div>
-    <button id="rail-close" title="Close (Esc)">×</button>
+    <button id="rail-close" title="Close (Esc)" aria-label="Close panel" data-icon="close"></button>
   </header>
   <div id="rail-domain-breakdown"><!-- mini domain chips --></div>
   <div id="card-list"><!-- dataset cards injected --></div>
@@ -110,16 +110,16 @@
 <div id="passport-drawer" role="dialog" aria-label="Data Passport" hidden>
   <header class="rail-header">
     <div>
-      <h2>🛂 Data Passport</h2>
+      <h2><span data-icon="passport"></span> Data Passport</h2>
       <p id="passport-sub">Pin datasets across regions, export one manifest.</p>
     </div>
-    <button id="passport-close" title="Close">×</button>
+    <button id="passport-close" title="Close" aria-label="Close Data Passport" data-icon="close"></button>
   </header>
   <div id="passport-list"></div>
   <footer class="passport-actions">
-    <button id="passport-export" class="primary">⬇ Export manifest (.sh)</button>
-    <button id="passport-copy">Copy manifest</button>
-    <button id="passport-clear" class="danger">Clear</button>
+    <button id="passport-export" class="primary"><span data-icon="download"></span> Export manifest</button>
+    <button id="passport-copy"><span data-icon="copy"></span> Copy</button>
+    <button id="passport-clear" class="danger"><span data-icon="trash"></span> Clear</button>
   </footer>
 </div>
 
