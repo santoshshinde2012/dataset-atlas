@@ -75,7 +75,24 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
         'No datasets match the current filters here.<br>Try widening domain or source filters.'));
       return;
     }
+
+    // when a country opened the region, group the list so the country/region
+    // split is explicit rather than implied by sort order
+    if (focusName && focusCount > 0 && focusCount < datasets.length) {
+      const coversFocus = (d) => (d.countries || []).includes(state.focusCountry);
+      list.appendChild(groupLabel(`Specific to ${focusName}`, focusCount));
+      for (const d of datasets.filter(coversFocus)) list.appendChild(datasetCard(d));
+      list.appendChild(groupLabel(
+        `Region-wide · ${isGlobal ? 'Global' : REGION_META[region].name}`,
+        datasets.length - focusCount));
+      for (const d of datasets.filter((d) => !coversFocus(d))) list.appendChild(datasetCard(d));
+      return;
+    }
     for (const d of datasets) list.appendChild(datasetCard(d));
+  }
+
+  function groupLabel(text, count) {
+    return el('div', 'card-group-label', `${esc(text)} <span>${count}</span>`);
   }
 
   function renderDomainBreakdown(region, activeDomain) {

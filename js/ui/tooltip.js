@@ -15,19 +15,28 @@ export function createTooltip(element, store, countryCodes = {}) {
         return `<span class="tt-domain" style="color:${c};border-color:${c}55">${icon(DOMAIN_META[k].icon)} ${n}</span>`;
       }).join('');
 
+    const regionName = REGION_META[regionKey].name;
     const country = countryId ? countryCodes[countryId] : null;
     const countrySpecific = country ? store.select.countryDatasets(country.cca2).length : 0;
-    const title = country
-      ? `${esc(country.name)} · ${esc(REGION_META[regionKey].name)}`
-      : esc(REGION_META[regionKey].name);
-    const sub = countrySpecific
-      ? `${countrySpecific} specific to ${esc(country.name)} · ${list.length} in region`
-      : `${list.length} dataset${list.length === 1 ? ' matches' : 's match'} current filters`;
+
+    // a clear two-level picture: the exact country, then its region
+    const stats = country
+      ? `<div class="tt-stats">
+           <div class="tt-stat"><b>${countrySpecific}</b><span>${esc(country.name)}-specific</span></div>
+           <div class="tt-stat"><b>${list.length}</b><span>in ${esc(regionName)}</span></div>
+         </div>`
+      : `<div class="tt-stats">
+           <div class="tt-stat"><b>${list.length}</b><span>dataset${list.length === 1 ? '' : 's'} match filters</span></div>
+         </div>`;
 
     element.innerHTML = `
-      <div class="tt-title">${title}</div>
-      <div class="tt-sub">${sub}</div>
-      ${chips ? `<div class="tt-domains">${chips}</div>` : ''}`;
+      <div class="tt-title">${country ? esc(country.name) : esc(regionName)}</div>
+      ${country ? `<div class="tt-sub">${esc(regionName)}</div>` : ''}
+      ${stats}
+      ${chips ? `<div class="tt-domains">${chips}</div>` : ''}
+      <div class="tt-hint">${country && countrySpecific
+        ? `Click to browse — ${esc(country.name)} first`
+        : 'Click to browse datasets'}</div>`;
     element.hidden = false;
     move(event);
   }

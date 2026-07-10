@@ -384,6 +384,7 @@ button {
 
 .country { stroke: var(--map-country-stroke); stroke-width: 0.5; transition: fill 0.3s ease; }
 .region-hover .country:not(.hovered-region) { opacity: 0.45; }
+.country.hovered-country { stroke: var(--accent); stroke-width: 1.2; }
 
 .graticule { fill: none; stroke: var(--map-graticule); stroke-width: 0.5; }
 .sphere-fill { fill: var(--map-ocean); }
@@ -412,7 +413,19 @@ button {
   stroke: var(--node-text-halo);
   stroke-width: 3px;
 }
-.region-node text.node-count { font-size: 10px; fill: var(--text); font-weight: 700; }
+.region-node .count-badge rect {
+  fill: var(--panel-solid);
+  stroke-width: 1.4;
+  filter: drop-shadow(0 1px 3px rgba(23, 36, 52, 0.18));
+}
+.region-node .count-badge text {
+  fill: var(--text);
+  font-size: 10.5px;
+  font-weight: 700;
+  text-anchor: middle;
+  stroke: none;
+  pointer-events: none;
+}
 .region-node.selected circle.core { stroke: var(--accent); stroke-width: 2; }
 .region-node:focus { outline: none; }
 .region-node:focus-visible circle.core { stroke: var(--accent); stroke-width: 2.5; }
@@ -500,6 +513,16 @@ button {
 }
 #tooltip .tt-title { font-weight: 700; margin-bottom: 2px; }
 #tooltip .tt-sub { color: var(--muted); font-size: 11px; }
+#tooltip .tt-stats { display: flex; gap: 14px; margin-top: 6px; }
+#tooltip .tt-stat b { display: block; font-size: 15px; line-height: 1.1; color: var(--accent); }
+#tooltip .tt-stat span { font-size: 10px; color: var(--muted); }
+#tooltip .tt-hint {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid var(--panel-border);
+  font-size: 10px;
+  color: var(--muted);
+}
 #tooltip .tt-domains { margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px; }
 #tooltip .tt-domain {
   display: inline-flex;
@@ -572,6 +595,26 @@ button {
 #card-list::-webkit-scrollbar { width: 8px; }
 #card-list::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 4px; }
 .empty-note { color: var(--muted); font-size: 12.5px; text-align: center; padding: 30px 10px; }
+
+.card-group-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 2px -2px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.card-group-label span {
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent);
+  letter-spacing: 0;
+}
+.card-group-label::after { content: ""; flex: 1; height: 1px; background: var(--panel-border); }
 
 /* ---- Dataset card ---- */
 .card {

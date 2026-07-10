@@ -115,7 +115,11 @@ export class MapView {
     nodes.append('circle').attr('class', 'halo');
     nodes.append('circle').attr('class', 'core');
     nodes.append('text').attr('class', 'node-name');
-    nodes.append('text').attr('class', 'node-count');
+    // the count renders in a solid pill so the number stays legible over
+    // any map fill, in either theme
+    const badge = nodes.append('g').attr('class', 'count-badge');
+    badge.append('rect');
+    badge.append('text');
 
     this.svg.on('click', () => this.store.actions.selectRegion(null));
   }
@@ -126,6 +130,8 @@ export class MapView {
     this.stopAutoRotate();
     this.gCountries.classed('region-hover', true);
     this.gCountries.selectAll(`.country[data-region="${region}"]`).classed('hovered-region', true);
+    // outline the exact country under the pointer, distinct from its region
+    d3.select(event.currentTarget).classed('hovered-country', true).raise();
     this.tooltip.show(event, region, d.id);
   }
 
@@ -137,7 +143,7 @@ export class MapView {
 
   #onCountryLeave() {
     this.gCountries.classed('region-hover', false);
-    this.gCountries.selectAll('.country').classed('hovered-region', false);
+    this.gCountries.selectAll('.country').classed('hovered-region', false).classed('hovered-country', false);
     this.tooltip.hide();
   }
 
@@ -205,7 +211,8 @@ export class MapView {
     const s = this.strategy;
 
     const self = this;
-    this.gNodes.selectAll('g').each(function ([key, meta]) {
+    // scope to the node class — each node contains a nested count-badge <g>
+    this.gNodes.selectAll('g.region-node').each(function ([key, meta]) {
       const g = d3.select(this);
       const visible = s.isVisible(d3, self.projection, meta.centroid);
       g.attr('display', visible ? null : 'none');
@@ -217,9 +224,19 @@ export class MapView {
         .classed('selected', state.region === key)
         .style('opacity', count === 0 ? 0.35 : 1);
       g.select('.halo').attr('r', r + 9).attr('fill', nodeColor).attr('opacity', 0.14);
-      g.select('.core').attr('r', r).attr('fill', nodeColor).attr('fill-opacity', 0.45);
-      g.select('.node-name').attr('y', -r - 8).text(meta.name);
-      g.select('.node-count').attr('y', 4).text(count);
+      g.select('.core').attr('r', r).attr('fill', nodeColor).attr('fill-opacity', 0.4);
+      g.select('.node-name').attr('y', -r - 10).text(meta.name);
+
+      const badge = g.select('.count-badge');
+      const label = badge.select('text').text(count).attr('y', 3.5);
+      const w = Math.max(22, label.node().getComputedTextLength() + 13);
+      badge.select('rect')
+        .attr('x', -w / 2)
+        .attr('y', -9)
+        .attr('width', w)
+        .attr('height', 18)
+        .attr('rx', 9)
+        .attr('stroke', nodeColor);
     });
   }
 
