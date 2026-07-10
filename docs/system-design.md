@@ -58,7 +58,7 @@ js/
   services/          ports: pins storage (localStorage), clipboard, toast
   map/projections.js globe/flat strategies behind one interface
   map/map-view.js    map rendering + drag/zoom/auto-rotate/focus
-  ui/                topbar, filter rail, card rail, passport drawer, tooltip
+  ui/                topbar, domain dock, filter rail, card rail, passport drawer, tooltip
   main.js            composition root (dependency injection happens here)
 ```
 

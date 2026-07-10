@@ -12,6 +12,7 @@ import { createClipboard } from './services/clipboard.js';
 import { createTooltip } from './ui/tooltip.js';
 import { MapView } from './map/map-view.js';
 import { initTopbar } from './ui/topbar.js';
+import { initDomainDock } from './ui/domain-dock.js';
 import { initFilterRail, setCollapsed } from './ui/filter-rail.js';
 import { initCardRail } from './ui/card-rail.js';
 import { initPassport } from './ui/passport.js';
@@ -58,6 +59,7 @@ async function boot() {
 
   initPassport({ store, toast, copyText });
   initTopbar({ store, onPassportToggle: store.actions.togglePassport });
+  initDomainDock({ store });
   initFilterRail({ store, generated });
   initCardRail({ store, toast, copyText, countryNames });
 

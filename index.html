@@ -24,8 +24,6 @@
     </div>
   </div>
 
-  <nav id="domain-chips" aria-label="Domain filters"><!-- chips injected --></nav>
-
   <div class="top-actions">
     <div class="proj-toggle" role="group" aria-label="Map projection">
       <button id="proj-globe" class="active" title="Globe projection">Globe</button>
@@ -86,6 +84,7 @@
 <!-- ======= Map stage ======= -->
 <main id="stage">
   <svg id="map" role="group" aria-label="World map of dataset availability"></svg>
+  <nav id="domain-dock" aria-label="Domain filters"><!-- dock chips injected --></nav>
   <button id="global-pill" title="Datasets covering the whole world">
     <span data-icon="globe"></span> Global <span class="count-badge" id="global-count">0</span>
   </button>

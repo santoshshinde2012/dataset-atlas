@@ -31,7 +31,7 @@ npm run refresh    # liveness sweep + source-API freshness bumps + refresh stamp
 ## Using the atlas
 
 1. **Pick a region** — click a glowing region node, any country, or the **Global** pill. The globe animates to it and the card rail opens. (Nodes are keyboard-operable: Tab + Enter.)
-2. **Pick a domain** — the chips on top (Climate, Health, Economy, Agriculture, Education, Transport, Energy, Demographics) filter everything live; counts everywhere tell you what a click yields *before* you click.
+2. **Pick a domain** — the floating dock over the map keeps all eight domains (plus All) visible at every width as icon + live count; the active chip expands its label and the whole map recolors in that domain's hue. In "All domains" mode each region node wears a ring of its domain mix.
 3. **Get the data** — every card has **Get data** (deep link straight to the dataset page) and **Copy CLI** / **Copy link** with an in-place "Copied" confirmation.
 
 Power features:
@@ -78,7 +78,7 @@ js/
   services/          ports: pins storage (localStorage), clipboard, toast
   map/projections.js globe/flat projection strategies behind one interface
   map/map-view.js    the map stage: rendering + drag/zoom/auto-rotate/focus
-  ui/                topbar, filter rail, card rail, passport drawer, tooltip
+  ui/                topbar, domain dock, filter rail, card rail, passport drawer, tooltip
   main.js            composition root: builds store + services, injects them
 ```
 

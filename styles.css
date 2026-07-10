@@ -142,6 +142,7 @@ button {
   min-height: 58px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 18px;
   padding: 0 16px;
   background: var(--topbar-bg);
@@ -163,20 +164,72 @@ button {
 .brand-text h1 { font-size: 15px; font-weight: 700; letter-spacing: 0.2px; white-space: nowrap; }
 .brand-text p { font-size: 11px; color: var(--muted); white-space: nowrap; }
 
-#domain-chips {
+/* ============ Domain dock ============
+   A floating glass bar over the map: every domain is always visible as
+   icon + live count; the active or hovered chip expands its label. */
+#domain-dock {
+  position: absolute;
+  top: calc(var(--topbar-h) + 12px);
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  gap: 5px;
+  align-items: center;
+  gap: 3px;
+  padding: 5px;
+  max-width: calc(100vw - 560px);
   overflow-x: auto;
   scrollbar-width: none;
-  flex: 1 1 auto;
-  min-width: 0;
-  padding: 4px 2px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  z-index: 25;
 }
-#domain-chips::-webkit-scrollbar { display: none; }
-/* fade the edges only when the strip actually overflows */
-#domain-chips.overflowing {
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+#domain-dock::-webkit-scrollbar { display: none; }
+
+.dock-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  color: var(--muted);
+  font-size: 12.5px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.dock-chip .icon { width: 15px; height: 15px; color: var(--chip-color, currentColor); }
+.dock-chip .dock-label {
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  font-weight: 600;
+  transition: max-width 0.22s ease, opacity 0.16s ease;
+}
+.dock-chip:hover .dock-label,
+.dock-chip:focus-visible .dock-label,
+.dock-chip.active .dock-label { max-width: 110px; opacity: 1; }
+.dock-chip:hover { background: var(--hover-wash); color: var(--text); }
+.dock-chip.active {
+  background: color-mix(in srgb, var(--chip-color, var(--accent)) 13%, transparent);
+  border-color: color-mix(in srgb, var(--chip-color, var(--accent)) 55%, transparent);
+  color: var(--text);
+}
+.dock-chip .chip-count {
+  font-size: 10.5px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--hover-wash);
+  color: var(--muted);
+  font-weight: 600;
+}
+.dock-chip.active .chip-count {
+  background: color-mix(in srgb, var(--chip-color, var(--accent)) 18%, transparent);
+  color: color-mix(in srgb, var(--chip-color, var(--accent)) 75%, var(--text));
 }
 
 /* quiet ghost chips; only the ACTIVE domain wears its color — the strip
@@ -824,7 +877,8 @@ button {
   #card-rail, #passport-drawer, #toast { animation: none; }
   .country { transition: none; }
   .chip, .preset, .card, .card-actions a, .card-actions button,
-  .passport-actions button, #global-pill, #rail-expand, #theme-toggle, #passport-btn { transition: none; }
+  .passport-actions button, #global-pill, #rail-expand, #theme-toggle, #passport-btn,
+  .dock-chip, .dock-chip .dock-label { transition: none; }
 }
 
 /* ============ Responsive ============ */
@@ -832,8 +886,19 @@ button {
   .brand-text p { display: none; }
   #left-rail { width: 220px; }
   #card-rail, #passport-drawer { width: min(372px, calc(100vw - 24px)); }
+  /* the dock takes the full row under the header; side controls drop below it */
+  #domain-dock {
+    left: 12px;
+    right: 12px;
+    transform: none;
+    max-width: none;
+    border-radius: 14px;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 18px), transparent 100%);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 18px), transparent 100%);
+  }
+  #rail-expand, #left-rail { top: calc(var(--topbar-h) + 66px); }
+  #global-pill { top: calc(var(--topbar-h) + 66px); }
 }
 @media (max-width: 640px) {
-  #domain-chips { order: 3; }
   #topbar { flex-wrap: wrap; padding: 8px 12px; }
 }
