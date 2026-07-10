@@ -20,22 +20,22 @@
    "approxSizeMB": 2000
   },
   {
-   "title": "Ethiopia Socioeconomic Survey ESS4 2018/19 (LSMS-ISA)",
-   "description": "Nationally representative panel of ~6,770 households in 535 enumeration areas: plot-level crop production, land holdings, livestock and input use plus household welfare modules; public-use microdata in Stata/CSV.",
+   "title": "Ethiopia Socioeconomic Panel Survey ESS5 2021/22 (LSMS-ISA)",
+   "description": "Fifth wave of the national LSMS-ISA panel by the Ethiopian Statistical Service and World Bank: 4,999 households in 438 enumeration areas (all regions except Tigray), with plot-level crop production, land holdings, livestock and input use plus household welfare modules; public-use microdata.",
    "domain": "agriculture",
    "region": "africa",
    "source": "World Bank Microdata Library (LSMS)",
    "sourceType": "intl-org",
-   "url": "https://microdata.worldbank.org/index.php/catalog/3823",
+   "url": "https://microdata.worldbank.org/index.php/catalog/6161",
    "formats": [
     "CSV",
     "Stata"
    ],
    "license": "Free with registration",
    "licenseOpenness": 0.4,
-   "freshnessYear": 2020,
-   "coverageStart": 2018,
-   "coverageEnd": 2019,
+   "freshnessYear": 2023,
+   "coverageStart": 2021,
+   "coverageEnd": 2022,
    "granularity": "point",
    "approxSizeMB": 200
   },
@@ -86,14 +86,14 @@
    "region": "asia",
    "source": "data.gov.in",
    "sourceType": "gov-portal",
-   "url": "https://www.data.gov.in/catalog/district-wise-season-wise-crop-production-statistics",
+   "url": "https://www.data.gov.in/catalog/district-wise-season-wise-crop-production-statistics-0",
    "formats": [
     "CSV",
     "API"
    ],
    "license": "Open Government Data India",
    "licenseOpenness": 0.8,
-   "freshnessYear": 2023,
+   "freshnessYear": 2024,
    "coverageStart": 1997,
    "coverageEnd": 2022,
    "granularity": "admin",
@@ -118,6 +118,28 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 0.5
+  },
+  {
+   "title": "Crop production in EU standard humidity (APRO_CPSH1)",
+   "description": "Annual harvested production, cultivated area and yield for cereals, root crops, vegetables and fruit at EU standard humidity, per country, 2000-2026; ~386k observations in Eurostat table APRO_CPSH1.",
+   "domain": "agriculture",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/web/products-datasets/-/apro_cpsh1",
+   "formats": [
+    "TSV",
+    "CSV",
+    "XLSX",
+    "SDMX-JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2000,
+   "coverageEnd": 2026,
+   "granularity": "country",
+   "approxSizeMB": 5
   },
   {
    "title": "Eurostat: Crop Production in EU Standard Humidity (apro_cpsh1)",
@@ -243,6 +265,28 @@
    "approxSizeMB": 300
   },
   {
+   "title": "Colombia — Evaluaciones Agropecuarias Municipales (EVA) 2019–2024, Base Agrícola",
+   "description": "Municipal crop statistics for Colombia (UPRA EVA): sown and harvested area (ha), production (t) and yield for ~200 crops across ~1,100 municipalities, 2019-2024. 141,073 rows, 18 columns.",
+   "domain": "agriculture",
+   "region": "latin-america",
+   "source": "UPRA / Datos Abiertos Colombia",
+   "sourceType": "gov-portal",
+   "url": "https://www.datos.gov.co/Agricultura-y-Desarrollo-Rural/Evaluaciones-Agropecuarias-Municipales-EVA-2019-20/uejq-wxrr",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XML",
+    "XLSX"
+   ],
+   "license": "CC BY-SA 4.0",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2025,
+   "coverageStart": 2019,
+   "coverageEnd": 2024,
+   "granularity": "admin",
+   "approxSizeMB": 20
+  },
+  {
    "title": "USDA Cropland Data Layer (CropScape)",
    "description": "Annual crop-specific land-cover raster of the conterminous US from satellite imagery; 30 m resolution (10 m from 2024) with classes for corn, soybeans, wheat and 100+ other covers; GeoTIFF via National Download and CroplandCROS.",
    "domain": "agriculture",
@@ -299,6 +343,25 @@
    "coverageEnd": 2022,
    "granularity": "admin",
    "approxSizeMB": 20
+  },
+  {
+   "title": "CHIRPS Monthly Rainfall over Africa (Digital Earth Africa)",
+   "description": "Monthly rainfall rasters (CHIRPS v2.0) for Africa at 0.05 degree (~5 km), 1981 to present, blending satellite infrared with station gauge data. Cloud-optimized GeoTIFFs hosted by Digital Earth Africa.",
+   "domain": "climate",
+   "region": "africa",
+   "source": "Digital Earth Africa / Climate Hazards Center (AWS Open Data)",
+   "sourceType": "research",
+   "url": "https://registry.opendata.aws/deafrica-chirps/",
+   "formats": [
+    "GeoTIFF"
+   ],
+   "license": "Public Domain (CC0)",
+   "licenseOpenness": 1,
+   "freshnessYear": 2026,
+   "coverageStart": 1981,
+   "coverageEnd": 2026,
+   "granularity": "grid",
+   "approxSizeMB": 1200
   },
   {
    "title": "Ethiopia: Rainfall Indicators at Subnational Level",
@@ -741,6 +804,28 @@
    "approxSizeMB": 15
   },
   {
+   "title": "Population on 1 January by age and sex (DEMO_PJAN)",
+   "description": "Population on 1 January by single year of age and sex for EU, EFTA and candidate countries, 1960-2025; ~739k observations (Eurostat DEMO_PJAN), the reference population series behind EU demographic indicators.",
+   "domain": "demographics",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/web/products-datasets/-/demo_pjan",
+   "formats": [
+    "TSV",
+    "CSV",
+    "XLSX",
+    "SDMX-JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1960,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 6
+  },
+  {
    "title": "Our World in Data: Population & Demography Explorer",
    "description": "Country-level series from UN WPP 2024: population, growth rate, median age, fertility, life expectancy and migration, 1950-2023 with projections to 2100. Each explorer view offers a full CSV download.",
    "domain": "demographics",
@@ -940,6 +1025,27 @@
    "coverageEnd": 2025,
    "granularity": "admin",
    "approxSizeMB": 2.5
+  },
+  {
+   "title": "Pacific Population Estimates and Projections (DF_POP_PROJ)",
+   "description": "SPC Statistics for Development Division projections for 22 Pacific Island countries and territories, 1950-2050: mid-year population by sex and 5-year age group, yearly growth rate, share of regional population.",
+   "domain": "demographics",
+   "region": "oceania",
+   "source": "Pacific Community (SPC) / Pacific Data Hub",
+   "sourceType": "intl-org",
+   "url": "https://sdd.spc.int/dataset/df_pop_proj",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "SDMX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 1950,
+   "coverageEnd": 2050,
+   "granularity": "country",
+   "approxSizeMB": 6
   },
   {
    "title": "Africa Development Indicators",
@@ -1165,6 +1271,25 @@
    "approxSizeMB": 270
   },
   {
+   "title": "Argentina — Producto Interno Bruto a precios de mercado, precios constantes base 2004",
+   "description": "Argentina quarterly and annual GDP at market prices in constant 2004 pesos (INDEC national accounts), including sectoral gross value added series. Two CSV time series, updated quarterly through 2026.",
+   "domain": "economy",
+   "region": "latin-america",
+   "source": "Ministerio de Economía (INDEC) / datos.gob.ar",
+   "sourceType": "gov-portal",
+   "url": "https://datos.gob.ar/dataset/sspm-producto-interno-bruto-precios-mercado-precios-constantes-base-2004",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2004,
+   "coverageEnd": 2026,
+   "granularity": "country",
+   "approxSizeMB": 1
+  },
+  {
    "title": "Brazilian E-Commerce Public Dataset by Olist",
    "description": "~100k anonymized orders from the Olist marketplace in Brazil, 2016-2018: 9 relational CSVs covering order items, prices, freight, payments, reviews, and customer/seller location by zip-code prefix.",
    "domain": "economy",
@@ -1244,6 +1369,48 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 10
+  },
+  {
+   "title": "Gross Domestic Product for Pacific Island Countries and Territories (DF_NATIONAL_ACCOUNTS)",
+   "description": "Annual national accounts for Pacific Island countries and territories, 2005-2025: GDP and GDP per capita at current prices plus year-on-year variation rates, from PDH.stat with CSV/Excel export and SDMX API.",
+   "domain": "economy",
+   "region": "oceania",
+   "source": "Pacific Community (SPC) / Pacific Data Hub",
+   "sourceType": "intl-org",
+   "url": "https://sdd.spc.int/dataset/df_national_accounts",
+   "formats": [
+    "CSV",
+    "XLSX",
+    "SDMX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 2005,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 1
+  },
+  {
+   "title": "Primary School Enrolment Ratio — Sub-Saharan Africa",
+   "description": "Primary school gross enrolment ratio (%) for Sub-Saharan Africa and every country, annual 1970-2024, from UNESCO Institute for Statistics via the World Bank. Downloadable as CSV, XML or Excel.",
+   "domain": "education",
+   "region": "africa",
+   "source": "World Bank Open Data (UNESCO Institute for Statistics)",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/SE.PRM.ENRR?locations=ZG",
+   "formats": [
+    "CSV",
+    "XML",
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1970,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 3
   },
   {
    "title": "South Africa School Masterlist (EMIS)",
@@ -1366,6 +1533,27 @@
    "approxSizeMB": 0.5
   },
   {
+   "title": "Education Statistics (EdStats)",
+   "description": "World Bank EdStats: 4,000+ education indicators compiled from UNESCO UIS, OECD and household surveys — enrollment, completion, literacy, expenditure — for 200+ economies.",
+   "domain": "education",
+   "region": "global",
+   "source": "World Bank",
+   "sourceType": "intl-org",
+   "url": "https://datacatalog.worldbank.org/search/dataset/0038480",
+   "formats": [
+    "CSV",
+    "API",
+    "XLSX"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1970,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 40
+  },
+  {
    "title": "Government Expenditure on Education (% of GDP)",
    "description": "Country-year panel of public education spending as a share of GDP for ~200 economies, sourced from the UNESCO Institute for Statistics. One row per country with annual values 1970-2025.",
    "domain": "education",
@@ -1409,26 +1597,6 @@
    "approxSizeMB": 2000
   },
   {
-   "title": "UNESCO — Education Statistics (SDG 4)",
-   "description": "UNESCO Institute for Statistics indicators: enrollment, completion, literacy, and education spending worldwide.",
-   "domain": "education",
-   "region": "global",
-   "source": "UNESCO UIS",
-   "sourceType": "intl-org",
-   "url": "https://databrowser.uis.unesco.org/",
-   "formats": [
-    "CSV",
-    "API"
-   ],
-   "license": "CC BY 3.0 IGO",
-   "licenseOpenness": 0.8,
-   "freshnessYear": 2025,
-   "coverageStart": 1970,
-   "coverageEnd": 2024,
-   "granularity": "country",
-   "approxSizeMB": 40
-  },
-  {
    "title": "World University Rankings",
    "description": "Times Higher Education, Shanghai (ARWU) and CWUR ranking tables 2005-2016 in CSV form, with scores by criterion per university plus supplementary country education expenditure and attainment files.",
    "domain": "education",
@@ -1469,6 +1637,28 @@
    "approxSizeMB": 500
   },
   {
+   "title": "Colombia — MEN estadísticas de educación preescolar, básica y media por municipio",
+   "description": "Colombian Ministry of Education indicators by municipality, 2011-2024: gross/net coverage, approval, failure, repetition and dropout rates by education level, plus class size. 15,707 rows, 41 columns.",
+   "domain": "education",
+   "region": "latin-america",
+   "source": "Ministerio de Educación Nacional / Datos Abiertos Colombia",
+   "sourceType": "gov-portal",
+   "url": "https://www.datos.gov.co/Educaci-n/MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR-B-SICA/nudc-7mev",
+   "formats": [
+    "CSV",
+    "JSON",
+    "XML",
+    "XLSX"
+   ],
+   "license": "CC BY-SA 4.0",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2025,
+   "coverageStart": 2011,
+   "coverageEnd": 2024,
+   "granularity": "admin",
+   "approxSizeMB": 4
+  },
+  {
    "title": "College Scorecard",
    "description": "Institution-level data on ~6,500 US colleges 1996-97 to 2025-26: enrollment, costs, student aid, completion, cumulative debt and post-graduation earnings, plus field-of-study files by CIP code.",
    "domain": "education",
@@ -1506,6 +1696,25 @@
    "coverageEnd": 2013,
    "granularity": "point",
    "approxSizeMB": 40
+  },
+  {
+   "title": "School Locations 2025 (Victoria, Australia)",
+   "description": "Listing of every registered primary and secondary school in Victoria for 2025, government and non-government: school name, sector, type, address, phone, and departmental region/area per campus.",
+   "domain": "education",
+   "region": "oceania",
+   "source": "Victorian Department of Education via data.gov.au",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.au/data/dataset/school-locations-2025",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY 3.0 AU",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 2025,
+   "coverageEnd": 2025,
+   "granularity": "point",
+   "approxSizeMB": 0.5
   },
   {
    "title": "Schools, Australia (ABS)",
@@ -1814,6 +2023,25 @@
    "approxSizeMB": 500000
   },
   {
+   "title": "Australian Petroleum Statistics",
+   "description": "Monthly national and state series on sales of petroleum products, exports and imports of products and crude oil, crude/condensate production, refinery input and output, and product stocks; extract updated monthly.",
+   "domain": "energy",
+   "region": "oceania",
+   "source": "Dept of Climate Change, Energy, the Environment and Water via data.gov.au",
+   "sourceType": "gov-portal",
+   "url": "https://data.gov.au/data/dataset/australian-petroleum-statistics",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "CC BY 3.0 AU",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2010,
+   "coverageEnd": 2026,
+   "granularity": "admin",
+   "approxSizeMB": 3
+  },
+  {
    "title": "New Zealand Electricity Statistics (MBIE)",
    "description": "Quarterly-updated tables of NZ electricity generation by fuel (hydro, geothermal, wind, thermal), demand by sector (residential, industrial, commercial), capacity and transmission/distribution, from 1974.",
    "domain": "energy",
@@ -1831,6 +2059,25 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 0.5
+  },
+  {
+   "title": "Health Facilities in Sub-Saharan Africa",
+   "description": "Geolocated master list of 98,745 public health facilities across 50 sub-Saharan African countries; each record gives country, admin location, facility name, type and coordinates. Excel format.",
+   "domain": "health",
+   "region": "africa",
+   "source": "Humanitarian Data Exchange (HDX) — Maina et al. / WHO",
+   "sourceType": "intl-org",
+   "url": "https://data.humdata.org/dataset/health-facilities-in-sub-saharan-africa",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "Creative Commons Attribution (CC BY)",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2019,
+   "coverageStart": 2019,
+   "coverageEnd": 2019,
+   "granularity": "point",
+   "approxSizeMB": 15
   },
   {
    "title": "Malaria in Africa",
@@ -1891,6 +2138,28 @@
    "coverageEnd": 2022,
    "granularity": "country",
    "approxSizeMB": 0.5
+  },
+  {
+   "title": "Causes of death - standardised death rate by NUTS 2 region (HLTH_CD_ASDR2)",
+   "description": "Age-standardised death rates per 100k inhabitants by ICD-10 cause of death, sex, age group and NUTS 2 region of residence across Europe, 2011-2023; ~4.5M observations (Eurostat HLTH_CD_ASDR2).",
+   "domain": "health",
+   "region": "europe",
+   "source": "Eurostat",
+   "sourceType": "intl-org",
+   "url": "https://ec.europa.eu/eurostat/web/products-datasets/-/hlth_cd_asdr2",
+   "formats": [
+    "TSV",
+    "CSV",
+    "XLSX",
+    "SDMX-JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2011,
+   "coverageEnd": 2023,
+   "granularity": "admin",
+   "approxSizeMB": 35
   },
   {
    "title": "ONS National life tables, UK",
@@ -2116,6 +2385,45 @@
    "approxSizeMB": 8
   },
   {
+   "title": "Queensland COVID-19 Case Line List - Age Groups",
+   "description": "Line list of Queensland COVID-19 cases from 2020 to present: one row per case with notification date and age group at notification, including validated self-reported RAT results from March 2023; refreshed weekly.",
+   "domain": "health",
+   "region": "oceania",
+   "source": "Queensland Health via data.qld.gov.au",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.qld.gov.au/dataset/queensland-covid-19-case-line-list-age-groups",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2020,
+   "coverageEnd": 2026,
+   "granularity": "admin",
+   "approxSizeMB": 45
+  },
+  {
+   "title": "Africa Road Network (gROADS v1)",
+   "description": "Continental road network for Africa from NASA SEDAC/CIESIN gROADS v1, with line geometry, road name and functional class attributes. Downloadable as Shapefile or GeoJSON.",
+   "domain": "transport",
+   "region": "africa",
+   "source": "ENERGYDATA.INFO (NASA SEDAC / CIESIN gROADS)",
+   "sourceType": "intl-org",
+   "url": "https://energydata.info/dataset/road-network",
+   "formats": [
+    "SHP",
+    "GeoJSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2018,
+   "coverageStart": 2010,
+   "coverageEnd": 2010,
+   "granularity": "point",
+   "approxSizeMB": 90
+  },
+  {
    "title": "Road Traffic Accidents in Addis Ababa",
    "description": "12,316 police-reported road traffic accidents in Addis Ababa, Ethiopia (2017-2020) with 32 attributes: driver age/sex/experience, vehicle type, road surface, weather, collision type and accident severity. Sourced from Mendeley Data.",
    "domain": "transport",
@@ -2154,6 +2462,25 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 0.5
+  },
+  {
+   "title": "Asian Transport Outlook (ATO) National Database",
+   "description": "National transport indicators for 51 Asia-Pacific economies: ~400 variables on infrastructure, transport activity, road safety, air pollution, climate and policy, in 9 Excel workbooks with data from 2000 onward.",
+   "domain": "transport",
+   "region": "asia",
+   "source": "Asian Development Bank / Asian Transport Observatory",
+   "sourceType": "intl-org",
+   "url": "https://asiantransportobservatory.org/snd/",
+   "formats": [
+    "XLSX"
+   ],
+   "license": "ATO Terms of Service (attribution, non-commercial)",
+   "licenseOpenness": 0.6,
+   "freshnessYear": 2025,
+   "coverageStart": 2000,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 6.5
   },
   {
    "title": "Railway Passenger Transport (rail_pa_total, Eurostat)",
@@ -2380,6 +2707,25 @@
    "coverageEnd": 2026,
    "granularity": "point",
    "approxSizeMB": 250
+  },
+  {
+   "title": "Crash data from Queensland roads",
+   "description": "All reported casualty road crashes in Queensland from Jan 2001 to Jun 2025: geocoded crash locations plus tables for casualties, driver demographics, vehicle types, restraint/helmet use, and contributing factors.",
+   "domain": "transport",
+   "region": "oceania",
+   "source": "Queensland Department of Transport and Main Roads via data.qld.gov.au",
+   "sourceType": "gov-portal",
+   "url": "https://www.data.qld.gov.au/dataset/crash-data-from-queensland-roads",
+   "formats": [
+    "CSV"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 2001,
+   "coverageEnd": 2025,
+   "granularity": "point",
+   "approxSizeMB": 210
   }
  ]
 }
