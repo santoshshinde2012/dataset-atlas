@@ -113,3 +113,23 @@ test('regionDatasets sorts by freshness descending', () => {
   const asia = store.select.regionDatasets('asia');
   assert.deepEqual(asia.map((d) => d.title), ['A']);
 });
+
+test('country focus sorts covering datasets first and clears with the region', () => {
+  const raw = {
+    datasets: [
+      { ...rawCatalog.datasets[0], title: 'Older India', url: 'https://x.com/in', countries: ['IN'], freshnessYear: 2015 },
+      { ...rawCatalog.datasets[0], title: 'Fresh Regional', url: 'https://x.com/asia', freshnessYear: 2026 },
+    ],
+  };
+  const store = createStore({ catalog: buildCatalog(raw), pinStorage: fakeStorage() });
+  store.actions.selectRegion('asia', 'IN');
+  assert.equal(store.getState().focusCountry, 'IN');
+  // the India-tagged dataset outranks the fresher regional one under focus
+  assert.deepEqual(store.select.regionDatasets('asia').map((d) => d.title), ['Older India', 'Fresh Regional']);
+  assert.equal(store.select.countryDatasets('IN').length, 1);
+  store.actions.selectRegion(null);
+  assert.equal(store.getState().focusCountry, null);
+  // without focus, freshness ordering rules
+  store.actions.selectRegion('asia');
+  assert.deepEqual(store.select.regionDatasets('asia').map((d) => d.title), ['Fresh Regional', 'Older India']);
+});

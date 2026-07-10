@@ -41,6 +41,10 @@ export function sanitizeEntry(d) {
   e.coverageEnd = +d.coverageEnd || e.freshnessYear;
   e.approxSizeMB = Math.max(0.1, +d.approxSizeMB || 1);
   if (!KAGGLE_REF_RE.test(e.kaggleRef || '')) delete e.kaggleRef;
+  // optional country tags: ISO 3166-1 alpha-2, uppercase, at most 4
+  e.countries = Array.isArray(d.countries)
+    ? d.countries.filter((c) => /^[A-Z]{2}$/.test(String(c))).slice(0, 4)
+    : [];
   return e;
 }
 
@@ -54,14 +58,16 @@ export function buildCatalog(raw) {
 
 /** Fetch and build the catalog plus map data. Browser-only (uses fetch). */
 export async function loadAtlasData(base = '') {
-  const [world, countryRegion, rawCatalog] = await Promise.all([
+  const [world, countryRegion, countryCodes, rawCatalog] = await Promise.all([
     fetch(`${base}data/world-110m.json`).then((r) => r.json()),
     fetch(`${base}data/country-regions.json`).then((r) => r.json()),
+    fetch(`${base}data/country-codes.json`).then((r) => r.json()),
     fetch(`${base}data/catalog.json`).then((r) => r.json()),
   ]);
   return {
     world,
     countryRegion,
+    countryCodes, // ISO-numeric id -> { cca2, name }
     catalog: buildCatalog(rawCatalog),
     generated: typeof rawCatalog.generated === 'string' ? rawCatalog.generated : null,
   };

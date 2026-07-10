@@ -4,8 +4,8 @@ import { esc } from '../utils/text.js';
 import { domainCounts } from '../filters.js';
 import { icon } from '../icons.js';
 
-export function createTooltip(element, store) {
-  function show(event, regionKey) {
+export function createTooltip(element, store, countryCodes = {}) {
+  function show(event, regionKey, countryId = null) {
     const list = store.select.filtered().filter((d) => d.region === regionKey);
     const chips = Object.entries(domainCounts(list))
       .sort((a, b) => b[1] - a[1])
@@ -13,9 +13,19 @@ export function createTooltip(element, store) {
         const m = DOMAIN_META[k];
         return `<span class="tt-domain" style="color:${m.color};border-color:${m.color}55">${icon(m.icon)} ${n}</span>`;
       }).join('');
+
+    const country = countryId ? countryCodes[countryId] : null;
+    const countrySpecific = country ? store.select.countryDatasets(country.cca2).length : 0;
+    const title = country
+      ? `${esc(country.name)} · ${esc(REGION_META[regionKey].name)}`
+      : esc(REGION_META[regionKey].name);
+    const sub = countrySpecific
+      ? `${countrySpecific} specific to ${esc(country.name)} · ${list.length} in region`
+      : `${list.length} dataset${list.length === 1 ? ' matches' : 's match'} current filters`;
+
     element.innerHTML = `
-      <div class="tt-title">${esc(REGION_META[regionKey].name)}</div>
-      <div class="tt-sub">${list.length} dataset${list.length === 1 ? ' matches' : 's match'} current filters</div>
+      <div class="tt-title">${title}</div>
+      <div class="tt-sub">${sub}</div>
       ${chips ? `<div class="tt-domains">${chips}</div>` : ''}`;
     element.hidden = false;
     move(event);

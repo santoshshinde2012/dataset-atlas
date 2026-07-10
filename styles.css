@@ -523,6 +523,10 @@ button {
   letter-spacing: 0.2px;
 }
 .badge.plain { --badge-color: var(--muted); font-weight: 400; }
+.badge.country-badge {
+  --badge-color: var(--accent);
+  background: rgba(56, 225, 255, 0.12);
+}
 
 .card-desc { font-size: 12px; color: var(--muted); line-height: 1.45; margin-bottom: 9px; }
 

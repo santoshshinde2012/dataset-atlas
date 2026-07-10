@@ -18,10 +18,11 @@ export class MapView {
    * @param {object} deps.store
    * @param {{show: Function, move: Function, hide: Function}} deps.tooltip
    */
-  constructor({ svgElement, world, countryRegion, store, tooltip }) {
+  constructor({ svgElement, world, countryRegion, countryCodes = {}, store, tooltip }) {
     this.svg = d3.select(svgElement);
     this.world = world;
     this.countryRegion = countryRegion;
+    this.countryCodes = countryCodes;
     this.store = store;
     this.tooltip = tooltip;
 
@@ -75,7 +76,8 @@ export class MapView {
         const region = this.countryRegion[d.id];
         if (region) {
           event.stopPropagation();
-          this.store.actions.selectRegion(region);
+          // remember which country opened the region — its datasets sort first
+          this.store.actions.selectRegion(region, this.countryCodes[d.id]?.cca2 || null);
         }
       });
 
@@ -117,7 +119,7 @@ export class MapView {
     this.stopAutoRotate();
     this.gCountries.classed('region-hover', true);
     this.gCountries.selectAll(`.country[data-region="${region}"]`).classed('hovered-region', true);
-    this.tooltip.show(event, region);
+    this.tooltip.show(event, region, d.id);
   }
 
   /** The legend gradient is derived from the same ramp as the choropleth. */

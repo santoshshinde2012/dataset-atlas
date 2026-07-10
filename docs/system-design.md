@@ -100,9 +100,12 @@ One catalog entry (validated by `js/catalog.js` at load and `npm run validate` a
   "kaggleRef": "owner/slug  (Kaggle only, regex-whitelisted)",
   "formats": ["CSV", "API"], "license": "CC BY 4.0", "licenseOpenness": 0.8,
   "freshnessYear": 2025, "coverageStart": 1960, "coverageEnd": 2024,
-  "granularity": "country|admin|city|point|grid", "approxSizeMB": 270
+  "granularity": "country|admin|city|point|grid", "approxSizeMB": 270,
+  "countries": ["IN"]
 }
 ```
+
+`countries` (optional, ≤4 ISO alpha-2 codes) marks datasets specific to identifiable countries. Clicking a country on the map opens its region with that country's datasets sorted first and badged, and the hover tooltip shows the country-specific count — so country-level coverage is visible even though the atlas navigates by region.
 
 The five **DNA metrics** (freshness, coverage span, granularity, size, license openness) are pure functions of these fields (`js/dna.js`), normalized to (0, 1] so any two datasets compare visually.
 

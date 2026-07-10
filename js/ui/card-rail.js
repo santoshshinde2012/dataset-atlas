@@ -6,7 +6,7 @@ import { dnaMetrics } from '../dna.js';
 import { domainCounts } from '../filters.js';
 import { icon } from '../icons.js';
 
-export function initCardRail({ store, toast, copyText }) {
+export function initCardRail({ store, toast, copyText, countryNames = {} }) {
   const rail = $('#card-rail');
   const list = $('#card-list');
   let lastRenderedKey = null; // region + filter signature, to keep scroll on pin toggles
@@ -40,6 +40,7 @@ export function initCardRail({ store, toast, copyText }) {
     const key = JSON.stringify([
       region,
       state.domain,
+      state.focusCountry,
       [...state.sourceTypes].sort(),
       [...state.formats].sort(),
       state.minOpenness,
@@ -56,8 +57,13 @@ export function initCardRail({ store, toast, copyText }) {
     $('#rail-region-name').innerHTML = isGlobal
       ? `${icon('globe')} Global datasets`
       : esc(REGION_META[region].name);
+    const focusName = state.focusCountry ? countryNames[state.focusCountry] : null;
+    const focusCount = state.focusCountry
+      ? datasets.filter((d) => (d.countries || []).includes(state.focusCountry)).length
+      : 0;
     $('#rail-region-sub').textContent =
       `${datasets.length} dataset${datasets.length === 1 ? '' : 's'}` +
+      (focusName && focusCount ? ` · ${focusCount} specific to ${focusName}` : '') +
       (state.domain !== 'all' ? ` · ${DOMAIN_META[state.domain].name}` : '');
 
     renderDomainBreakdown(region, state.domain);
@@ -115,6 +121,11 @@ export function initCardRail({ store, toast, copyText }) {
     card.appendChild(top);
 
     const badges = el('div', 'card-badges');
+    const state = store.getState();
+    if (state.focusCountry && (d.countries || []).includes(state.focusCountry)) {
+      const cb = el('span', 'badge country-badge', esc(countryNames[state.focusCountry] || state.focusCountry));
+      badges.appendChild(cb);
+    }
     const srcBadge = el('span', 'badge', esc(d.source));
     srcBadge.style.setProperty('--badge-color', sm.color || 'var(--muted)');
     badges.appendChild(srcBadge);

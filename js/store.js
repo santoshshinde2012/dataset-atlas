@@ -30,6 +30,7 @@ export function createStore({ catalog, pinStorage }) {
     minOpenness: 0,
     search: '',
     region: null,
+    focusCountry: null, // cca2 of the clicked country, when region was entered via a country
     preset: null,
     projection: 'globe',
     passportOpen: false,
@@ -46,10 +47,16 @@ export function createStore({ catalog, pinStorage }) {
     regionCounts: () => regionCounts(filterCatalog(catalog, state)),
     domainCounts: (ignore = ['domain']) => domainCounts(filterCatalog(catalog, state, ignore)),
     matches: (d, ignore = []) => matchesFacets(d, state, ignore),
-    regionDatasets: (region) =>
-      filterCatalog(catalog, state)
+    regionDatasets: (region) => {
+      const focus = state.focusCountry;
+      const covers = (d) => (focus && (d.countries || []).includes(focus) ? 1 : 0);
+      return filterCatalog(catalog, state)
         .filter((d) => d.region === region)
-        .sort((a, b) => (b.freshnessYear || 0) - (a.freshnessYear || 0)),
+        .sort((a, b) => covers(b) - covers(a) || (b.freshnessYear || 0) - (a.freshnessYear || 0));
+    },
+    /** Filtered datasets tagged as covering a specific country (cca2). */
+    countryDatasets: (cca2) =>
+      filterCatalog(catalog, state).filter((d) => (d.countries || []).includes(cca2)),
     pinnedDatasets: () => catalog.filter((d) => state.pins.has(d.id)),
     isPinned: (id) => state.pins.has(id),
   };
@@ -80,8 +87,9 @@ export function createStore({ catalog, pinStorage }) {
     },
     setMinOpenness(v) { state.minOpenness = +v; notify(); },
     setSearch(q) { state.search = q.trim().toLowerCase(); notify(); },
-    selectRegion(key) {
+    selectRegion(key, focusCountry = null) {
       state.region = key;
+      state.focusCountry = key ? focusCountry : null;
       // the card rail and the passport drawer share the right edge
       if (key) state.passportOpen = false;
       notify();

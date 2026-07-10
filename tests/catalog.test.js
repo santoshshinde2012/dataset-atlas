@@ -74,6 +74,13 @@ test('sanitizeEntry strips shell-unsafe kaggleRef', () => {
   assert.equal(e2.kaggleRef, undefined);
 });
 
+test('sanitizeEntry validates optional country tags', () => {
+  assert.deepEqual(sanitizeEntry({ ...valid, countries: ['IN', 'BR'] }).countries, ['IN', 'BR']);
+  assert.deepEqual(sanitizeEntry({ ...valid }).countries, []);
+  assert.deepEqual(sanitizeEntry({ ...valid, countries: ['india', 'I', 'IN1', '<b>'] }).countries, []);
+  assert.equal(sanitizeEntry({ ...valid, countries: ['A1', 'B2', 'IN', 'BR', 'US', 'AU', 'NZ'] }).countries.length <= 4, true);
+});
+
 test('buildCatalog filters invalid entries and assigns stable ids', () => {
   const catalog = buildCatalog({ datasets: [valid, { junk: true }, { ...valid, url: 'https://other.example/x' }] });
   assert.equal(catalog.length, 2);

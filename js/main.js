@@ -26,20 +26,23 @@ function hydrateIcons() {
 
 async function boot() {
   hydrateIcons(); // static chrome icons appear while data loads
-  const { world, countryRegion, catalog, generated } = await loadAtlasData();
+  const { world, countryRegion, countryCodes, catalog, generated } = await loadAtlasData();
+  const countryNames = Object.fromEntries(
+    Object.values(countryCodes).map((c) => [c.cca2, c.name])
+  );
   window.__atlasBooted = true; // disarms the boot-fallback watchdog in index.html
 
   const store = createStore({ catalog, pinStorage: localPinStorage });
   const toast = createToast($('#toast'));
   const copyText = createClipboard(toast);
-  const tooltip = createTooltip($('#tooltip'), store);
+  const tooltip = createTooltip($('#tooltip'), store, countryCodes);
 
-  new MapView({ svgElement: $('#map'), world, countryRegion, store, tooltip });
+  new MapView({ svgElement: $('#map'), world, countryRegion, countryCodes, store, tooltip });
 
   initPassport({ store, toast, copyText });
   initTopbar({ store, onPassportToggle: store.actions.togglePassport });
   initFilterRail({ store, generated });
-  initCardRail({ store, toast, copyText });
+  initCardRail({ store, toast, copyText, countryNames });
 
   // single writer for the shared right-edge layout state
   const syncRailOpen = () => {
