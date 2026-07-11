@@ -60,7 +60,8 @@ Power features:
 | `data/world-110m.json` | World country shapes (TopoJSON, from world-atlas) |
 | `data/country-regions.json` | ISO-numeric country code → atlas region |
 | `data/country-codes.json` | ISO-numeric → alpha-2 code + display name (country focus) |
-| `scripts/` | Catalog validator and the liveness/freshness refresh job |
+| `scripts/` | Catalog validator, the liveness/freshness refresh job, and the `atlas-mcp.js` agent server |
+| `.mcp.json`, `.claude/skills/` | The MCP server registration and the `expedition` agent skill |
 | `vendor/` | Local copies of D3 v7 and topojson-client (works offline) |
 | `.github/workflows/` | CI, GitHub Pages deploy, daily catalog refresh |
 | `docs/` | Concept & research, system design, free-cloud deployment guide |
@@ -125,6 +126,25 @@ Three GitHub Actions workflows ship with the repo:
 Two optional one-time settings:
 - Refresh PRs need **Settings → Actions → General → Workflow permissions → "Allow GitHub Actions to create and approve pull requests."**
 - Kaggle freshness needs repo secrets `KAGGLE_USERNAME` and `KAGGLE_KEY` (from [kaggle.com/settings](https://www.kaggle.com/settings) → Create New Token). Without them the Kaggle adapter simply skips.
+
+## Agent interface (MCP)
+
+The same curated catalog is also a tool an AI agent can use. [`scripts/atlas-mcp.js`](scripts/atlas-mcp.js) is a single-file, **zero-dependency** stdio [MCP](https://modelcontextprotocol.io) server (no `npm install`) that turns any plain-language goal into a ready-to-use dataset collection. It exposes four tools, each backed by the app's own pure modules — so an agent's output is byte-identical to what the UI produces:
+
+| Tool | Does |
+|---|---|
+| `search_catalog` | Faceted, ranked query (domain, region, country, license, format, size) with per-dataset DNA scores |
+| `get_dataset` | Full metadata + DNA detail + the download command + a share link for one entry |
+| `list_bundles` | The curated "I want to…" starter kits (5 datasets each) |
+| `build_passport` | A list of ids → a reproducible `data-passport.sh`, a `references.bib`, and a pre-pinned atlas share link |
+
+It's registered in [`.mcp.json`](.mcp.json), so **Claude Code auto-discovers it** in this repo. The same config block works for Claude Desktop and Agent SDK agents:
+
+```json
+{ "mcpServers": { "dataset-atlas": { "command": "node", "args": ["scripts/atlas-mcp.js"] } } }
+```
+
+The [`expedition`](.claude/skills/expedition/SKILL.md) skill drives the tools through a six-step flow — clarify the use case → search → rank by DNA → assemble → package → hand off. Ask it *"find me data to analyze renewable energy adoption across Europe"* and it returns a shortlist, a download script, and citations. The atlas supplies verified ground truth; the agent supplies judgment.
 
 ## Deploying (free)
 

@@ -60,6 +60,8 @@ js/
   map/map-view.js    map rendering + drag/zoom/auto-rotate/focus
   ui/                topbar, domain dock, filter rail, card rail, passport drawer, tooltip
   main.js            composition root (dependency injection happens here)
+scripts/
+  atlas-mcp.js       agent interface: zero-dependency stdio MCP server (see §12)
 ```
 
 **How SOLID lands here:**
@@ -141,7 +143,7 @@ Modeled on farmlandatlas.com's interaction grammar: the map is the persistent st
 
 ## 8. Testing and CI
 
-- **64 unit tests** (`node --test`, zero dependencies) over the pure modules: sanitizer (including injection and country-tag cases), facet predicates, manifest hardening, DNA scoring, store behavior (country-focus ordering, pin import, starter bundles), URL-hash state round-trips, citation/BibTeX generation, access-signal detection, and a **theme-drift test** that fails CI if CSS and config accent colors diverge.
+- **74 unit tests** (`node --test`, zero dependencies) over the pure modules: sanitizer (including injection and country-tag cases), facet predicates, manifest hardening, DNA scoring, store behavior (country-focus ordering, pin import, starter bundles), URL-hash state round-trips, citation/BibTeX generation, access-signal detection, the MCP tool handlers (facet queries, ranking, passport artifacts, and that manifests stay hardened through the agent path), and a **theme-drift test** that fails CI if CSS and config accent colors diverge.
 - **Live verification** during development: every feature exercised in a real browser (projections, filters, pinning, manifest export, keyboard paths, mobile layout).
 - **CI** (GitHub Actions): syntax-check every module → unit tests → catalog validation. No install step — the pipeline is as dependency-free as the app.
 - Three adversarial multi-agent review rounds (4 lenses each, findings verified by independent skeptic agents before being acted on) ran during development; 30 confirmed findings were fixed.
@@ -173,3 +175,18 @@ The catalog has two update paths — one automated, one editorial — both funne
 **Editorial growth** — new entries come from the agent-assisted curation rounds in §5 (curate → adversarially verify → validate), run on demand. This is deliberate: whether a dataset *belongs* in the atlas is a judgment call, so it is not automated.
 
 The runtime is untouched by all of this — it still just fetches one static JSON file; `generated` and per-entry `verified` stamps are how the automation surfaces in the UI.
+
+## 12. Agent interface (MCP)
+
+The catalog is machine-readable ground truth, so the same data that powers the map also powers agents. `scripts/atlas-mcp.js` is a single-file, **zero-dependency** stdio [MCP](https://modelcontextprotocol.io) server (hand-rolled newline-delimited JSON-RPC 2.0, matching the repo's no-install ethos) that any MCP client — Claude Code, Claude Desktop, an Agent SDK agent — mounts as a dataset-discovery tool.
+
+**Design principle: the server is a thin façade, never a fork.** Each tool body calls the app's own pure modules, so an agent's results are byte-identical to the UI's and there is no second copy of the filtering, scoring, sanitization, or manifest logic to drift.
+
+| Tool | Backed by | Returns |
+|---|---|---|
+| `search_catalog` | `filterCatalog` (js/filters.js) + `dnaMetrics` (js/dna.js) | Faceted, ranked entries (domain/region/country/license/format/size) with 0–1 DNA scores |
+| `get_dataset` | `dnaMetrics` + the entry | Full metadata, DNA detail with notes, download command, share link |
+| `list_bundles` | `PRESETS` (js/config.js) | The curated 5-dataset starter kits with resolved ids |
+| `build_passport` | `manifestText` (js/manifest.js) + `bibliographyFor` (js/citation.js) | `data-passport.sh`, `references.bib`, and a pre-pinned share link |
+
+The catalog still flows through `buildCatalog` (the §6 sanitizer) whether it is read from the local `data/catalog.json` or fetched from the live GitHub Pages copy, so the security model is unchanged — an agent cannot reach an unsanitized entry, and every manifest string is shell-hardened exactly as in the browser. The **acquisition/preparation half stays in the client agent** (download via the Kaggle CLI or the URL, then profile and join): the atlas does discovery and the reproducible hand-off, mirroring the July-2026 MCP ecosystem where discovery, acquisition, and preparation are composed from separate servers. The [`expedition`](../.claude/skills/expedition/SKILL.md) skill encodes the six-step flow (clarify → search → rank by DNA → assemble → package → hand off) that drives these four tools.

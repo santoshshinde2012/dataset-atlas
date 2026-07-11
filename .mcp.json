@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "dataset-atlas": {
+      "command": "node",
+      "args": ["scripts/atlas-mcp.js"]
+    }
+  }
+}

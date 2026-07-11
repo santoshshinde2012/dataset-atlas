@@ -8,6 +8,7 @@ Map-first dataset discovery: Region → Domain → Get in ≤3 clicks. Dependenc
 - `npm test` — unit tests (node --test, zero dependencies)
 - `npm run validate` — schema-check `data/catalog.json` after editing it
 - `npm run refresh` — liveness sweep + source-API freshness bumps + `generated` stamp (also runs daily via `.github/workflows/refresh.yml`)
+- `node scripts/atlas-mcp.js` — the agent-facing MCP server (stdio); registered in `.mcp.json` so Claude Code auto-discovers it
 
 ## Architecture (SOLID ES modules)
 
@@ -18,6 +19,7 @@ Map-first dataset discovery: Region → Domain → Get in ≤3 clicks. Dependenc
 - `js/catalog.js` — the ONE sanitization choke point for the third-party catalog (URL scheme + control-char whitelist, kaggleRef regex). Never bypass it; anything reaching the clipboard or the exported shell manifest flows through here plus `js/manifest.js`'s `oneLine`/`oneLineUrl` hardening.
 - `js/map/projections.js` — projection strategies; MapView consumes the documented interface blindly. New projection = new registry entry implementing the full contract in the header comment.
 - Pure modules (`config`, `utils/text`, `filters`, `dna`, `manifest`, `catalog`, `store`) must stay Node-importable — tests import them directly. Browser-only code goes in `js/ui/`, `js/map/`, `js/services/`, `js/lib.js`.
+- `scripts/atlas-mcp.js` — the agent interface (zero-dependency stdio MCP server). Every tool body reuses the pure modules above (`buildCatalog`, `filterCatalog`, `dnaMetrics`, `manifestText`, `bibliographyFor`); it must NEVER re-implement filtering or bypass the sanitizer, so agent output stays identical to the UI's. New tool = new entry in `toolDefinitions()` + `callTool()`. Keep it dependency-free.
 
 ## Conventions
 
