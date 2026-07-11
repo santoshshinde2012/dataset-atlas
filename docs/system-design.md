@@ -1,6 +1,8 @@
 # The Dataset Atlas — System Design
 
-*Version 1.0 · July 2026 · companion to [the concept & research doc](dataset-atlas-concept-and-research.md)*
+*Version 1.1 · July 2026 · companion to [the concept & research doc](dataset-atlas-concept-and-research.md)*
+
+*Changelog: 1.1 adds the daily self-refresh pipeline (§11) and the agent interface / MCP server (§12).*
 
 ## 1. Problem and goals
 
@@ -20,14 +22,15 @@ Finding a dataset today means knowing *where to look* first (Kaggle? World Bank?
 
 ## 2. High-level architecture
 
-The system has two planes: an **offline curation pipeline** that produces the catalog, and a **runtime SPA** that renders it. There is no backend — the "API" is a static JSON file.
+The system has three planes over one artifact: an **offline curation-and-refresh pipeline** that produces and maintains the catalog, a **runtime SPA** that renders it, and an **agent interface** (§12) — a zero-dependency stdio MCP server that serves the same catalog to MCP clients. There is no backend — the "API" is a static JSON file, read through the same `catalog.js` sanitizer (§6) on every plane.
 
 ```mermaid
 flowchart LR
-  subgraph Curation["Curation pipeline (offline, agent-assisted)"]
+  subgraph Curation["Curation + refresh pipeline (offline, agent-assisted)"]
     A[Domain curators<br/>8 agents, web-verified] --> B[Adversarial verifiers<br/>per-domain link + metadata checks]
     B --> C[Merge · dedup · gap-fill]
     C --> D[npm run validate<br/>schema + editorial rules]
+    R[Daily refresh<br/>liveness + freshness] --> D
   end
   D --> E[(data/catalog.json<br/>155 entries)]
   subgraph Runtime["Runtime SPA (static hosting)"]
@@ -37,6 +40,10 @@ flowchart LR
     G --> I[UI components<br/>topbar · rails · passport]
     H -->|select region| G
     I -->|actions| G
+  end
+  subgraph Agents["Agent interface (MCP, §12)"]
+    E --> M[atlas-mcp.js<br/>zero-dep stdio MCP server<br/>reuses filters · dna · manifest]
+    M -->|search · get · bundles · passport| N[MCP clients<br/>Claude Code · Desktop · Agent SDK]
   end
 ```
 
@@ -53,12 +60,16 @@ js/
   filters.js         composable facet predicates + faceted counting
   dna.js             dataset "DNA" scoring (5 normalized metrics)
   manifest.js        Data Passport shell-script generation
+  citation.js        BibTeX citation generation (pure over entry fields)
+  access.js          access-requirement signal (account/paywall warning)
+  url-state.js       shareable view state ⇄ location.hash (pure serialize/parse)
   lib.js             adapter over vendored d3/topojson globals
   utils/             pure helpers (esc, oneLine/oneLineUrl, hashId, normFormat; $/el)
   services/          ports: pins storage (localStorage), clipboard, toast
   map/projections.js globe/flat strategies behind one interface
   map/map-view.js    map rendering + drag/zoom/auto-rotate/focus
-  ui/                topbar, domain dock, filter rail, card rail, passport drawer, tooltip
+  ui/                topbar, domain dock, filter rail, card rail, compare tray,
+                     passport drawer, tooltip, welcome card
   main.js            composition root (dependency injection happens here)
 scripts/
   atlas-mcp.js       agent interface: zero-dependency stdio MCP server (see §12)
@@ -74,9 +85,9 @@ scripts/
 
 ### State management
 
-A ~120-line hand-rolled pub/sub store (no framework):
+A ~220-line hand-rolled pub/sub store (no framework):
 
-- **State**: `domain`, `sourceTypes`, `formats`, `minOpenness`, `search`, `region`, `preset`, `projection`, `passportOpen`, `pins`.
+- **State**: `domain`, `sourceTypes`, `formats`, `minOpenness`, `search`, `region`, `focusCountry`, `preset`, `projection`, `passportOpen`, `theme`, `pins`, `sort`, `compare`, `compareOpen`, `onlyChanged`, `changes`.
 - **Actions** mutate state, persist side effects through injected ports, then `notify()`. Cross-cutting rules live in actions (e.g. selecting a region closes the passport drawer; changing domain clears a mismatched preset).
 - **Selectors** derive filtered lists and faceted counts on demand — with a 155-entry catalog, recomputation is microseconds; no memoization needed.
 - **Rendering**: components build static DOM once and update counts/classes in place on each notify, so keyboard focus and scroll positions survive re-renders. The card rail keys its rebuild on a signature of all filter inputs, letting pin toggles skip the rebuild entirely.
@@ -103,7 +114,8 @@ One catalog entry (validated by `js/catalog.js` at load and `npm run validate` a
   "formats": ["CSV", "API"], "license": "CC BY 4.0", "licenseOpenness": 0.8,
   "freshnessYear": 2025, "coverageStart": 1960, "coverageEnd": 2024,
   "granularity": "country|admin|city|point|grid", "approxSizeMB": 270,
-  "countries": ["IN"]
+  "countries": ["IN"],
+  "verified": "2026-07-11 (optional ISO date; the daily refresh liveness sweep stamps it, and it drives the card's shield badge)"
 }
 ```
 
@@ -143,14 +155,14 @@ Modeled on farmlandatlas.com's interaction grammar: the map is the persistent st
 
 ## 8. Testing and CI
 
-- **74 unit tests** (`node --test`, zero dependencies) over the pure modules: sanitizer (including injection and country-tag cases), facet predicates, manifest hardening, DNA scoring, store behavior (country-focus ordering, pin import, starter bundles), URL-hash state round-trips, citation/BibTeX generation, access-signal detection, the MCP tool handlers (facet queries, ranking, passport artifacts, and that manifests stay hardened through the agent path), and a **theme-drift test** that fails CI if CSS and config accent colors diverge.
+- **81 unit tests** (`node --test`, zero dependencies) over the pure modules: sanitizer (including injection and country-tag cases), facet predicates, manifest hardening, DNA scoring, store behavior (country-focus ordering, pin import, starter bundles), URL-hash state round-trips, citation/BibTeX generation, access-signal detection, the MCP tool handlers (facet queries, ranking, passport artifacts, and that manifests stay hardened through the agent path), and a **theme-drift test** that fails CI if CSS and config accent colors diverge.
 - **Live verification** during development: every feature exercised in a real browser (projections, filters, pinning, manifest export, keyboard paths, mobile layout).
 - **CI** (GitHub Actions): syntax-check every module → unit tests → catalog validation. No install step — the pipeline is as dependency-free as the app.
-- Three adversarial multi-agent review rounds (4 lenses each, findings verified by independent skeptic agents before being acted on) ran during development; 30 confirmed findings were fixed.
+- Four adversarial multi-agent review rounds (4 lenses each, findings verified by independent skeptic agents before being acted on) ran during development — three across the runtime SPA plus one dedicated pass over the agent interface (§12); 40 confirmed findings were fixed.
 
 ## 9. Performance characteristics
 
-- **Payload**: ~110 KB world topology + ~90 KB catalog + ~280 KB vendored D3 (all cacheable, no CDN dependency). First paint is the static shell; the map renders as soon as three parallel fetches resolve.
+- **Payload**: ~110 KB world topology + ~120 KB catalog + ~280 KB vendored D3 (all cacheable, no CDN dependency). First paint is the static shell; the map renders as soon as three parallel fetches resolve.
 - **Interaction**: filter changes trigger cheap in-place updates (attribute/text writes + one fill recompute over 177 country paths). Full path regeneration happens only on drag/zoom/rotate frames, which the 110m-resolution topology sustains comfortably.
 - **Memory**: the whole dataset lives in one in-memory array; selectors recompute rather than cache.
 
