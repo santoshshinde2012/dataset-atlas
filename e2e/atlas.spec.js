@@ -18,3 +18,23 @@ test('searches the catalog and restores a shared view', async ({ page }) => {
   await expect(page.locator('#rail-region-name')).toContainText('Search results');
   await expect(page.locator('#card-list .card').first()).toBeVisible();
 });
+
+test('the deploy package omits repository-only files', async ({ request }) => {
+  for (const path of ['/README.md', '/scripts/atlas-mcp.js', '/js/catalog-metadata.js']) {
+    expect((await request.get(path)).status()).toBe(404);
+  }
+});
+
+test('pins a dataset and exports the passport manifest', async ({ page }) => {
+  await page.goto('/#r=global');
+  const firstCard = page.locator('#card-list .card').first();
+  await expect(firstCard).toBeVisible();
+  await firstCard.locator('.pin-btn').click();
+  await page.locator('#passport-btn').click();
+  await expect(page.locator('#passport-drawer')).toBeVisible();
+  await expect(page.locator('#passport-list .passport-item')).toHaveCount(1);
+  const downloadEvent = page.waitForEvent('download');
+  await page.locator('#passport-export').click();
+  const download = await downloadEvent;
+  expect(download.suggestedFilename()).toBe('data-passport.sh');
+});

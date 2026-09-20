@@ -4,7 +4,7 @@
 
 The Dataset Atlas helps people find datasets by geography and subject. Select a region or country on the map, choose a domain, and open the source dataset page. The catalog currently contains 155 curated entries across eight domains and seven world regions, plus global datasets.
 
-The browser app is a static site with no runtime package dependencies, build step, account, or backend. D3 and TopoJSON are vendored in `vendor/` so the app can also run offline when served locally.
+The browser app is a static site with no runtime package dependencies, account, or backend. D3 and TopoJSON are vendored in `vendor/` so the app can also run offline when served locally. Deployment copies browser assets into a clean `dist/` directory; it does not compile the app.
 
 ## Features
 
@@ -32,6 +32,7 @@ Open <http://localhost:4173>. The browser app itself needs no `npm install`.
 npm test                 # pure logic and MCP tests
 npm run validate         # catalog schema and editorial checks
 npm run refresh          # network link checks and source metadata (edits catalog.json)
+npm run build:site       # create the deployable dist/ directory
 ```
 
 Browser smoke tests use Playwright as a development dependency:
@@ -70,7 +71,7 @@ When editing the catalog, link to the specific dataset page and run `npm run val
 
 A dead link creates or updates the **Catalog links need review** issue and makes the refresh run fail visibly. Valid checks still reach `main`; the issue remains for a human to replace or remove the broken entry. Review open issues and any older `catalog-refresh-*` pull requests when maintaining the catalog. Kaggle metadata checks are optional and require `KAGGLE_USERNAME` and `KAGGLE_KEY` repository secrets.
 
-GitHub Pages is configured for the repository root. Other static hosts can serve the same files; see [deployment guidance](docs/deployment-free-cloud.md). Do not publish `node_modules/`.
+GitHub Pages publishes only `dist/`, which contains the application shell, browser modules, map data, catalog, and vendored libraries. It excludes repository documentation, test tools, MCP scripts, and local development files. Other static hosts can serve `dist/`; see [deployment guidance](docs/deployment-free-cloud.md).
 
 ## MCP interface
 
@@ -82,6 +83,7 @@ Run `node scripts/atlas-mcp.js`, or use the checked-in [`.mcp.json`](.mcp.json) 
 data/                   Catalog and map reference data
 js/                     Browser app, pure logic, UI, and map modules
 scripts/                Catalog validator, refresh job, and MCP server
+dist/                   Generated browser-only deployment package (ignored by Git)
 tests/                  Node.js unit tests
 e2e/                    Playwright browser smoke tests
 vendor/                 Runtime D3 and TopoJSON copies

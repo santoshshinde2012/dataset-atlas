@@ -15,7 +15,7 @@ Finding a dataset today means knowing *where to look* first (Kaggle? World Bank?
 | Goal | Decision it drove |
 |---|---|
 | Zero-friction entry, instant load | Static SPA, no login, no landing page |
-| Deployable anywhere for free | No build step, no server, no external runtime services |
+| Deployable anywhere for free | Static browser files, no compilation, no server, no external runtime services |
 | Works offline / air-gapped demos | All assets vendored locally (D3, TopoJSON, catalog) |
 | Trustworthy catalog | Every entry link-verified twice; runtime sanitization as defense-in-depth |
 | Maintainable by one person | SOLID module architecture, unit tests, CI, drift-prevention tests |
