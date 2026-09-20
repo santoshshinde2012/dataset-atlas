@@ -17,6 +17,7 @@ import { DOMAIN_META, REGION_META, GLOBAL_REGION, PRESETS } from '../js/config.j
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const raw = JSON.parse(readFileSync(join(root, 'data/catalog.json'), 'utf8'));
 const entries = raw.datasets || raw;
+const pilot = JSON.parse(readFileSync(join(root, 'data/pilot.json'), 'utf8'));
 
 const errors = [];
 const warnings = [];
@@ -61,6 +62,22 @@ for (const p of PRESETS) {
       errors.push(`preset "${p.label}": bundle URL not in catalog — ${url}`);
     }
   }
+}
+
+// The research pilot must resolve to curated catalog entries and safe source URLs.
+if (pilot.tasks.length !== 3 || pilot.profiles.length !== 15) errors.push('pilot requires 3 tasks and 15 profiles');
+const taskIds = new Set(pilot.tasks.map((task) => task.id));
+const profileUrls = new Set();
+for (const profile of pilot.profiles) {
+  if (!allUrls.has(profile.url.toLowerCase().replace(/\/+$/, ''))) errors.push(`pilot URL missing from catalog: ${profile.url}`);
+  if (!taskIds.has(profile.task)) errors.push(`pilot task missing: ${profile.task}`);
+  if (profileUrls.has(profile.url)) errors.push(`duplicate pilot URL: ${profile.url}`);
+  profileUrls.add(profile.url);
+  for (const url of [profile.evidence, profile.resource?.url, profile.preview?.source].filter(Boolean)) {
+    if (!/^https:\/\/[^\s\x00-\x1f\x7f"'<>\\`]+$/i.test(url)) errors.push(`unsafe pilot URL: ${url}`);
+  }
+  if (!profile.evidence || !profile.access || !Array.isArray(profile.variables) || !Array.isArray(profile.joinKeys)) errors.push(`incomplete pilot profile: ${profile.url}`);
+  if (profile.preview && (!profile.columns || profile.preview.rows.some((row) => row.length !== profile.preview.columns.length))) errors.push(`invalid preview: ${profile.url}`);
 }
 
 console.log(`catalog: ${entries.length} entries, ${errors.length} errors, ${warnings.length} warnings`);

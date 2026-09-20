@@ -65,17 +65,19 @@ export function buildCatalog(raw) {
 
 /** Fetch and build the catalog plus map data. Browser-only (uses fetch). */
 export async function loadAtlasData(base = '') {
-  const [world, countryRegion, countryCodes, rawCatalog] = await Promise.all([
+  const [world, countryRegion, countryCodes, rawCatalog, pilot] = await Promise.all([
     fetch(`${base}data/world-110m.json`).then((r) => r.json()),
     fetch(`${base}data/country-regions.json`).then((r) => r.json()),
     fetch(`${base}data/country-codes.json`).then((r) => r.json()),
     fetch(`${base}data/catalog.json`).then((r) => r.json()),
+    fetch(`${base}data/pilot.json`).then((r) => r.json()),
   ]);
   return {
     world,
     countryRegion,
     countryCodes, // ISO-numeric id -> { cca2, name }
     catalog: buildCatalog(rawCatalog),
+    pilot,
     generated: /^\d{4}-\d{2}-\d{2}$/.test(rawCatalog.generated || '') ? rawCatalog.generated : null,
   };
 }

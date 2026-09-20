@@ -30,6 +30,7 @@
       <button id="proj-flat" title="Flat projection"><span data-icon="flat-map"></span> Flat</button>
     </div>
     <button id="theme-toggle" title="Switch theme" aria-label="Switch color theme"></button>
+    <button id="workbench-btn" title="Check dataset fit and joinability">Workbench</button>
     <button id="passport-btn" title="Your Data Passport — pinned datasets">
       <span data-icon="passport"></span> Passport <span id="passport-count" class="count-badge">0</span>
     </button>
@@ -165,6 +166,13 @@
       <button id="compare-close" title="Close" aria-label="Close comparison" data-icon="close"></button>
     </header>
     <div id="compare-table-wrap"></div>
+  </div>
+</div>
+
+<div id="workbench" role="dialog" aria-modal="true" aria-label="Research workbench" hidden>
+  <div class="workbench-inner">
+    <header class="rail-header"><div><h2>Research workbench</h2><p>Fit, access, joinability and handoff</p></div><button id="workbench-close" aria-label="Close research workbench">×</button></header>
+    <div id="workbench-body"></div>
   </div>
 </div>
 

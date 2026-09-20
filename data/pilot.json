@@ -1,0 +1,443 @@
+{
+  "reviewed": "2026-09-20",
+  "tasks": [
+    {
+      "id": "crop",
+      "title": "Study crop production and rainfall in India",
+      "description": "Find crop output and climate measures that can be aligned by place and year.",
+      "country": "IN",
+      "startYear": 2000,
+      "endYear": 2015,
+      "level": "district",
+      "variables": [
+        "crop production",
+        "rainfall"
+      ]
+    },
+    {
+      "id": "health",
+      "title": "Compare COVID-19 and population trends",
+      "description": "Find case counts and population denominators with compatible dates and geographies.",
+      "country": "IN",
+      "startYear": 2020,
+      "endYear": 2022,
+      "level": "country",
+      "variables": [
+        "COVID-19 cases",
+        "population"
+      ]
+    },
+    {
+      "id": "energy",
+      "title": "Compare energy use and CO₂ emissions",
+      "description": "Join national energy and emissions series by ISO country code and year.",
+      "country": "IN",
+      "startYear": 2000,
+      "endYear": 2022,
+      "level": "country",
+      "variables": [
+        "energy consumption",
+        "CO₂ emissions"
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "url": "https://www.kaggle.com/datasets/abhinand05/crop-production-in-india",
+      "task": "crop",
+      "countries": [
+        "IN"
+      ],
+      "level": "district",
+      "time": "year",
+      "variables": [
+        "crop production"
+      ],
+      "joinKeys": [
+        "state",
+        "district",
+        "year"
+      ],
+      "access": "Kaggle account and dataset terms may be required; open the source page to download.",
+      "evidence": "https://www.kaggle.com/datasets/abhinand05/crop-production-in-india"
+    },
+    {
+      "url": "https://www.data.gov.in/catalog/district-wise-season-wise-crop-production-statistics-0",
+      "task": "crop",
+      "countries": [
+        "IN"
+      ],
+      "level": "district",
+      "time": "season/year",
+      "variables": [
+        "crop production"
+      ],
+      "joinKeys": [
+        "state",
+        "district",
+        "year",
+        "season"
+      ],
+      "access": "Choose a resource on the Government of India catalog page; availability and API keys vary by resource.",
+      "evidence": "https://www.data.gov.in/catalog/district-wise-season-wise-crop-production-statistics-0"
+    },
+    {
+      "url": "https://www.data.gov.in/resource/sub-divisional-monthly-rainfall-1901-2017",
+      "task": "crop",
+      "countries": [
+        "IN"
+      ],
+      "level": "subdivision",
+      "time": "month/year",
+      "variables": [
+        "rainfall"
+      ],
+      "joinKeys": [
+        "subdivision",
+        "year",
+        "month"
+      ],
+      "access": "Open the Government of India resource page. A district to meteorological subdivision crosswalk is needed for district analysis.",
+      "evidence": "https://www.data.gov.in/resource/sub-divisional-monthly-rainfall-1901-2017"
+    },
+    {
+      "url": "https://ourworldindata.org/crop-yields",
+      "task": "crop",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "variables": [
+        "crop yield"
+      ],
+      "joinKeys": [
+        "iso_code",
+        "year"
+      ],
+      "access": "Open CSV directly; this resource is cereal yield in tonnes per hectare, not production volume.",
+      "resource": {
+        "url": "https://ourworldindata.org/grapher/cereal-yield.csv",
+        "format": "CSV",
+        "label": "Cereal yield series"
+      },
+      "columns": [
+        "Entity",
+        "Code",
+        "Year",
+        "Cereals - Yield (tonnes per hectare)"
+      ],
+      "preview": {
+        "columns": [
+          "Entity",
+          "Code",
+          "Year",
+          "Cereals - Yield (tonnes per hectare)"
+        ],
+        "rows": [
+          [
+            "Afghanistan",
+            "AFG",
+            1961,
+            1.1151
+          ]
+        ],
+        "source": "https://ourworldindata.org/grapher/cereal-yield.csv"
+      },
+      "evidence": "https://ourworldindata.org/grapher/cereal-yield"
+    },
+    {
+      "url": "https://www.fao.org/faostat/en/#data/QCL",
+      "task": "crop",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "variables": [
+        "crop production",
+        "crop yield"
+      ],
+      "joinKeys": [
+        "area code",
+        "year",
+        "item"
+      ],
+      "access": "Use FAOSTAT QCL to select area, item, element and years, then download. Element and units must match before combining series.",
+      "evidence": "https://www.fao.org/faostat/en/#data/QCL"
+    },
+    {
+      "url": "https://github.com/owid/covid-19-data/tree/master/public/data",
+      "task": "health",
+      "countries": [],
+      "level": "country",
+      "time": "day",
+      "variables": [
+        "COVID-19 cases",
+        "population"
+      ],
+      "joinKeys": [
+        "code",
+        "date"
+      ],
+      "access": "The GitHub repository is archived; use the current OWID Data Catalog CSV for recent data. Check variable availability by date.",
+      "resource": {
+        "url": "https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv",
+        "format": "CSV",
+        "label": "Current OWID COVID compact CSV"
+      },
+      "columns": [
+        "country",
+        "date",
+        "total_cases",
+        "new_cases",
+        "code",
+        "population"
+      ],
+      "evidence": "https://github.com/owid/covid-19-data/blob/master/public/data/README.md"
+    },
+    {
+      "url": "https://www.who.int/data/gho/data/indicators/indicator-details/GHO/life-expectancy-at-birth-(years)",
+      "task": "health",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "variables": [
+        "life expectancy"
+      ],
+      "joinKeys": [
+        "country",
+        "year"
+      ],
+      "access": "Use the WHO indicator page for data and download options. Indicator definition and sex breakdown matter.",
+      "evidence": "https://www.who.int/data/gho/data/indicators/indicator-details/GHO/life-expectancy-at-birth-(years)"
+    },
+    {
+      "url": "https://data.worldbank.org/indicator/SP.POP.TOTL",
+      "task": "health",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "variables": [
+        "population"
+      ],
+      "joinKeys": [
+        "countryiso3code",
+        "date"
+      ],
+      "access": "World Bank API is paginated. Request all pages and exclude aggregate regions before joining.",
+      "resource": {
+        "url": "https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?format=json&per_page=100",
+        "format": "JSON API",
+        "label": "Population API, first page"
+      },
+      "columns": [
+        "countryiso3code",
+        "date",
+        "value"
+      ],
+      "evidence": "https://data.worldbank.org/indicator/SP.POP.TOTL"
+    },
+    {
+      "url": "https://www.kaggle.com/datasets/sudalairajkumar/covid19-in-india",
+      "task": "health",
+      "countries": [
+        "IN"
+      ],
+      "level": "state",
+      "time": "day",
+      "variables": [
+        "COVID-19 cases"
+      ],
+      "joinKeys": [
+        "state",
+        "date"
+      ],
+      "access": "Kaggle account and dataset terms may be required; open the source page. State names need standardization.",
+      "evidence": "https://www.kaggle.com/datasets/sudalairajkumar/covid19-in-india"
+    },
+    {
+      "url": "https://catalog.data.gov/dataset/places-local-data-for-better-health-county-data-2024-release",
+      "task": "health",
+      "countries": [
+        "US"
+      ],
+      "level": "county",
+      "time": "year",
+      "variables": [
+        "health outcomes"
+      ],
+      "joinKeys": [
+        "county FIPS",
+        "year"
+      ],
+      "access": "Choose a distribution from Data.gov. County FIPS identifies US counties; this cannot directly join to India data.",
+      "evidence": "https://catalog.data.gov/dataset/places-local-data-for-better-health-county-data-2024-release"
+    },
+    {
+      "url": "https://github.com/owid/energy-data",
+      "task": "energy",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "variables": [
+        "energy consumption",
+        "electricity generation"
+      ],
+      "joinKeys": [
+        "iso_code",
+        "year"
+      ],
+      "access": "Download the OWID CSV. Filter to ISO country rows and read the codebook for metric units and missing values.",
+      "resource": {
+        "url": "https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv",
+        "format": "CSV",
+        "label": "OWID energy data"
+      },
+      "columns": [
+        "country",
+        "year",
+        "iso_code",
+        "primary_energy_consumption",
+        "renewables_share_energy"
+      ],
+      "evidence": "https://github.com/owid/energy-data",
+      "preview": {
+        "columns": [
+          "country",
+          "iso_code",
+          "year",
+          "primary_energy_consumption"
+        ],
+        "rows": [
+          [
+            "India",
+            "IND",
+            2020,
+            8792.22
+          ],
+          [
+            "India",
+            "IND",
+            2021,
+            9544.969
+          ]
+        ],
+        "source": "https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv"
+      }
+    },
+    {
+      "url": "https://github.com/owid/co2-data",
+      "task": "energy",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "variables": [
+        "CO₂ emissions"
+      ],
+      "joinKeys": [
+        "iso_code",
+        "year"
+      ],
+      "access": "Download the OWID CSV. Filter to ISO country rows; co2 is annual million tonnes and co2_per_capita is tonnes per person.",
+      "resource": {
+        "url": "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
+        "format": "CSV",
+        "label": "OWID CO₂ data"
+      },
+      "columns": [
+        "country",
+        "year",
+        "iso_code",
+        "co2",
+        "co2_per_capita"
+      ],
+      "evidence": "https://github.com/owid/co2-data",
+      "preview": {
+        "columns": [
+          "country",
+          "iso_code",
+          "year",
+          "co2",
+          "co2_per_capita"
+        ],
+        "rows": [
+          [
+            "India",
+            "IND",
+            2020,
+            2422.732,
+            1.727
+          ],
+          [
+            "India",
+            "IND",
+            2021,
+            2675.778,
+            1.892
+          ]
+        ],
+        "source": "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv"
+      }
+    },
+    {
+      "url": "https://data.worldbank.org/indicator/EG.ELC.ACCS.ZS",
+      "task": "energy",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "variables": [
+        "electricity access"
+      ],
+      "joinKeys": [
+        "countryiso3code",
+        "date"
+      ],
+      "access": "World Bank API is paginated; value is percent of population. Rename date to year and countryiso3code to iso_code for a country-year join.",
+      "resource": {
+        "url": "https://api.worldbank.org/v2/country/all/indicator/EG.ELC.ACCS.ZS?format=json&per_page=100",
+        "format": "JSON API",
+        "label": "Electricity access API, first page"
+      },
+      "columns": [
+        "countryiso3code",
+        "date",
+        "value"
+      ],
+      "evidence": "https://data.worldbank.org/indicator/EG.ELC.ACCS.ZS"
+    },
+    {
+      "url": "https://ec.europa.eu/eurostat/web/products-datasets/-/nrg_bal_c",
+      "task": "energy",
+      "countries": [
+        "EU"
+      ],
+      "level": "country",
+      "time": "year",
+      "variables": [
+        "energy balance"
+      ],
+      "joinKeys": [
+        "geo",
+        "year",
+        "unit",
+        "product",
+        "balance"
+      ],
+      "access": "Select energy product, balance item and unit in Eurostat before export. Country codes need a crosswalk to ISO-3.",
+      "evidence": "https://ec.europa.eu/eurostat/web/products-datasets/-/nrg_bal_c"
+    },
+    {
+      "url": "https://datasets.wri.org/dataset/globalpowerplantdatabase",
+      "task": "energy",
+      "countries": [],
+      "level": "point",
+      "time": "year",
+      "variables": [
+        "power plant capacity"
+      ],
+      "joinKeys": [
+        "country",
+        "plant id"
+      ],
+      "access": "Open the WRI source page for available distributions and terms. Aggregate plants to country-year before comparing to national series.",
+      "evidence": "https://datasets.wri.org/dataset/globalpowerplantdatabase"
+    }
+  ]
+}
