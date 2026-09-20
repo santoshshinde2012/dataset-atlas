@@ -2,6 +2,7 @@
 import { SOURCE_TYPE_META, PRESETS, LICENSE_LABELS, REGION_META } from '../config.js';
 import { $, el } from '../utils/dom.js';
 import { esc, normFormat } from '../utils/text.js';
+import { externalCatalogs } from '../external-catalogs.js';
 
 export function initFilterRail({ store, generated = null, toast = () => {} }) {
   if (generated) {
@@ -70,7 +71,11 @@ export function initFilterRail({ store, generated = null, toast = () => {} }) {
     const counts = store.select.regionCounts();
     const covered = Object.keys(REGION_META).filter((k) => counts[k] > 0).length;
     $('#tally').textContent =
-      `${store.select.filtered().length} datasets · ${covered}/${Object.keys(REGION_META).length} regions covered`;
+      `${store.select.filtered().length} curated datasets · ${covered}/${Object.keys(REGION_META).length} regions covered`;
+
+    $('#external-catalogs').innerHTML = externalCatalogs(state.search).map((source) =>
+      `<a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.name)}<small>${esc(source.scope)}${source.searchesQuery ? ' · search current terms' : ''}</small></a>`
+    ).join('');
 
     // active-filter count on the collapsed-rail button, so narrowing is
     // never invisible when the panel is closed

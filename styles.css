@@ -1251,6 +1251,13 @@ button {
   #hint { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
 }
 
+#external-catalogs-section summary { cursor: pointer; font-size: 12px; font-weight: 650; }
+#external-catalogs-section p { color: var(--muted); font-size: 11px; line-height: 1.4; }
+#external-catalogs { display: grid; gap: 6px; }
+#external-catalogs a { display: block; padding: 7px 8px; border-radius: 7px; color: var(--accent); background: var(--chip-bg); font-size: 12px; text-decoration: none; }
+#external-catalogs a:hover, #external-catalogs a:focus-visible { background: var(--hover-wash); text-decoration: underline; }
+#external-catalogs small { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+
 /* Research workbench is isolated from the map and existing rails. */
 #workbench[hidden] { display: none; }
 #workbench { position: fixed; inset: 0; z-index: 1000; background: rgba(4, 11, 22, .75); display: grid; place-items: center; padding: 16px; }
