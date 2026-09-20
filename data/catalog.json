@@ -3570,6 +3570,342 @@
    ],
    "verified": "2026-09-20",
    "sourceModifiedYear": 2026
+  },
+  {
+   "title": "PM2.5 air pollution, mean annual exposure (micrograms per cubic meter) — World Bank",
+   "description": "Population-weighted exposure to ambient PM2.5 pollution is defined as the average level of exposure of a nation's population to concentrations of suspended particles measuring less than 2.5 microns in aerodynamic diameter, which are. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "climate",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/EN.ATM.PM25.MC.M3",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2023,
+   "coverageStart": 1990,
+   "coverageEnd": 2023,
+   "granularity": "country",
+   "approxSizeMB": 5.0
+  },
+  {
+   "title": "Carbon dioxide (CO2) emissions excluding LULUCF per capita (t CO2e/capita) — World Bank",
+   "description": "Total annual emissions of carbon dioxide (CO2), one of the six Kyoto greenhouse gases (GHG), from the agriculture, energy, waste, and industrial sectors, excluding LULUCF, standardized to carbon dioxide equivalent values divided by the. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "climate",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/EN.GHG.CO2.PC.CE.AR5",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 1970,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 5.2
+  },
+  {
+   "title": "Mortality rate, under-5 (per 1,000 live births) — World Bank",
+   "description": "Under-five mortality rate is the probability per 1,000 that a newborn baby will die before reaching age five, if subject to age-specific mortality rates of the specified year. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "health",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/SH.DYN.MORT",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 1960,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 4.4
+  },
+  {
+   "title": "Maternal mortality ratio (modeled estimate, per 100,000 live births) — World Bank",
+   "description": "Maternal mortality ratio is the number of women who die from pregnancy-related causes while pregnant or within 42 days of pregnancy termination per 100,000 live births. The data are estimated with a regression model using information on. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "health",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/SH.STA.MMRT",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2023,
+   "coverageStart": 1985,
+   "coverageEnd": 2023,
+   "granularity": "country",
+   "approxSizeMB": 4.7
+  },
+  {
+   "title": "GDP per capita (current US$) — World Bank",
+   "description": "Gross domestic product is the total income earned through the production of goods and services in an economic territory during an accounting period. It can be measured in three different ways: using either the expenditure approach, the. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "economy",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/NY.GDP.PCAP.CD",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1960,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 4.3
+  },
+  {
+   "title": "Inflation, consumer prices (annual %) — World Bank",
+   "description": "Inflation as measured by the consumer price index reflects the annual percentage change in the cost to the average consumer of acquiring a basket of goods and services that may be fixed or changed at specified intervals, such as yearly. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "economy",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1960,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 4.4
+  },
+  {
+   "title": "Cereal yield (kg per hectare) — World Bank",
+   "description": "Cereal yield, measured as kilograms per hectare of harvested land, includes wheat, rice, maize, barley, oats, rye, millet, sorghum, buckwheat, and mixed grains. Production data on cereals relate to crops harvested for dry grain only.. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "agriculture",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/AG.YLD.CREL.KG",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 1961,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 4.2
+  },
+  {
+   "title": "Food production index (2014-2016 = 100) — World Bank",
+   "description": "Food production index covers food crops that are considered edible and that contain nutrients. Coffee and tea are excluded because, although edible, they have no nutritive value. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "agriculture",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/AG.PRD.FOOD.XD",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2022,
+   "coverageStart": 1961,
+   "coverageEnd": 2022,
+   "granularity": "country",
+   "approxSizeMB": 4.3
+  },
+  {
+   "title": "Literacy rate, adult total (% of people ages 15 and above) — World Bank",
+   "description": "Adult literacy rate is the percentage of people ages 15 and above who can both read and write with understanding a short simple statement about their everyday life. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "education",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/SE.ADT.LITR.ZS",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 1970,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 4.6
+  },
+  {
+   "title": "Primary completion rate, total (% of relevant age group) — World Bank",
+   "description": "Primary completion rate, or gross intake ratio to the last grade of primary education, is the number of new entrants (enrollments minus repeaters) in the last grade of primary education, regardless of age, divided by the population at the. Annual country coverage varies; confirm the requested country and years at so...",
+   "domain": "education",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/SE.PRM.CMPT.ZS",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1970,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 4.7
+  },
+  {
+   "title": "Air transport, freight (million ton-km) — World Bank",
+   "description": "Air freight is the volume of freight, express, and diplomatic bags carried on each flight stage (operation of an aircraft from takeoff to its next landing), measured in metric tons times kilometers traveled. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "transport",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/IS.AIR.GOOD.MT.K1",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2023,
+   "coverageStart": 1970,
+   "coverageEnd": 2023,
+   "granularity": "country",
+   "approxSizeMB": 4.4
+  },
+  {
+   "title": "Container port traffic (TEU: 20 foot equivalent units) — World Bank",
+   "description": "Port container traffic measures the flow of containers from land to sea transport modes, and vice versa, in twenty-foot equivalent units (TEUs), a standard-size container. Data refer to coastal shipping as well as international journeys.. Annual country coverage varies; confirm the requested country and years at sou...",
+   "domain": "transport",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/IS.SHP.GOOD.TU",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 2005,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 4.5
+  },
+  {
+   "title": "Renewable energy consumption (% of total final energy consumption) — World Bank",
+   "description": "Renewable energy consumption is the share of renewable energy in total final energy consumption. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "energy",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/EG.FEC.RNEW.ZS",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2022,
+   "coverageStart": 1990,
+   "coverageEnd": 2022,
+   "granularity": "country",
+   "approxSizeMB": 4.8
+  },
+  {
+   "title": "Energy use (kg of oil equivalent per capita) — World Bank",
+   "description": "Energy use refers to use of primary energy before transformation to other end-use fuels, which is equal to indigenous production plus imports and stock changes, minus exports and fuels supplied to ships and aircraft engaged in. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "energy",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 1990,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 4.5
+  },
+  {
+   "title": "Urban population (% of total population) — World Bank",
+   "description": "Urban population refers to people living in urban areas as defined by national statistical offices. The data are collected and smoothed by United Nations Population Division. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "demographics",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/SP.URB.TOTL.IN.ZS",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2025,
+   "coverageStart": 1960,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 4.5
+  },
+  {
+   "title": "Fertility rate, total (births per woman) — World Bank",
+   "description": "Total fertility rate represents the number of children that would be born to a woman if she were to live to the end of her childbearing years and bear children in accordance with age-specific fertility rates of the specified year. Annual country coverage varies; confirm the requested country and years at source.",
+   "domain": "demographics",
+   "region": "global",
+   "source": "World Bank Open Data",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/SP.DYN.TFRT.IN",
+   "formats": [
+    "API",
+    "CSV",
+    "JSON"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2024,
+   "coverageStart": 1960,
+   "coverageEnd": 2024,
+   "granularity": "country",
+   "approxSizeMB": 4.3
   }
  ],
  "generated": "2026-09-20"

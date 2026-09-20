@@ -22,6 +22,7 @@ const files = [
   'js/citation.js',
   'js/config.js',
   'js/dna.js',
+  'js/external-catalogs.js',
   'js/filters.js',
   'js/fit.js',
   'js/icons.js',

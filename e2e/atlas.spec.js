@@ -17,6 +17,9 @@ test('searches the catalog and restores a shared view', async ({ page }) => {
   await page.locator('#search-input').fill('malaria');
   await expect(page.locator('#rail-region-name')).toContainText('Search results');
   await expect(page.locator('#card-list .card').first()).toBeVisible();
+  await page.locator('#external-catalogs-section summary').click();
+  await expect(page.locator('#external-catalogs a')).toHaveCount(6);
+  await expect(page.locator('#external-catalogs a').first()).toHaveAttribute('href', /q=malaria/);
 });
 
 test('the deploy package omits repository-only files', async ({ request }) => {

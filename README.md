@@ -2,7 +2,7 @@
 
 [Live atlas](https://santoshshinde2012.github.io/dataset-atlas/) · [License](LICENSE)
 
-The Dataset Atlas helps people find datasets by geography and subject. Select a region or country on the map, choose a domain, and open the source dataset page. The catalog currently contains 155 curated entries across eight domains and seven world regions, plus global datasets.
+The Dataset Atlas helps people find datasets by geography and subject. Select a region or country on the map, choose a domain, and open the source dataset page. The catalog currently contains 171 curated entries across eight domains and seven world regions, plus global datasets. This is a reviewed starting set, not an exhaustive index of every dataset.
 
 The browser app is a static site with no runtime package dependencies, account, or backend. D3 and TopoJSON are vendored in `vendor/` so the app can also run offline when served locally. Deployment copies browser assets into a clean `dist/` directory; it does not compile the app.
 
@@ -15,6 +15,7 @@ The browser app is a static site with no runtime package dependencies, account, 
 - Export an annotated shell manifest and BibTeX references.
 - Use the local MCP server to search the same catalog and build a passport from an agent.
 - See the last successful link check on dataset cards and the catalog's last check date.
+- Search beyond the atlas through official and broad discovery catalogs. Data.gov, HDX, and Google Dataset Search receive the current search terms; World Bank, India Open Government Data, and Eurostat open their catalog home pages for further filtering. External results have their own metadata and access terms.
 - Use the Research Workbench to screen 15 reviewed sources against three practical questions: India crop and rainfall analysis, COVID-19 and population comparisons, and energy versus CO₂. Adjust country, years, and geographic level; inspect direct resources, schema evidence, sample rows, and pair compatibility; export a Markdown project brief. The verified OWID energy/CO₂ pair also has a downloadable notebook.
 
 **Export scope:** Kaggle entries include executable `kaggle datasets download` commands. Other entries are source-page URLs in shell comments; those sites may require manual navigation, an account, or their own API. The manifest is a source inventory, not a complete automated downloader. Dataset licenses and access terms remain those of the source providers.
@@ -47,6 +48,8 @@ npm run test:e2e
 ## Catalog and data provenance
 
 The catalog lives in [`data/catalog.json`](data/catalog.json). Each entry records its source URL, domain, region, format, license, approximate size, coverage years, and an editorially reviewed `freshnessYear`. Optional `countries` tags mark country-specific entries.
+
+The 16 additional World Bank indicators were checked against the official indicator and observations APIs. Their start and end years are the first and last nonempty observations for recognized countries across the entire series; individual countries may have shorter coverage. The size field is an estimate of the source API's full JSON response, not a promised download size. Provider catalog links are maintained in [`js/external-catalogs.js`](js/external-catalogs.js).
 
 The workbench's reviewed metadata lives in [`data/pilot.json`](data/pilot.json). It records source links, access instructions, variables, join keys, geographic and time grain, direct resources where verified, and static source samples. Empty `countries` means coverage is unknown to this pilot, not worldwide coverage. A fit result screens metadata only; it does not guarantee a valid analysis. Direct API examples may be paginated. Add or revise pilot entries only after checking the linked source, update the review date, and run validation and browser tests. The example [energy/CO₂ notebook](data/energy-co2-example.ipynb) filters aggregate rows and checks one-to-one country-year keys before joining.
 

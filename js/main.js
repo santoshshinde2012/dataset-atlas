@@ -235,10 +235,11 @@ function showAboutPanel(generated) {
           <button id="about-close" title="Close" aria-label="Close">${icon('close')}</button>
         </header>
         <div class="about-body">
-          <p><b>Every entry is verified twice before it ships.</b> Datasets are curated by
-          domain librarians, then an independent adversarial pass re-fetches every URL and
-          cross-checks license, coverage and freshness against the source page. Entries that
-          fail are dropped.</p>
+          <p><b>This is a curated starting set, not every dataset worldwide.</b> Entries link
+          to provider pages. New World Bank indicators were checked against the official
+          indicator and observations APIs; their year ranges describe the whole series and
+          may be shorter for a given country. Use “Search beyond the atlas” to explore
+          larger provider catalogs directly.</p>
           <p><b>The catalog is checked daily.</b> An automated job checks links and records
           source metadata dates from supported APIs. Those dates do not change the data's
           editorially reviewed freshness year or coverage. Broken links are flagged for
