@@ -1,6 +1,6 @@
 ---
 name: expedition
-description: Turn a plain-language use case ("predict crop yields in India") into a verified, ready-to-use dataset collection — searched, ranked, and packaged from the Dataset Atlas catalog with a reproducible download script, citations, and a share link. Use when the user describes a data project, asks what data to use for a goal, or wants a dataset collection assembled.
+description: Turn a plain-language use case ("predict crop yields in India") into a verified dataset collection — searched, ranked, and packaged from the Dataset Atlas catalog with a source inventory, citations, and a share link. Use when the user describes a data project, asks what data to use for a goal, or wants a dataset collection assembled.
 ---
 
 # Expedition — from use case to dataset collection
@@ -46,7 +46,7 @@ run the pure modules directly with Node (`js/filters.js`, `js/dna.js`,
    keyed by meteorological subdivision needs a crosswalk.
 
 5. **Package.** `build_passport` with the chosen ids. Hand the user all
-   three artifacts: `data-passport.sh` (reproducible downloads), and
+   three artifacts: `data-passport.sh` (source links and Kaggle commands), and
    `references.bib` (citations with license + coverage provenance) as files,
    plus the share link (opens the atlas with the collection pre-pinned).
 

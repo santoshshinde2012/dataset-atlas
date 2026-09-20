@@ -1,4 +1,8 @@
 .DS_Store
 node_modules/
 *.log
+refresh-report.json
+playwright-report/
+test-results/
+dead-links.md
 .claude/settings.local.json

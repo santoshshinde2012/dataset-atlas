@@ -181,12 +181,12 @@ The catalog has two update paths — one automated, one editorial — both funne
 | Step | What happens | Architectural note |
 |---|---|---|
 | Liveness sweep | Every URL fetched and classified ok / bot-blocked / dead / transient; `ok` entries get a `verified` date stamp (the shield badge on cards) | 8 concurrent workers; bot walls (401/403/405/406/429) count as alive |
-| Freshness enrichment | Source metadata APIs report last-modified dates; `freshnessYear` bumps when the source is newer (living series also extend `coverageEnd`) | An adapter registry — World Bank, CKAN portals, GitHub, figshare, Kaggle (behind optional `KAGGLE_USERNAME`/`KAGGLE_KEY` secrets, silent skip without). New host family = one entry |
-| Ship or escalate | Safe metadata changes auto-commit to `main` behind the validate + test gate and redeploy; dead links open a review PR and turn the run red | Machine-verifiable changes need no human; replacing a dataset does |
+| Source metadata | Source APIs report last-modified dates in `sourceModifiedYear`; reviewed `freshnessYear` and `coverageEnd` remain unchanged | An adapter registry — World Bank, CKAN portals, GitHub, figshare, Kaggle (behind optional `KAGGLE_USERNAME`/`KAGGLE_KEY` secrets, silent skip without). New host family = one entry |
+| Ship or escalate | Successful checks and metadata changes commit to `main` behind validation and tests, even when a separate link is dead. Dead links create or update one review issue and turn the run red | The commit requests a Pages deployment explicitly because `GITHUB_TOKEN` commits do not trigger push workflows |
 
 **Editorial growth** — new entries come from the agent-assisted curation rounds in §5 (curate → adversarially verify → validate), run on demand. This is deliberate: whether a dataset *belongs* in the atlas is a judgment call, so it is not automated.
 
-The runtime is untouched by all of this — it still just fetches one static JSON file; `generated` and per-entry `verified` stamps are how the automation surfaces in the UI.
+The runtime still fetches one static JSON file; `generated`, `verified`, and `sourceModifiedYear` surface the different checks in the UI.
 
 ## 12. Agent interface (MCP)
 
@@ -201,4 +201,4 @@ The catalog is machine-readable ground truth, so the same data that powers the m
 | `list_bundles` | `PRESETS` (js/config.js) | The curated 5-dataset starter kits with resolved ids |
 | `build_passport` | `manifestText` (js/manifest.js) + `bibliographyFor` (js/citation.js) | `data-passport.sh`, `references.bib`, and a pre-pinned share link |
 
-The catalog still flows through `buildCatalog` (the §6 sanitizer) whether it is read from the local `data/catalog.json` or fetched from the live GitHub Pages copy, so the security model is unchanged — an agent cannot reach an unsanitized entry, and every manifest string is shell-hardened exactly as in the browser. The **acquisition/preparation half stays in the client agent** (download via the Kaggle CLI or the URL, then profile and join): the atlas does discovery and the reproducible hand-off, mirroring the July-2026 MCP ecosystem where discovery, acquisition, and preparation are composed from separate servers. The [`expedition`](../.claude/skills/expedition/SKILL.md) skill encodes the six-step flow (clarify → search → rank by DNA → assemble → package → hand off) that drives these four tools.
+The catalog still flows through `buildCatalog` (the §6 sanitizer) whether it is read from the local `data/catalog.json` or fetched from the live GitHub Pages copy, so the security model is unchanged — an agent cannot reach an unsanitized entry, and every manifest string is shell-hardened exactly as in the browser. The **acquisition/preparation half stays in the client agent** (download via the Kaggle CLI or the URL, then profile and join): the atlas handles discovery and source hand-off. The [`expedition`](../.claude/skills/expedition/SKILL.md) skill encodes the six-step flow (clarify → search → rank by DNA → assemble → package → hand off) that drives these four tools.

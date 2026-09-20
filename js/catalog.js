@@ -38,6 +38,9 @@ export function sanitizeEntry(d) {
   e.license = clean(d.license || 'Unknown');
   e.licenseOpenness = Math.max(0, Math.min(1, +d.licenseOpenness || 0));
   e.freshnessYear = +d.freshnessYear || 2015;
+  if (Number.isInteger(d.sourceModifiedYear) && d.sourceModifiedYear >= 1990 && d.sourceModifiedYear <= new Date().getUTCFullYear()) {
+    e.sourceModifiedYear = d.sourceModifiedYear;
+  } else delete e.sourceModifiedYear;
   e.coverageStart = +d.coverageStart || e.freshnessYear;
   e.coverageEnd = +d.coverageEnd || e.freshnessYear;
   e.approxSizeMB = Math.max(0.1, +d.approxSizeMB || 1);

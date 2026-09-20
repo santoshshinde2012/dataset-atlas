@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_call:
 
 jobs:
   test:
@@ -13,11 +14,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
-      # zero dependencies by design — no npm install step
+      - name: Install test tooling
+        run: npm ci
+
+      # The app has no runtime packages; CI installs Playwright for smoke tests.
       - name: Syntax-check every module
         run: |
-          for f in $(find js scripts tests -name '*.js'); do
+          for f in $(find js scripts tests e2e -name '*.js') playwright.config.js; do
             node --check "$f"
           done
 
@@ -26,3 +31,9 @@ jobs:
 
       - name: Validate catalog
         run: npm run validate
+
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser smoke tests
+        run: npm run test:e2e

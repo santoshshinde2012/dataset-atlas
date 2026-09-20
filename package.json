@@ -10,7 +10,11 @@
   "scripts": {
     "start": "python3 -m http.server 4173",
     "test": "node --test",
+    "test:e2e": "playwright test",
     "validate": "node scripts/validate-catalog.js",
     "refresh": "node scripts/refresh-catalog.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
   }
 }

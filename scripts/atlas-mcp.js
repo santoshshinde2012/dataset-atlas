@@ -9,7 +9,7 @@
  *   search_catalog   faceted query + ranking over the verified catalog
  *   get_dataset      full metadata + DNA profile for one entry
  *   list_bundles     the curated "I want to…" starter bundles
- *   build_passport   reproducible download manifest + BibTeX + share link
+ *   build_passport   source inventory and download commands + BibTeX + share link
  *
  * Every tool body reuses the app's own pure modules — the catalog always
  * flows through the js/catalog.js sanitization choke point, manifests
@@ -86,6 +86,7 @@ const compact = (d, extra = {}) => ({
   license: d.license,
   licenseOpenness: d.licenseOpenness,
   freshnessYear: d.freshnessYear,
+  ...(d.sourceModifiedYear ? { sourceModifiedYear: d.sourceModifiedYear } : {}),
   coverage: `${d.coverageStart}-${d.coverageEnd}`,
   granularity: d.granularity || 'country',
   approxSizeMB: d.approxSizeMB,
@@ -252,7 +253,7 @@ export function toolDefinitions() {
     },
     {
       name: 'build_passport',
-      description: 'Turn a list of dataset ids into the three reproducible artifacts: data-passport.sh (runnable, shell-injection-hardened download manifest), references.bib (BibTeX with license + coverage provenance), and a share link that opens the atlas with the collection pre-pinned.',
+      description: 'Turn a list of dataset ids into data-passport.sh (source URLs and executable Kaggle commands), references.bib (BibTeX with license and coverage), and a share link that opens the atlas with the collection pre-pinned. Non-Kaggle downloads require manual action.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -279,7 +280,7 @@ export async function callTool(catalog, name, args) {
 
 const INSTRUCTIONS = 'Dataset discovery over a curated, adversarially verified, daily-refreshed catalog. '
   + 'Typical flow: search_catalog (facets: domain/region/country/license/format) or list_bundles for a curated starting kit -> '
-  + 'get_dataset to inspect candidates -> build_passport with the chosen ids for a reproducible download script, citations, and a share link. '
+  + 'get_dataset to inspect candidates -> build_passport with the chosen ids for a source inventory, Kaggle commands, citations, and a share link. '
   + 'Downloading and profiling the actual data files is the client agent\'s job (kaggle CLI for kaggleRef entries, the url for the rest).';
 
 const ok = (id, res) => ({ jsonrpc: '2.0', id, result: res });

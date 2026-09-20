@@ -40,7 +40,7 @@ Design rules we adopt: one persistent map as the stage; at most three filter gro
 
 **C. Use-case-first entry ("I want to…").** The user picks an intent — "forecast crop yield", "study disease outbreaks", "build a housing-price model" — and the atlas pre-selects the domain, highlights regions with usable data, and bundles the 3–5 datasets that use case needs into one download list.
 
-**D. Data Passport.** A shareable collection: pin datasets from multiple regions/sources, then export a manifest (URLs + Kaggle CLI script) that reproduces the whole download on any machine — for teams and reproducible research.
+**D. Data Passport.** A shareable collection: pin datasets from multiple regions and sources, then export an annotated source inventory with executable Kaggle CLI commands and manual links for other providers.
 
 **E. Coverage heatmap ("where data is missing").** Invert the signal: paint regions by data *scarcity* per domain. Valuable for NGOs, researchers, and competition organizers deciding where new data collection matters most.
 

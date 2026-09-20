@@ -7,7 +7,12 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: catalog-refresh
+  cancel-in-progress: false
 
 jobs:
   refresh:
@@ -18,10 +23,10 @@ jobs:
         with:
           node-version: 22
 
-      - name: Refresh liveness + freshness
+      - name: Check links and source metadata
         id: refresh
         # dead links make the step fail AFTER writing the report — keep going
-        # so the safe freshness bumps still land for review
+        # so successful checks and source metadata can still land
         continue-on-error: true
         env:
           # optional: unlock the Kaggle metadata adapter (Settings → Secrets)
@@ -35,42 +40,35 @@ jobs:
       - name: Unit tests
         run: npm test
 
-      # Machine-verified metadata (freshness bumps, verified stamps, the
-      # generated date) commits straight to main — validate + tests above are
-      # the gate, and the Pages deploy follows automatically. Dead links are
-      # the one case that needs a human: those go to a PR instead.
-      - name: Commit safe refresh directly
-        if: steps.refresh.outcome == 'success'
+      # Successful checks and source metadata can advance even when a different
+      # link needs editorial review. Only catalog.json is committed.
+      - name: Commit checked catalog
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          if git diff --quiet; then
+          if git diff --quiet -- data/catalog.json; then
             echo "catalog already current"
             exit 0
           fi
           git config user.name "atlas-refresh-bot"
           git config user.email "actions@github.com"
           git add data/catalog.json
-          git commit -m "Automated daily refresh: liveness sweep + freshness bumps"
+          git commit -m "Automated daily catalog check"
           git push
+          # Commits made with GITHUB_TOKEN do not trigger push workflows.
+          gh workflow run deploy-pages.yml --ref main
 
-      - name: Open PR when dead links need a human
+      - name: Report dead links for editorial review
         if: steps.refresh.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if git diff --quiet; then
-            echo "no catalog changes to propose"
+          node -e 'const r=require("./refresh-report.json"); process.stdout.write("Dead links found on " + new Date().toISOString().slice(0,10) + ":\n\n" + r.dead.map(x=>"- " + x).join("\n") + "\n")' > dead-links.md
+          issue=$(gh issue list --state open --search 'Catalog links need review in:title' --json number --jq '.[0].number')
+          if [ -n "$issue" ]; then
+            gh issue edit "$issue" --body-file dead-links.md
           else
-            BRANCH="catalog-refresh-$(date +%Y%m%d)"
-            git config user.name "atlas-refresh-bot"
-            git config user.email "actions@github.com"
-            git checkout -b "$BRANCH"
-            git add data/catalog.json
-            git commit -m "Catalog refresh with dead links flagged — review required"
-            git push -u origin "$BRANCH"
-            gh pr create \
-              --title "Catalog refresh $(date +%Y-%m-%d): dead links need review" \
-              --body "The daily refresh found dead links (listed in the workflow log). Replace or drop those entries, then merge the accompanying freshness updates." \
-              --base main --head "$BRANCH"
+            gh issue create --title 'Catalog links need review' --body-file dead-links.md
           fi
-          echo "::error::Dead links detected — see the refresh step log"
+          echo "::error::Dead links detected — see the catalog review issue"
           exit 1
