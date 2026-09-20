@@ -72,7 +72,7 @@ When editing the catalog, link to the specific dataset page and run `npm run val
 | [Deploy](.github/workflows/deploy-pages.yml) | Push to `main` or manual dispatch | Publishes to GitHub Pages only after CI succeeds |
 | [Refresh](.github/workflows/refresh.yml) | Daily schedule or manual dispatch | Checks links, updates verified dates and source metadata, commits safe catalog changes, and requests deployment |
 
-A dead link creates or updates the **Catalog links need review** issue and makes the refresh run fail visibly. Valid checks still reach `main`; the issue remains for a human to replace or remove the broken entry. Review open issues and any older `catalog-refresh-*` pull requests when maintaining the catalog. Kaggle metadata checks are optional and require `KAGGLE_USERNAME` and `KAGGLE_KEY` repository secrets.
+A dead link creates or updates the **Catalog links need review** issue and makes the refresh run fail visibly. Valid checks still reach `main`; the issue remains for a human to replace or remove the broken entry. The current refresh workflow commits validated catalog checks directly and does not create daily pull requests. Review the open issue when maintaining the catalog. Kaggle metadata checks are optional and require `KAGGLE_USERNAME` and `KAGGLE_KEY` repository secrets.
 
 GitHub Pages publishes only `dist/`, which contains the application shell, browser modules, map data, catalog, and vendored libraries. It excludes repository documentation, test tools, MCP scripts, and local development files. Other static hosts can serve `dist/`; see [deployment guidance](docs/deployment-free-cloud.md).
 
