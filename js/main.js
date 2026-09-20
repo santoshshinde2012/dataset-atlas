@@ -18,6 +18,7 @@ import { initCardRail } from './ui/card-rail.js';
 import { initPassport } from './ui/passport.js';
 import { initWelcome } from './ui/welcome.js';
 import { initCompare } from './ui/compare.js';
+import { initWorkbench } from './ui/workbench.js';
 import { serializeState, parseState } from './url-state.js';
 import { REGION_META, DOMAIN_META, GLOBAL_REGION } from './config.js';
 import { $ } from './utils/dom.js';
@@ -55,7 +56,7 @@ function hydrateIcons() {
 
 async function boot() {
   hydrateIcons(); // static chrome icons appear while data loads
-  const { world, countryRegion, countryCodes, catalog, generated } = await loadAtlasData();
+  const { world, countryRegion, countryCodes, catalog, generated, pilot } = await loadAtlasData();
   const countryNames = Object.fromEntries(
     Object.values(countryCodes).map((c) => [c.cca2, c.name])
   );
@@ -115,6 +116,7 @@ async function boot() {
   initFilterRail({ store, generated, toast });
   initCardRail({ store, toast, copyText, countryNames });
   initCompare({ store, toast });
+  initWorkbench({ catalog, pilot, toast });
   initWelcome({ store });
 
   // pins arriving via a shared link are merged once, with feedback

@@ -1250,3 +1250,22 @@ button {
 @media (max-width: 1100px) {
   #hint { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
 }
+
+/* Research workbench is isolated from the map and existing rails. */
+#workbench[hidden] { display: none; }
+#workbench { position: fixed; inset: 0; z-index: 1000; background: rgba(4, 11, 22, .75); display: grid; place-items: center; padding: 16px; }
+.workbench-inner { width: min(1100px, 100%); max-height: min(92vh, 100%); overflow: auto; border-radius: 16px; background: var(--panel-solid); color: var(--text); box-shadow: 0 20px 70px rgba(0,0,0,.35); }
+#workbench-body { padding: 20px; }
+#workbench-body select { display: block; max-width: 100%; margin: 6px 0 16px; padding: 8px; }
+.workbench-inputs { display: flex; flex-wrap: wrap; gap: 12px; }
+.workbench-inputs input { display: block; width: 100px; margin: 6px 0 16px; padding: 8px; }
+.workbench-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; margin: 18px 0; }
+.workbench-card, .workbench-join { padding: 16px; border: 1px solid currentColor; border-radius: 10px; overflow-wrap: anywhere; }
+.workbench-card h3 { margin-top: 0; }
+.workbench-card ul, .workbench-join ul { padding-left: 20px; }
+.workbench-card li, .workbench-join li { margin: 7px 0; }
+.workbench-card pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.fit-match { color: #087845; }.fit-conflict { color: #b43c2a; }.fit-review, .fit-unknown { color: #986400; }
+.workbench-join { margin-bottom: 18px; }
+.workbench-note { opacity: .75; }
+@media (max-width: 640px) { #workbench { padding: 0; } .workbench-inner { max-height: 100vh; border-radius: 0; } #workbench-btn { font-size: 12px; } }

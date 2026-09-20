@@ -15,6 +15,7 @@ The browser app is a static site with no runtime package dependencies, account, 
 - Export an annotated shell manifest and BibTeX references.
 - Use the local MCP server to search the same catalog and build a passport from an agent.
 - See the last successful link check on dataset cards and the catalog's last check date.
+- Use the Research Workbench to screen 15 reviewed sources against three practical questions: India crop and rainfall analysis, COVID-19 and population comparisons, and energy versus CO₂. Adjust country, years, and geographic level; inspect direct resources, schema evidence, sample rows, and pair compatibility; export a Markdown project brief. The verified OWID energy/CO₂ pair also has a downloadable notebook.
 
 **Export scope:** Kaggle entries include executable `kaggle datasets download` commands. Other entries are source-page URLs in shell comments; those sites may require manual navigation, an account, or their own API. The manifest is a source inventory, not a complete automated downloader. Dataset licenses and access terms remain those of the source providers.
 
@@ -47,6 +48,8 @@ npm run test:e2e
 
 The catalog lives in [`data/catalog.json`](data/catalog.json). Each entry records its source URL, domain, region, format, license, approximate size, coverage years, and an editorially reviewed `freshnessYear`. Optional `countries` tags mark country-specific entries.
 
+The workbench's reviewed metadata lives in [`data/pilot.json`](data/pilot.json). It records source links, access instructions, variables, join keys, geographic and time grain, direct resources where verified, and static source samples. Empty `countries` means coverage is unknown to this pilot, not worldwide coverage. A fit result screens metadata only; it does not guarantee a valid analysis. Direct API examples may be paginated. Add or revise pilot entries only after checking the linked source, update the review date, and run validation and browser tests. The example [energy/CO₂ notebook](data/energy-co2-example.ipynb) filters aggregate rows and checks one-to-one country-year keys before joining.
+
 These fields have different meanings:
 
 | Field | Meaning | Updated by |
@@ -59,7 +62,7 @@ These fields have different meanings:
 
 A source metadata change does **not** prove the underlying observations changed. The refresh job therefore never changes `freshnessYear` or `coverageEnd`. An HTTP success verifies URL reachability, not dataset quality or license accuracy; blocked and transient responses do not receive a new `verified` stamp.
 
-When editing the catalog, link to the specific dataset page and run `npm run validate`. The validator checks entry shapes, duplicate URLs, coverage order, and starter-bundle references. It does not replace manual review of source metadata.
+When editing the catalog, link to the specific dataset page and run `npm run validate`. The validator checks entry shapes, duplicate URLs, coverage order, starter-bundle references, pilot profile links, and pilot resource URL safety. It does not replace manual review of source metadata.
 
 ## Automation and deployment
 
@@ -80,7 +83,7 @@ Run `node scripts/atlas-mcp.js`, or use the checked-in [`.mcp.json`](.mcp.json) 
 ## Repository layout
 
 ```text
-data/                   Catalog and map reference data
+data/                   Catalog, pilot metadata, notebook, and map reference data
 js/                     Browser app, pure logic, UI, and map modules
 scripts/                Catalog validator, refresh job, and MCP server
 dist/                   Generated browser-only deployment package (ignored by Git)

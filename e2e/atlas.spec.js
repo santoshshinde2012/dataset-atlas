@@ -38,3 +38,25 @@ test('pins a dataset and exports the passport manifest', async ({ page }) => {
   const download = await downloadEvent;
   expect(download.suggestedFilename()).toBe('data-passport.sh');
 });
+
+test('research workbench checks fit and exports evidence-backed handoff', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#global-count')).not.toHaveText('0');
+  await page.locator('#workbench-btn').click();
+  await expect(page.locator('.workbench-card')).toHaveCount(5);
+  await page.locator('#fit-country').fill('US');
+  await page.locator('#fit-country').blur();
+  await expect(page.locator('.workbench-card').first()).toContainText('outside documented coverage');
+  await expect(page.locator('#join-result')).toContainText('Shared named keys');
+  await page.locator('#workbench-task').selectOption('energy');
+  await expect(page.locator('.workbench-card')).toHaveCount(5);
+  await page.locator('#join-a').selectOption('0');
+  await page.locator('#join-b').selectOption('1');
+  await expect(page.locator('#join-result')).toContainText('Verified pilot pair');
+  const briefEvent = page.waitForEvent('download');
+  await page.locator('#workbench-export').click();
+  expect((await briefEvent).suggestedFilename()).toBe('dataset-atlas-energy-brief.md');
+  const notebookEvent = page.waitForEvent('download');
+  await page.getByText('Download verified Energy + CO₂ notebook').click();
+  expect((await notebookEvent).suggestedFilename()).toBe('energy-co2-example.ipynb');
+});
