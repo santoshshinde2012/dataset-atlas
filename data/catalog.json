@@ -1711,7 +1711,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 0.3,
-   "verified": "2026-08-19",
+   "verified": "2026-09-20",
    "sourceModifiedYear": 2026
   },
   {
@@ -1829,7 +1829,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 3,
-   "verified": "2026-08-19",
+   "verified": "2026-09-20",
    "sourceModifiedYear": 2026
   },
   {
@@ -2564,7 +2564,8 @@
    "countries": [
     "LB"
    ],
-   "verified": "2026-09-20"
+   "verified": "2026-09-20",
+   "sourceModifiedYear": 2022
   },
   {
    "title": "Saudi Arabia Electricity Consumption by Sectors",
@@ -2708,7 +2709,7 @@
    "countries": [
     "NZ"
    ],
-   "verified": "2026-08-19"
+   "verified": "2026-09-20"
   },
   {
    "title": "Health Facilities in Sub-Saharan Africa",
@@ -3305,7 +3306,7 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-08-19",
+   "verified": "2026-09-20",
    "sourceModifiedYear": 2026
   },
   {
