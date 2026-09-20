@@ -11,7 +11,7 @@ export function manifestText(list) {
     '#!/usr/bin/env bash',
     '# ════════════════════════════════════════════════════',
     '#  The Dataset Atlas — Data Passport',
-    `#  ${list.length} dataset${list.length === 1 ? '' : 's'} · re-run this script to reproduce the downloads`,
+    `#  ${list.length} dataset${list.length === 1 ? '' : 's'} · source inventory and available download commands`,
     '# ════════════════════════════════════════════════════',
     '',
   ];

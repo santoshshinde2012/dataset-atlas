@@ -5,7 +5,7 @@ import { esc, normFormat } from '../utils/text.js';
 
 export function initFilterRail({ store, generated = null, toast = () => {} }) {
   if (generated) {
-    $('#catalog-stamp').textContent = `Catalog refreshed ${generated}`;
+    $('#catalog-stamp').textContent = `Catalog checked ${generated}`;
     $('#catalog-stamp').hidden = false;
   }
   buildPresets(store, toast);

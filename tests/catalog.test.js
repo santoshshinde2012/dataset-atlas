@@ -28,6 +28,15 @@ test('sanitizeEntry accepts a well-formed entry unchanged in essentials', () => 
   assert.deepEqual(e.formats, ['CSV']);
 });
 
+test('source metadata stays separate from the reviewed dataset year', () => {
+  const currentYear = new Date().getUTCFullYear();
+  const e = sanitizeEntry({ ...valid, sourceModifiedYear: currentYear });
+  assert.equal(e.sourceModifiedYear, currentYear);
+  assert.equal(e.freshnessYear, 2024);
+  assert.equal(e.coverageEnd, 2024);
+  assert.equal(sanitizeEntry({ ...valid, sourceModifiedYear: '2026' }).sourceModifiedYear, undefined);
+});
+
 test('sanitizeEntry rejects unusable entries', () => {
   assert.equal(sanitizeEntry(null), null);
   assert.equal(sanitizeEntry({ ...valid, url: 'javascript:alert(1)' }), null);

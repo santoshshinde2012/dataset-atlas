@@ -1,13 +1,14 @@
 # The Dataset Atlas
 
-Map-first dataset discovery: Region → Domain → Get in ≤3 clicks. Dependency-free static SPA (no build step, no npm install). UI/UX modeled on farmlandatlas.com. Concept and UX research: `docs/dataset-atlas-concept-and-research.md`.
+Map-first dataset discovery: Region → Domain → Get in ≤3 clicks. Dependency-free static SPA (no compilation or runtime npm install). `npm run build:site` stages only browser assets in `dist/` for deployment. UI/UX modeled on farmlandatlas.com. Concept and UX research: `docs/dataset-atlas-concept-and-research.md`.
 
 ## Commands
 
 - `npm start` — serve on http://localhost:4173 (or use the `.claude/launch.json` "atlas" preview config)
+- `npm run build:site` — prepare the browser-only `dist/` deployment artifact
 - `npm test` — unit tests (node --test, zero dependencies)
 - `npm run validate` — schema-check `data/catalog.json` after editing it
-- `npm run refresh` — liveness sweep + source-API freshness bumps + `generated` stamp (also runs daily via `.github/workflows/refresh.yml`)
+- `npm run refresh` — liveness sweep + separate source metadata year + `generated` stamp; reviewed data years stay unchanged (also runs daily via `.github/workflows/refresh.yml`)
 - `node scripts/atlas-mcp.js` — the agent-facing MCP server (stdio); registered in `.mcp.json` so Claude Code auto-discovers it
 
 ## Architecture (SOLID ES modules)

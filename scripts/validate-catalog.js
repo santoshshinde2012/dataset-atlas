@@ -36,6 +36,7 @@ entries.forEach((d, i) => {
   if (e.sourceType === 'kaggle' && !e.kaggleRef) warnings.push(`${label}: kaggle source without kaggleRef`);
   if (e.kaggleRef && !e.url.includes(e.kaggleRef)) warnings.push(`${label}: kaggleRef not found in url`);
   if (e.coverageStart > e.coverageEnd) errors.push(`${label}: coverageStart > coverageEnd`);
+  if (d.sourceModifiedYear !== undefined && e.sourceModifiedYear !== d.sourceModifiedYear) errors.push(`${label}: invalid sourceModifiedYear`);
   if (e.description.length > 320) warnings.push(`${label}: description over 320 chars`);
 });
 

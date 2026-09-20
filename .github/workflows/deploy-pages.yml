@@ -15,21 +15,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  verify:
+    uses: ./.github/workflows/ci.yml
+
   deploy:
+    needs: verify
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - uses: actions/configure-pages@v5
         with:
           # create the Pages site on first run instead of failing when it
           # doesn't exist yet (fresh repos, forks)
           enablement: enabled
-      # static site: the repo root IS the artifact — no build step
+      - name: Build browser-only artifact
+        run: npm run build:site
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: dist
       - id: deployment
         uses: actions/deploy-pages@v4

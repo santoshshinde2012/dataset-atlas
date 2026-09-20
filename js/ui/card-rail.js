@@ -290,8 +290,13 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
     badges.appendChild(el('span', 'badge plain', esc(d.license)));
     if (d.verified) {
       const v = el('span', 'badge verified-badge', `${icon('shield')} ${esc(d.verified)}`);
-      v.title = `Link and metadata last verified ${d.verified}`;
+      v.title = `Dataset link last returned a successful response ${d.verified}`;
       badges.appendChild(v);
+    }
+    if (d.sourceModifiedYear) {
+      const modified = el('span', 'badge plain', `Source changed ${d.sourceModifiedYear}`);
+      modified.title = 'Source page, repository, or package activity; dataset content year may differ';
+      badges.appendChild(modified);
     }
     card.appendChild(badges);
 

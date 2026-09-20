@@ -237,10 +237,11 @@ function showAboutPanel(generated) {
           domain librarians, then an independent adversarial pass re-fetches every URL and
           cross-checks license, coverage and freshness against the source page. Entries that
           fail are dropped.</p>
-          <p><b>The catalog re-verifies itself weekly.</b> An automated job checks that every
-          link is still alive and pulls last-modified dates from source APIs (World Bank, CKAN
-          portals, GitHub, figshare). Changes arrive as reviewed updates
-          ${generated ? `— last refresh <b>${esc(generated)}</b>.` : '.'}</p>
+          <p><b>The catalog is checked daily.</b> An automated job checks links and records
+          source metadata dates from supported APIs. Those dates do not change the data's
+          editorially reviewed freshness year or coverage. Broken links are flagged for
+          review while successful checks can still be published
+          ${generated ? `— last check <b>${esc(generated)}</b>.` : '.'}</p>
           <p><b>Shield badges</b> on cards show when a dataset's link was last verified.
           <b>DNA bars</b> compare freshness, coverage span, granularity, size and license
           openness — tap any bar for the exact value. <b>Lock badges</b> warn about

@@ -4,19 +4,20 @@
  *
  * 1. Liveness sweep: fetches every catalog URL and classifies it
  *    (ok / blocked-by-bot-wall / dead / transient-error).
- * 2. Freshness enrichment: for hosts with public metadata APIs (CKAN
- *    portals, GitHub, figshare, World Bank), reads the source's own
- *    last-modified date and bumps freshnessYear when the source is newer.
+ * 2. Source metadata enrichment: public APIs may report when a source page,
+ *    repository, or package changed. This is stored separately from the
+ *    editorially verified data freshness and coverage years.
  *    Adapters are a registry — supporting a new host is one entry.
  * 3. Stamps data/catalog.json with a `generated` date (shown in the UI).
  *
  * Run manually (`npm run refresh`) or on a schedule (.github/workflows/
- * refresh.yml, which opens a PR when anything changed). Exits 1 when dead
- * links are found so CI turns red until a human fixes or replaces them.
+ * refresh.yml, which opens or updates an issue for dead links). Exits 1 when
+ * dead links are found so the scheduled run stays red until editorial review.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { recordSourceModifiedYear } from '../js/catalog-metadata.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const path = join(root, 'data/catalog.json');
@@ -52,7 +53,7 @@ function classify(status) {
   return 'transient'; // network error / 5xx — warn, do not fail
 }
 
-/* ---------- 2. freshness adapters (host → last-modified year) ---------- */
+/* ---------- 2. source metadata adapters (host → last-modified year) ---------- */
 
 const CKAN_HOSTS = {
   'data.humdata.org': 'https://data.humdata.org',
@@ -123,7 +124,7 @@ const ADAPTERS = [
 
 /* ---------- run ---------- */
 
-const report = { ok: 0, blocked: 0, transient: [], dead: [], bumped: [] };
+const report = { ok: 0, blocked: 0, transient: [], dead: [], sourceModified: [] };
 const today = new Date().toISOString().slice(0, 10);
 const queue = [...catalog];
 const workers = Array.from({ length: 8 }, async () => {
@@ -141,10 +142,9 @@ const workers = Array.from({ length: 8 }, async () => {
       const m = a.match(u);
       if (!m) continue;
       const year = await a.year(u, m).catch(() => null);
-      if (year && year > d.freshnessYear) {
-        report.bumped.push(`${d.title}: freshnessYear ${d.freshnessYear} -> ${year} (${a.name})`);
-        d.freshnessYear = year;
-        if (year > d.coverageEnd && d.coverageEnd >= 2020) d.coverageEnd = year; // living series keep extending
+      const previous = d.sourceModifiedYear || 'unknown';
+      if (recordSourceModifiedYear(d, year)) {
+        report.sourceModified.push(`${d.title}: sourceModifiedYear ${previous} -> ${year} (${a.name})`);
       }
       break;
     }
@@ -154,12 +154,13 @@ await Promise.all(workers);
 
 data.generated = new Date().toISOString().slice(0, 10);
 writeFileSync(path, JSON.stringify(data, null, 1) + '\n');
+writeFileSync(join(root, 'refresh-report.json'), JSON.stringify(report, null, 2) + '\n');
 
 console.log(`liveness: ${report.ok} ok, ${report.blocked} bot-blocked, ${report.transient.length} transient, ${report.dead.length} dead`);
 for (const l of report.transient) console.warn('  transient:', l);
 for (const l of report.dead) console.error('  DEAD:', l);
-console.log(`freshness: ${report.bumped.length} entries bumped`);
-for (const l of report.bumped) console.log('  ', l);
+console.log(`source metadata: ${report.sourceModified.length} entries updated`);
+for (const l of report.sourceModified) console.log('  ', l);
 console.log(`stamped generated=${data.generated}`);
 
 process.exit(report.dead.length ? 1 : 0);
