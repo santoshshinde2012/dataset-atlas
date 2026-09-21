@@ -31,7 +31,7 @@ test('every published browser module is reachable from the app entry point', () 
 });
 
 test('maintainer documentation has no broken local links', () => {
-  const markdown = ['README.md', 'CLAUDE.md', ...readdirSync(resolve(root, 'docs')).filter((name) => name.endsWith('.md')).map((name) => `docs/${name}`)];
+  const markdown = ['README.md', 'CLAUDE.md', 'CONTRIBUTING.md', ...readdirSync(resolve(root, 'docs')).filter((name) => name.endsWith('.md')).map((name) => `docs/${name}`)];
   for (const file of markdown) {
     for (const match of read(file).matchAll(/\]\(([^)]+)\)/g)) {
       const target = match[1].split('#')[0];

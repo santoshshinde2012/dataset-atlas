@@ -29,7 +29,7 @@
     },
     {
       "id": "energy",
-      "title": "Compare energy use and CO\u2082 emissions",
+      "title": "Compare energy use and CO₂ emissions",
       "description": "Join national energy and emissions series by ISO country code and year.",
       "country": "IN",
       "startYear": 2000,
@@ -37,7 +37,7 @@
       "level": "country",
       "variables": [
         "energy consumption",
-        "CO\u2082 emissions"
+        "CO₂ emissions"
       ]
     },
     {
@@ -64,6 +64,45 @@
       "variables": [
         "population",
         "administrative boundaries"
+      ]
+    },
+    {
+      "id": "units",
+      "title": "Compare GDP, emissions, and per-capita rates",
+      "description": "See whether current-US$ GDP, PPP, and CO₂ can share a row. They cannot without a documented unit and vintage.",
+      "country": "IN",
+      "startYear": 2015,
+      "endYear": 2022,
+      "level": "country",
+      "variables": [
+        "GDP",
+        "CO₂ emissions",
+        "population"
+      ]
+    },
+    {
+      "id": "lgd",
+      "title": "Join India administrative data on LGD codes",
+      "description": "Map district names to current LGD codes. Census 2011 codes are a different vintage.",
+      "country": "IN",
+      "startYear": 2011,
+      "endYear": 2026,
+      "level": "lgd-district",
+      "variables": [
+        "LGD code",
+        "district"
+      ]
+    },
+    {
+      "id": "climate",
+      "title": "Compare CHIRPS grid rainfall with IMD subdivisions",
+      "description": "See whether a 0.05° rainfall grid can be joined to IMD meteorological subdivisions. It cannot.",
+      "country": "IN",
+      "startYear": 2000,
+      "endYear": 2017,
+      "level": "grid",
+      "variables": [
+        "rainfall"
       ]
     }
   ],
@@ -279,6 +318,7 @@
         "code",
         "date"
       ],
+      "vintage": "calendar",
       "access": "The GitHub repository is archived; use the current OWID Data Catalog CSV for recent data. Check variable availability by date. Committed sample: data/samples/covid-cases-sample.csv.",
       "resource": {
         "url": "https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv",
@@ -322,6 +362,8 @@
       "countries": [],
       "level": "country",
       "time": "year",
+      "vintage": "mid-year",
+      "series": "SP.POP.TOTL",
       "variables": [
         "population"
       ],
@@ -389,6 +431,8 @@
       "countries": [],
       "level": "country",
       "time": "year",
+      "unit": "TWh",
+      "vintage": "calendar",
       "variables": [
         "energy consumption",
         "electricity generation"
@@ -441,8 +485,10 @@
       "countries": [],
       "level": "country",
       "time": "year",
+      "unit": "million tonnes",
+      "vintage": "calendar",
       "variables": [
-        "CO\u2082 emissions"
+        "CO₂ emissions"
       ],
       "joinKeys": [
         "iso_code",
@@ -452,7 +498,7 @@
       "resource": {
         "url": "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
         "format": "CSV",
-        "label": "OWID CO\u2082 data"
+        "label": "OWID CO₂ data"
       },
       "columns": [
         "country",
@@ -664,6 +710,208 @@
       ],
       "access": "HDX COD-PS Nigeria population by admin-1 P-code. Committed sample: data/samples/nga-cod-ps-sample.csv.",
       "evidence": "https://data.humdata.org/dataset/cod-ps-nga"
+    },
+    {
+      "url": "https://data.worldbank.org/indicator/NY.GDP.MKTP.CD",
+      "task": "units",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "unit": "current US$",
+      "vintage": "fiscal",
+      "iso3": "AUS",
+      "variables": [
+        "GDP"
+      ],
+      "joinKeys": [
+        "countryiso3code",
+        "date"
+      ],
+      "access": "World Bank CSV ZIP or paginated API. Value is current US$, not PPP. FY reporters (Australia, India, …) store a fiscal year in the year label.",
+      "resource": {
+        "url": "https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.CD?downloadformat=csv",
+        "format": "CSV",
+        "label": "World Bank CSV ZIP"
+      },
+      "columns": [
+        "countryiso3code",
+        "date",
+        "value"
+      ],
+      "evidence": "https://data.worldbank.org/indicator/NY.GDP.MKTP.CD"
+    },
+    {
+      "url": "https://github.com/owid/co2-data",
+      "task": "units",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "unit": "million tonnes",
+      "vintage": "calendar",
+      "variables": [
+        "CO₂ emissions"
+      ],
+      "joinKeys": [
+        "iso_code",
+        "year"
+      ],
+      "access": "Download the OWID CSV. co2 is million tonnes; co2_per_capita uses OWID population, not World Bank.",
+      "resource": {
+        "url": "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
+        "format": "CSV",
+        "label": "OWID CO₂ data"
+      },
+      "columns": [
+        "country",
+        "iso_code",
+        "year",
+        "co2",
+        "population",
+        "co2_per_capita"
+      ],
+      "evidence": "https://github.com/owid/co2-data"
+    },
+    {
+      "url": "https://ourworldindata.org/explorers/population-and-demography",
+      "task": "units",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "unit": "population",
+      "vintage": "mid-year",
+      "variables": [
+        "population"
+      ],
+      "joinKeys": [
+        "iso_code",
+        "year"
+      ],
+      "access": "Download the explorer CSV. This is OWID-harmonised population for use with OWID CO₂, not World Bank SP.POP.TOTL.",
+      "evidence": "https://ourworldindata.org/explorers/population-and-demography"
+    },
+    {
+      "url": "https://lgdirectory.gov.in/",
+      "task": "lgd",
+      "countries": [
+        "IN"
+      ],
+      "level": "lgd-district",
+      "time": "year",
+      "variables": [
+        "LGD code",
+        "district"
+      ],
+      "joinKeys": [
+        "lgd_code"
+      ],
+      "access": "Download the current LGD directory from the portal. Do not invent a file URL. Census 2011 codes are a different vintage.",
+      "crosswalk": {
+        "note": "Ahmednagar and Ahilyanagar share LGD 466. Unmatched names are dropped."
+      },
+      "columns": [
+        "state",
+        "district",
+        "lgd_code"
+      ],
+      "evidence": "https://lgdirectory.gov.in/",
+      "preview": {
+        "columns": [
+          "state",
+          "district",
+          "lgd"
+        ],
+        "rows": [
+          [
+            "Maharashtra",
+            "Ahmednagar",
+            "466"
+          ],
+          [
+            "Maharashtra",
+            "Ahilyanagar",
+            "466"
+          ]
+        ],
+        "source": "https://lgdirectory.gov.in/"
+      }
+    },
+    {
+      "url": "https://www.data.gov.in/resource/stateut-wise-area-districts-and-villages-india-census-2001-and-census-2011",
+      "task": "lgd",
+      "countries": [
+        "IN"
+      ],
+      "level": "district",
+      "time": "year",
+      "vintage": "census-night",
+      "variables": [
+        "district"
+      ],
+      "joinKeys": [
+        "census2011"
+      ],
+      "access": "Census 2011 district counts. Codes such as 522 (Ahmednagar) are not LGD 466.",
+      "evidence": "https://www.data.gov.in/resource/stateut-wise-area-districts-and-villages-india-census-2001-and-census-2011"
+    },
+    {
+      "url": "https://www.chc.ucsb.edu/data/chirps",
+      "task": "climate",
+      "countries": [],
+      "level": "grid",
+      "time": "month",
+      "unit": "rainfall mm",
+      "variables": [
+        "rainfall"
+      ],
+      "joinKeys": [
+        "lon",
+        "lat",
+        "time"
+      ],
+      "access": "Download CHIRPS NetCDF/GeoTIFF from UCSB CHC. 0.05° grid. Do not average to district names.",
+      "evidence": "https://www.chc.ucsb.edu/data/chirps",
+      "columns": [
+        "lon",
+        "lat",
+        "year",
+        "rainfall_mm"
+      ],
+      "preview": {
+        "columns": [
+          "lon",
+          "lat",
+          "year",
+          "rainfall_mm"
+        ],
+        "rows": [
+          [
+            "73.85",
+            "18.52",
+            "2014",
+            "180"
+          ]
+        ],
+        "source": "https://www.chc.ucsb.edu/data/chirps"
+      }
+    },
+    {
+      "url": "https://www.data.gov.in/resource/sub-divisional-monthly-rainfall-1901-2017",
+      "task": "climate",
+      "countries": [
+        "IN"
+      ],
+      "level": "subdivision",
+      "time": "month",
+      "unit": "rainfall mm",
+      "variables": [
+        "rainfall"
+      ],
+      "joinKeys": [
+        "SUBDIVISION",
+        "YEAR"
+      ],
+      "access": "IMD meteorological-subdivision monthly rainfall. Grain is subdivision, not a CHIRPS cell.",
+      "evidence": "https://www.data.gov.in/resource/sub-divisional-monthly-rainfall-1901-2017"
     }
   ]
 }

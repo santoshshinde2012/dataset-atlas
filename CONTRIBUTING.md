@@ -24,6 +24,8 @@ CI on GitHub runs the same gates. Do not merge with a failing check.
 | Add a starter “I want to…” bundle | `PRESETS` in `js/config.js` | Point a bundle at a URL that is not in the catalog |
 | Add a join kit | `js/kits.js` plus tests, samples, and a notebook for `verified` | Label `match` from column names alone |
 | Add an aggregate to drop | `js/identifiers.js` | Guess a country from a display name |
+| Add a unit family | `js/units.js` | Invent a unit conversion |
+| Add a fiscal reporter | `js/vintage.js` | Shift dates to “fix” FY vs calendar |
 | Screen reuse or link health | `js/license-use.js` / `js/link-health.js` | Treat unspecified as public domain |
 | Change MCP | `scripts/atlas-mcp.js` using existing pure modules | Duplicate sanitizer or fit logic |
 | Change layout or map | `js/ui/` or `js/map/` | Import one UI module from another |

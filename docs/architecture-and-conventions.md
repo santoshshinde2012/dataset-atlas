@@ -19,8 +19,8 @@ Pure modules must not import DOM or browser globals. `main.js` wires them togeth
 
 These rules give the SOLID principles concrete meaning here:
 
-- **Single responsibility:** `search.js` handles query terms and scoring; `filters.js` combines facets; `store.js` owns state; `resource.js` owns distributions; `coverage.js` owns geography claims; `kits.js` owns verified pairs; `identifiers.js` owns country vs aggregate codes; `fit.js` owns screening; `license-use.js` owns reuse labels; `link-health.js` owns URL reachability; UI modules render and handle events; `focus-trap.js` handles modal keyboard containment.
-- **Open/closed:** domain, region, source type, and preset registries live in `config.js`. Join kits are added in `js/kits.js`. Identifier aggregates are added in `js/identifiers.js`. New search providers belong in `external-catalogs.js`. Add a new adapter at its boundary instead of adding provider-specific branches throughout the UI.
+- **Single responsibility:** `search.js` handles query terms and scoring; `filters.js` combines facets; `store.js` owns state; `resource.js` owns distributions; `coverage.js` owns geography claims; `kits.js` owns verified pairs; `identifiers.js` owns country vs aggregate codes; `units.js` owns quantity families; `vintage.js` owns year basis; `fit.js` owns screening; `license-use.js` owns reuse labels; `link-health.js` owns URL reachability; UI modules render and handle events; `focus-trap.js` handles modal keyboard containment.
+- **Open/closed:** domain, region, source type, and preset registries live in `config.js`. Join kits are added in `js/kits.js`. Identifier aggregates are added in `js/identifiers.js`. Unit families are added in `js/units.js`. Fiscal reporters are added in `js/vintage.js`. New search providers belong in `external-catalogs.js`. Add a new adapter at its boundary instead of adding provider-specific branches throughout the UI.
 - **Liskov substitution and interface segregation:** browser services (`clipboard`, `storage`, `toast`) expose small, documented interfaces. A fake storage port can replace browser storage in store tests without changing consumer behavior.
 - **Dependency inversion:** the store accepts its persistence port and components accept the store/services from `main.js`; pure logic does not reach into the DOM or filesystem.
 
@@ -34,6 +34,8 @@ These rules give the SOLID principles concrete meaning here:
 | `js/map/` | Map rendering and projection contracts | Lower-kebab-case by role |
 | `js/services/` | Browser side effects behind small ports | Lower-kebab-case noun names |
 | `scripts/` | Node validation, packaging, refresh and MCP entrypoints | Verb or task names in lower-kebab-case |
+| `skills/` | Agent skill files that encode the join-kit contract | Keep `SKILL.md` frontmatter short; rules must match MCP tools |
+| `server.json` | MCP registry card | GitHub stdio metadata only; do not publish npm unless asked |
 | `tests/`, `e2e/` | Pure behavior tests and browser journeys | `<module>.test.js`, `<journey>.spec.js` |
 | `vendor/` | Pinned third-party browser copies and notices | Upstream name/version; document origin and license in `vendor/README.md` |
 | `docs/` | Maintainer guides, design decisions and research | Descriptive lower-kebab-case names; date research snapshots |

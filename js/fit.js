@@ -1,6 +1,8 @@
 /** Conservative, explainable checks over reviewed pilot metadata. */
 import { kitForPair } from './kits.js';
 import { IDENTIFIER_NOTE } from './identifiers.js';
+import { compareUnits, UNIT_NOTE } from './units.js';
+import { compareVintage, VINTAGE_NOTE } from './vintage.js';
 
 export function assessFit(dataset, profile, task) {
   const reasons = [];
@@ -28,6 +30,22 @@ export function assessFit(dataset, profile, task) {
   return { status: conflicts ? 'conflict' : reasons.some((r) => r.status === 'unknown' || r.status === 'review') ? 'review' : 'match', reasons };
 }
 
+function quantityNotes(a, b) {
+  const notes = [];
+  if (a.unit && b.unit) {
+    const units = compareUnits(a.unit, b.unit);
+    if (units.status !== 'match') notes.push({ status: 'match', text: `${units.reason} ${UNIT_NOTE}` });
+  }
+  if ((a.vintage || a.series) && (b.vintage || b.series)) {
+    const vintage = compareVintage(
+      { basis: a.vintage, iso3: a.iso3, series: a.series },
+      { basis: b.vintage, iso3: b.iso3, series: b.series },
+    );
+    if (vintage.status !== 'match') notes.push({ status: 'match', text: `${vintage.reason} ${VINTAGE_NOTE}` });
+  }
+  return notes;
+}
+
 export function assessJoin(a, b, aDataset, bDataset) {
   const notes = [];
   const kit = kitForPair(a.url, b.url);
@@ -44,6 +62,7 @@ export function assessJoin(a, b, aDataset, bDataset) {
   if (kit?.status === 'verified') {
     notes.push({ status: 'match', text: kit.joinNote });
     notes.push({ status: 'match', text: IDENTIFIER_NOTE });
+    notes.push(...quantityNotes(a, b));
     return { status: notes.some((n) => n.status === 'conflict') ? 'conflict' : 'match', notes, kit };
   }
   if (kit?.status === 'documented') {
@@ -65,6 +84,17 @@ export function assessJoin(a, b, aDataset, bDataset) {
   notes.push(shared.length ? { status: 'match', text: `Shared named keys: ${shared.join(', ')}` } : { status: 'unknown', text: 'No shared named join keys; inspect source schemas or map identifiers' });
   notes.push({ status: 'unknown', text: 'Key values, units and one-to-one cardinality have not been verified for this pair' });
   notes.push({ status: 'review', text: 'No verified kit. Do not invent a join from matching column names.' });
+  if (a.unit || b.unit) {
+    const units = compareUnits(a.unit, b.unit);
+    notes.push({ status: units.status, text: units.reason });
+  }
+  if (a.vintage || b.vintage || a.iso3 || b.iso3) {
+    const vintage = compareVintage(
+      { basis: a.vintage, iso3: a.iso3, series: a.series },
+      { basis: b.vintage, iso3: b.iso3, series: b.series },
+    );
+    notes.push({ status: vintage.status, text: vintage.reason });
+  }
   if (!a.countries.length || !b.countries.length) notes.push({ status: 'unknown', text: 'Country overlap is not documented for both sources' });
   if (a.countries.length && b.countries.length && !a.countries.some((c) => b.countries.includes(c))) notes.push({ status: 'conflict', text: 'Documented country coverage does not overlap' });
   return { status: notes.some((n) => n.status === 'conflict') ? 'conflict' : notes.some((n) => n.status === 'unknown' || n.status === 'review') ? 'review' : 'match', notes };

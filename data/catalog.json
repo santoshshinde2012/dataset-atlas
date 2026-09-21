@@ -5035,6 +5035,100 @@
    "resources": [],
    "coverageKind": "tagged-countries",
    "sourceModifiedYear": 2026
+  },
+  {
+   "title": "World Bank: GDP (current US$) (NY.GDP.MKTP.CD)",
+   "description": "GDP at market exchange rates in current US dollars, one row per economy-year, including aggregates. Not PPP. Some reporters are fiscal-year (Australia ends 30 June). CSV ZIP and paginated API.",
+   "domain": "economy",
+   "region": "global",
+   "source": "World Bank",
+   "sourceType": "intl-org",
+   "url": "https://data.worldbank.org/indicator/NY.GDP.MKTP.CD",
+   "formats": [
+    "CSV",
+    "XML",
+    "XLSX",
+    "API"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1960,
+   "coverageEnd": 2025,
+   "granularity": "country",
+   "approxSizeMB": 0.5,
+   "verified": "2026-09-21",
+   "landingPage": "https://data.worldbank.org/indicator/NY.GDP.MKTP.CD",
+   "providerId": "worldbank",
+   "resources": [
+    {
+     "url": "https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.CD?downloadformat=csv",
+     "format": "CSV",
+     "kind": "download",
+     "label": "World Bank CSV ZIP"
+    },
+    {
+     "url": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD?format=json&per_page=20000",
+     "format": "JSON",
+     "kind": "api",
+     "label": "World Bank API (paginated)"
+    }
+   ],
+   "coverageKind": "global-country-series"
+  },
+  {
+   "title": "CHIRPS global rainfall (Climate Hazards Center)",
+   "description": "Quasi-global 0.05° daily and monthly rainfall, 1981–present, blending satellite infrared with in-situ stations. Grid cells are not administrative units. Landing page plus bulk NetCDF/GeoTIFF from UCSB CHC.",
+   "domain": "climate",
+   "region": "global",
+   "source": "UCSB Climate Hazards Center",
+   "sourceType": "research",
+   "url": "https://www.chc.ucsb.edu/data/chirps",
+   "formats": [
+    "NetCDF",
+    "GeoTIFF",
+    "CSV"
+   ],
+   "license": "CC BY 4.0",
+   "licenseOpenness": 0.8,
+   "freshnessYear": 2026,
+   "coverageStart": 1981,
+   "coverageEnd": 2026,
+   "granularity": "grid",
+   "approxSizeMB": 8000,
+   "verified": "2026-09-21",
+   "landingPage": "https://www.chc.ucsb.edu/data/chirps",
+   "providerId": "chc-ucsb",
+   "resources": [],
+   "coverageKind": "unknown"
+  },
+  {
+   "title": "India Local Government Directory (LGD)",
+   "description": "Official current codes for states, districts, sub-districts, villages and local bodies, including renames and splits. Census 2011 codes are a different vintage. Portal download; no bulk file is invented here.",
+   "domain": "demographics",
+   "region": "asia",
+   "source": "Ministry of Panchayati Raj",
+   "sourceType": "gov-portal",
+   "url": "https://lgdirectory.gov.in/",
+   "formats": [
+    "CSV",
+    "Excel"
+   ],
+   "license": "GODL",
+   "licenseOpenness": 0.7,
+   "freshnessYear": 2026,
+   "coverageStart": 2008,
+   "coverageEnd": 2026,
+   "granularity": "admin",
+   "approxSizeMB": 40,
+   "countries": [
+    "IN"
+   ],
+   "verified": "2026-09-21",
+   "landingPage": "https://lgdirectory.gov.in/",
+   "providerId": "lgd-india",
+   "resources": [],
+   "coverageKind": "tagged-countries"
   }
  ],
  "generated": "2026-09-21"
