@@ -6,13 +6,13 @@ import { assessFit, assessJoin, projectReport } from '../js/fit.js';
 
 const pilot = JSON.parse(readFileSync(new URL('../data/pilot.json', import.meta.url)));
 const catalog = buildCatalog(JSON.parse(readFileSync(new URL('../data/catalog.json', import.meta.url))));
-const get = (fragment) => {
-  const profile = pilot.profiles.find((p) => p.url.includes(fragment));
+const get = (fragment, task) => {
+  const profile = pilot.profiles.find((p) => p.url.includes(fragment) && (!task || p.task === task));
   return { profile, dataset: catalog.find((d) => d.url === profile.url) };
 };
 
 test('pilot profiles resolve to catalog entries', () => {
-  assert.equal(pilot.profiles.length, 19);
+  assert.equal(pilot.profiles.length, 26);
   for (const profile of pilot.profiles) assert.ok(catalog.some((d) => d.url === profile.url), profile.url);
 });
 
@@ -33,11 +33,12 @@ test('rainfall vs district is review when a crosswalk is documented', () => {
 });
 
 test('verified energy pair joins on ISO and year; conflicting grains are flagged', () => {
-  const energy = get('owid/energy-data');
-  const co2 = get('owid/co2-data');
+  const energy = get('owid/energy-data', 'energy');
+  const co2 = get('owid/co2-data', 'energy');
   const join = assessJoin(energy.profile, co2.profile, energy.dataset, co2.dataset);
   assert.equal(join.status, 'match');
   assert.ok(join.notes.some((n) => n.text.includes('iso_code')));
+  assert.ok(join.notes.some((n) => /energy vs mass/i.test(n.text)));
   const plant = get('globalpowerplantdatabase');
   assert.equal(assessJoin(energy.profile, plant.profile, energy.dataset, plant.dataset).status, 'conflict');
   assert.match(projectReport(pilot.tasks[2], [energy, co2], [energy, co2]), /Pair compatibility/);
@@ -76,4 +77,25 @@ test('verified covid kit joins after daily→year; OpenAQ vs national PM2.5 is a
   const pcode = assessJoin(ab.profile, ps.profile, ab.dataset, ps.dataset);
   assert.equal(pcode.status, 'match');
   assert.equal(pcode.kit.id, 'nga-pcode-population');
+});
+
+test('GDP current vs OWID CO2 is a refusal; LGD and CHIRPS kits resolve', () => {
+  const gdp = get('NY.GDP.MKTP.CD', 'units');
+  const co2 = get('owid/co2-data', 'units');
+  const refuse = assessJoin(gdp.profile, co2.profile, gdp.dataset, co2.dataset);
+  assert.equal(refuse.status, 'conflict');
+  assert.equal(refuse.kit.id, 'wb-gdp-current-owid-co2');
+  const pop = get('population-and-demography', 'units');
+  const perCapita = assessJoin(co2.profile, pop.profile, co2.dataset, pop.dataset);
+  assert.equal(perCapita.status, 'match');
+  assert.equal(perCapita.kit.id, 'owid-co2-per-capita');
+  const lgd = get('lgdirectory.gov.in', 'lgd');
+  const census = get('census-2001-and-census-2011', 'lgd');
+  const join = assessJoin(lgd.profile, census.profile, lgd.dataset, census.dataset);
+  assert.equal(join.status, 'match');
+  assert.equal(join.kit.id, 'india-lgd-census');
+  const chirps = get('chc.ucsb.edu/data/chirps', 'climate');
+  const imd = get('sub-divisional-monthly-rainfall', 'climate');
+  const grid = assessJoin(chirps.profile, imd.profile, chirps.dataset, imd.dataset);
+  assert.equal(grid.doNotJoin, true);
 });

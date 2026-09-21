@@ -1,0 +1,13 @@
+{
+  "vintage": "2026-07",
+  "source": "https://lgdirectory.gov.in/",
+  "note": "Current LGD district codes for a checked Maharashtra slice. Census 2011 codes are a different vintage. Ahmednagar was renamed Ahilyanagar; both names map to the same LGD. Unmatched names are dropped.",
+  "byDistrict": {
+    "MAHARASHTRA|AHMEDNAGAR": { "lgd": "466", "name": "Ahilyanagar", "census2011": "522" },
+    "MAHARASHTRA|AHILYANAGAR": { "lgd": "466", "name": "Ahilyanagar", "census2011": "522" },
+    "MAHARASHTRA|AKOLA": { "lgd": "467", "name": "Akola", "census2011": "501" },
+    "MAHARASHTRA|AMRAVATI": { "lgd": "468", "name": "Amravati", "census2011": "503" },
+    "MAHARASHTRA|BEED": { "lgd": "470", "name": "Beed", "census2011": "523" },
+    "MAHARASHTRA|DHULE": { "lgd": "474", "name": "Dhule", "census2011": "498" }
+  }
+}

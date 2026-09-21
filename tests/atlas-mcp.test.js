@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   searchCatalog, getDataset, getResource, listBundles, listKits, assessFitTool, buildPassport, toolDefinitions, loadCatalog, dispatch,
-  recommendKitTool, checkIdentifiersTool, assessJoinTool, getCrosswalkTool,
+  recommendKitTool, checkIdentifiersTool, assessJoinTool, getCrosswalkTool, checkUnitsTool, checkVintageTool,
 } from '../scripts/atlas-mcp.js';
 import { buildCatalog } from '../js/catalog.js';
 import { PRESETS } from '../js/config.js';
@@ -156,7 +156,7 @@ test('manifest strings stay hardened through the passport path', () => {
 test('tool definitions carry the vocabulary agents need', () => {
   const defs = toolDefinitions();
   assert.deepEqual(defs.map((t) => t.name),
-    ['search_catalog', 'get_dataset', 'get_resource', 'list_bundles', 'list_kits', 'recommend_kit', 'assess_fit', 'assess_join', 'check_identifiers', 'get_crosswalk', 'build_passport']);
+    ['search_catalog', 'get_dataset', 'get_resource', 'list_bundles', 'list_kits', 'recommend_kit', 'assess_fit', 'assess_join', 'check_identifiers', 'check_units', 'check_vintage', 'get_crosswalk', 'build_passport']);
   const search = defs[0].inputSchema.properties;
   assert.ok(search.domain.enum.includes('agriculture'));
   assert.ok(search.region.enum.includes('global'));
@@ -182,7 +182,7 @@ test('dispatch routes requests and notifications by JSON-RPC semantics', async (
   assert.ok('tools' in init.result.capabilities);
 
   const list = await dispatch(cat, { jsonrpc: '2.0', id: 'a', method: 'tools/list' });
-  assert.equal(list.result.tools.length, 11, 'string ids are echoed');
+  assert.equal(list.result.tools.length, 13, 'string ids are echoed');
 
   const call = await dispatch(cat, { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'list_bundles', arguments: {} } });
   const payload = JSON.parse(call.result.content[0].text);
@@ -205,7 +205,7 @@ test('dispatch never replies to a notification, even for a known method', async 
 test('list_kits resolves verified pairs and assess_fit screens the energy kit', async () => {
   const real = await loadCatalog();
   const kits = listKits(real);
-  assert.equal(kits.kits.length, 5);
+  assert.equal(kits.kits.length, 9);
   const energy = kits.kits.find((k) => k.id === 'energy-co2');
   assert.equal(energy.status, 'verified');
   assert.equal(energy.datasets.length, 2);
@@ -215,6 +215,8 @@ test('list_kits resolves verified pairs and assess_fit screens the energy kit', 
   assert.equal(covid.status, 'verified');
   const air = kits.kits.find((k) => k.id === 'openaq-national-pm25');
   assert.equal(air.outcome, 'do-not-join');
+  assert.equal(kits.kits.find((k) => k.id === 'owid-co2-per-capita').datasets.length, 2);
+  assert.equal(kits.kits.find((k) => k.id === 'india-lgd-census').crosswalk.endsWith('india-lgd-district.json'), true);
   const fit = assessFitTool(real, { task: 'energy', country: 'IN' });
   assert.equal(fit.pair.join.status, 'match');
   const resource = getResource(real, { id: energy.datasets[0].id });
@@ -245,6 +247,22 @@ test('MCP recommend_kit, identifiers, crosswalk, and assess_join refuse unsafe j
   const refused = assessJoinTool(real, { idA: air.datasets[0].id, idB: air.datasets[1].id });
   assert.equal(refused.status, 'conflict');
   assert.equal(refused.doNotJoin, true);
+
+  const units = checkUnitsTool({ unitA: 'current US$', unitB: 'million tonnes' });
+  assert.equal(units.status, 'conflict');
+  const vintage = checkVintageTool({ basisA: 'fiscal', iso3A: 'AUS', basisB: 'calendar' });
+  assert.equal(vintage.status, 'conflict');
+  const lgd = getCrosswalkTool({ kit: 'india-lgd-census', state: 'Maharashtra', district: 'Ahmednagar' });
+  assert.equal(lgd.lgd.lgd, '466');
+  const ahilya = getCrosswalkTool({ kit: 'india-lgd-census', state: 'Maharashtra', district: 'Ahilyanagar' });
+  assert.equal(ahilya.lgd.lgd, '466');
+  const gdp = listKits(real).kits.find((k) => k.id === 'wb-gdp-current-owid-co2');
+  const gdpJoin = assessJoinTool(real, { idA: gdp.datasets[0].id, idB: gdp.datasets[1].id });
+  assert.equal(gdpJoin.doNotJoin, true);
+  assert.equal(recommendKitTool({ query: 'Ahmednagar LGD codes' }).kits[0].id, 'india-lgd-census');
+  assert.equal(recommendKitTool({ query: 'CHIRPS IMD rainfall grid' }).kits[0].id, 'chirps-imd-rainfall');
+  assert.equal(recommendKitTool({ query: 'GDP current US$ CO2 intensity' }).kits[0].id, 'wb-gdp-current-owid-co2');
+  assert.equal(recommendKitTool({ query: 'OWID CO2 per capita' }).kits[0].id, 'owid-co2-per-capita');
 });
 
 test('dispatch answers a request whose method happens to start with notifications/', async () => {

@@ -68,12 +68,13 @@ for (const p of PRESETS) {
 // The research pilot must resolve to curated catalog entries and safe source URLs.
 if (pilot.tasks.length < 3 || pilot.profiles.length < 15) errors.push('pilot requires at least 3 tasks and 15 profiles');
 const taskIds = new Set(pilot.tasks.map((task) => task.id));
-const profileUrls = new Set();
+const profileKeys = new Set();
 for (const profile of pilot.profiles) {
   if (!allUrls.has(profile.url.toLowerCase().replace(/\/+$/, ''))) errors.push(`pilot URL missing from catalog: ${profile.url}`);
   if (!taskIds.has(profile.task)) errors.push(`pilot task missing: ${profile.task}`);
-  if (profileUrls.has(profile.url)) errors.push(`duplicate pilot URL: ${profile.url}`);
-  profileUrls.add(profile.url);
+  const key = `${profile.task}|${profile.url}`;
+  if (profileKeys.has(key)) errors.push(`duplicate pilot URL for task ${profile.task}: ${profile.url}`);
+  profileKeys.add(key);
   for (const url of [profile.evidence, profile.resource?.url, profile.preview?.source].filter(Boolean)) {
     if (!/^https:\/\/[^\s\x00-\x1f\x7f"'<>\\`]+$/i.test(url)) errors.push(`unsafe pilot URL: ${url}`);
   }

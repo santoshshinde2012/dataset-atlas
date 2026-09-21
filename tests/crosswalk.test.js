@@ -68,3 +68,13 @@ test('OpenAQ Pune sample shows intra-city spread; Nigeria P-codes beat names', (
     assert.ok(byCode[pcode], pcode);
   }
 });
+
+test('LGD maps Ahmednagar and Ahilyanagar to 466; census 2011 is not LGD', () => {
+  const table = JSON.parse(readFileSync(new URL('../data/india-lgd-district.json', import.meta.url)));
+  const norm = (s) => String(s).toUpperCase().replace(/[^A-Z0-9]+/g, ' ').trim();
+  const key = (state, district) => `${norm(state)}|${norm(district)}`;
+  assert.equal(table.byDistrict[key('Maharashtra', 'Ahmednagar')].lgd, '466');
+  assert.equal(table.byDistrict[key('Maharashtra', 'Ahilyanagar')].lgd, '466');
+  assert.equal(table.byDistrict[key('Maharashtra', 'Ahmednagar')].census2011, '522');
+  assert.notEqual('522', '466');
+});

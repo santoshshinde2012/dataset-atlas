@@ -15,7 +15,10 @@
  *   assess_fit       workbench fit + pair join for a research task
  *   assess_join      can these two catalog ids be joined? no kit → do not join
  *   check_identifiers country vs World Bank / OWID aggregate
- *   get_crosswalk    district→IMD or Nigeria P-code lookup
+ *   check_units       same quantity? TWh ≠ Mt; current US$ ≠ PPP
+ *   check_vintage     calendar vs fiscal; mid-year vs census
+ *   get_crosswalk     IMD subdivision, LGD district, or Nigeria P-code
+
  *   build_passport   source inventory and download commands + BibTeX + share link
  *
  * Every tool body reuses the app's own pure modules — the catalog always
@@ -44,13 +47,15 @@ import { linkHealth } from '../js/link-health.js';
 import { KITS, recommendKits, publicKit, kitById } from '../js/kits.js';
 import { assessFit, assessJoin, assessJoinByIds } from '../js/fit.js';
 import { classifyIdentifiers } from '../js/identifiers.js';
+import { compareUnits, classifyUnit, UNIT_NOTE } from '../js/units.js';
+import { compareVintage, classifyVintage, VINTAGE_NOTE } from '../js/vintage.js';
 import {
   DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION, PRESETS, FORMAT_ORDER, SITE_BASE,
 } from '../js/config.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const LIVE_BASE = SITE_BASE;
-const SERVER_INFO = { name: 'dataset-atlas', version: '1.0.0' };
+const SERVER_INFO = { name: 'dataset-atlas', version: '1.1.0' };
 const PROTOCOL_VERSION = '2025-06-18';
 
 /**
@@ -247,6 +252,38 @@ export function checkIdentifiersTool(args = {}) {
   };
 }
 
+export function checkUnitsTool(args = {}) {
+  const unitA = args.unitA || args.a || '';
+  const unitB = args.unitB || args.b || '';
+  if (!unitA || !unitB) throw new Error('unitA and unitB are required');
+  const result = compareUnits(unitA, unitB);
+  return {
+    ...result,
+    a: classifyUnit(unitA),
+    b: classifyUnit(unitB),
+    guidance: result.status === 'match'
+      ? 'Same unit family. Still confirm the codebook.'
+      : `${UNIT_NOTE} A verified kit may join different quantities as separate columns.`,
+  };
+}
+
+export function checkVintageTool(args = {}) {
+  const left = { basis: args.basisA, iso3: args.iso3A, series: args.seriesA };
+  const right = { basis: args.basisB, iso3: args.iso3B, series: args.seriesB };
+  if (!left.basis && !left.series && !right.basis && !right.series) {
+    throw new Error('basisA/basisB or seriesA/seriesB are required');
+  }
+  const result = compareVintage(left, right);
+  return {
+    ...result,
+    a: classifyVintage(left),
+    b: classifyVintage(right),
+    guidance: result.status === 'conflict'
+      ? `Do not join on the year label. ${VINTAGE_NOTE}`
+      : VINTAGE_NOTE,
+  };
+}
+
 export function assessJoinTool(catalog, args = {}, pilot = loadPilot()) {
   if (!args.idA || !args.idB) throw new Error('idA and idB are required catalog dataset ids from search_catalog');
   return assessJoinByIds(catalog, args.idA, args.idB, pilot.profiles || []);
@@ -271,6 +308,23 @@ export function getCrosswalkTool(args = {}) {
       guidance: subdivision
         ? `Join rainfall on IMD subdivision "${subdivision}", not the district name.`
         : 'Unmatched district — drop it, do not guess a subdivision.',
+    };
+  }
+  if (kit.id === 'india-lgd-census') {
+    const cross = JSON.parse(readFileSync(join(root, kit.crosswalk), 'utf8'));
+    const norm = (s) => String(s || '').toUpperCase().replace(/[^A-Z0-9]+/g, ' ').trim();
+    const key = `${norm(args.state || '')}|${norm(args.district || '')}`;
+    const row = cross.byDistrict[key] || null;
+    return {
+      kit: kit.id,
+      key,
+      lgd: row,
+      vintage: cross.vintage,
+      resultGrain: kit.resultGrain,
+      unmatchedDropped: !row,
+      guidance: row
+        ? `Join on LGD ${row.lgd} (${row.name}, vintage ${cross.vintage}). Census 2011 code ${row.census2011} is not an LGD code.`
+        : 'Unmatched district — drop it. Do not use a Census 2011 code as LGD.',
     };
   }
   if (kit.id === 'nga-pcode-population') {
@@ -417,7 +471,7 @@ export function toolDefinitions() {
     },
     {
       name: 'list_kits',
-      description: 'Verified join kits and explicit do-not-join pairs (energy/CO2, India crop+rainfall, COVID/population, OpenAQ vs national PM2.5, Nigeria P-codes). Follow doNot and agentGuidance. Use recommend_kit to pick one; assess_join for two catalog ids.',
+      description: 'Verified join kits and explicit do-not-join pairs (energy/CO2, India crop+rainfall, COVID/population, OWID CO2 per capita, OpenAQ vs national PM2.5, Nigeria P-codes, WDI GDP current US$ vs OWID CO2, India LGD, CHIRPS vs IMD). Follow doNot and agentGuidance. Use recommend_kit to pick one; assess_join for two catalog ids.',
       inputSchema: { type: 'object', properties: {} },
     },
     {
@@ -427,7 +481,7 @@ export function toolDefinitions() {
         type: 'object',
         properties: {
           query: { type: 'string', description: 'natural-language question, e.g. "join India crop and rainfall" or "Pune AQI"' },
-          task: { type: 'string', enum: ['crop', 'health', 'energy', 'air', 'humanitarian'] },
+          task: { type: 'string', enum: [...new Set(KITS.map((k) => k.task))] },
         },
       },
     },
@@ -437,7 +491,7 @@ export function toolDefinitions() {
       inputSchema: {
         type: 'object',
         properties: {
-          task: { type: 'string', enum: ['crop', 'health', 'energy', 'air', 'humanitarian'] },
+          task: { type: 'string', enum: [...new Set(KITS.map((k) => k.task))] },
           country: { type: 'string', description: 'ISO 3166-1 alpha-2' },
           startYear: { type: 'number' },
           endYear: { type: 'number' },
@@ -471,8 +525,35 @@ export function toolDefinitions() {
       },
     },
     {
+      name: 'check_units',
+      description: 'Are these two unit strings the same quantity? TWh is not million tonnes. Current US$ is not PPP. Unknown stays unknown — this tool never converts. A verified kit may still join different quantities as separate columns.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          unitA: { type: 'string' },
+          unitB: { type: 'string' },
+        },
+        required: ['unitA', 'unitB'],
+      },
+    },
+    {
+      name: 'check_vintage',
+      description: 'Compare time basis (calendar, fiscal, mid-year, census-night, 1-january). Australia WDI 2022 GDP is FY 2021–22. World Bank population is mid-year, not OWID population. Conflict means do not join on the year label.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          basisA: { type: 'string', enum: ['calendar', 'fiscal', 'mid-year', 'census-night', '1-january'] },
+          basisB: { type: 'string', enum: ['calendar', 'fiscal', 'mid-year', 'census-night', '1-january'] },
+          iso3A: { type: 'string' },
+          iso3B: { type: 'string' },
+          seriesA: { type: 'string' },
+          seriesB: { type: 'string' },
+        },
+      },
+    },
+    {
       name: 'get_crosswalk',
-      description: 'Look up a verified identifier map. india-crop-rainfall: pass state + district → IMD subdivision. nga-pcode-population: pass pcode → admin1. Unmatched keys are dropped, never guessed.',
+      description: 'Look up a verified identifier map. india-crop-rainfall: state + district → IMD subdivision. india-lgd-census: state + district → current LGD. nga-pcode-population: pcode → admin1. Unmatched keys are dropped, never guessed.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -510,6 +591,8 @@ export async function callTool(catalog, name, args) {
     case 'assess_fit': return assessFitTool(catalog, args);
     case 'assess_join': return assessJoinTool(catalog, args);
     case 'check_identifiers': return checkIdentifiersTool(args);
+    case 'check_units': return checkUnitsTool(args);
+    case 'check_vintage': return checkVintageTool(args);
     case 'get_crosswalk': return getCrosswalkTool(args);
     case 'build_passport': return buildPassport(catalog, args, today);
     default: throw new Error(`unknown tool "${name}"`);
@@ -519,10 +602,12 @@ export async function callTool(catalog, name, args) {
 /* ---------- stdio JSON-RPC 2.0 transport ---------- */
 
 const INSTRUCTIONS = 'Dataset Atlas helps people use public datasets together without inventing joins. '
-  + 'Flow: recommend_kit for the question → list_kits / get_crosswalk / check_identifiers → get_resource for files vs landing pages → assess_join on two catalog ids → build_passport. '
-  + 'If recommend_kit returns no kit, do not write join code. Drop WLD, EUU, SAS, OWID_WRL and region names before country-year joins. '
-  + 'Never average OpenAQ stations to a city AQI. Never join on Indian district names or Nigerian state names when a crosswalk exists. '
-  + 'Landing pages are not files. A match is screening evidence, not a statistical guarantee. Unspecified licenses are not public domain.';
+  + 'Flow: recommend_kit → check_identifiers → check_units / check_vintage → get_crosswalk → get_resource → assess_join → build_passport. '
+  + 'If recommend_kit returns no kit, do not write join code. Drop WLD, EUU, SAS, OWID_WRL. '
+  + 'TWh is not million tonnes. Current US$ is not PPP. Fiscal-year GDP is not calendar-year emissions. '
+  + 'Never average OpenAQ stations to a city AQI. Never join CHIRPS grid cells to IMD subdivisions. '
+  + 'Never join on Indian district names or Nigerian state names when a crosswalk exists. Census 2011 codes are not LGD. '
+  + 'Landing pages are not files. Unspecified licenses are not public domain.';
 
 const ok = (id, res) => ({ jsonrpc: '2.0', id, result: res });
 const fail = (id, code, message) => ({ jsonrpc: '2.0', id, error: { code, message } });

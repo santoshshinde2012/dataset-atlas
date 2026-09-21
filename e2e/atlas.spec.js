@@ -80,6 +80,10 @@ test('research workbench checks fit and exports evidence-backed handoff', async 
   await page.locator('#workbench-task').selectOption('air');
   await expect(page.locator('#join-result')).toContainText('Do not join');
   await expect(page.locator('.workbench-donot')).toContainText('Do not average stations');
+  await page.locator('#workbench-task').selectOption('units');
+  await expect(page.locator('#join-result')).toContainText('Do not join');
+  await page.locator('#workbench-task').selectOption('climate');
+  await expect(page.locator('#join-result')).toContainText('Do not join');
 });
 
 test('mobile actions fit and the workbench contains keyboard focus', async ({ page }) => {
