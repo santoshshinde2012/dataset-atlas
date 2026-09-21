@@ -41,7 +41,7 @@ export const SOURCE_TYPE_META = {
   ngo:          { name: 'NGO',               color: '#fb7185' },
 };
 
-/** Use-case presets (concept C). Each carries a starter BUNDLE — 5 curated
+/** Use-case presets. Each carries a starter bundle of 5 curated
  * catalog URLs that one click pins into the Data Passport, ready to export.
  * Bundle URLs are validated against the catalog by `npm run validate`. */
 export const PRESETS = [

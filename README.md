@@ -100,4 +100,4 @@ index.html, styles.css  Static application shell and styles
 
 `js/main.js` wires the app together. `js/store.js` owns state and selectors. `js/catalog.js` sanitizes catalog entries before either UI or MCP code consumes them. Keep domain and region definitions in `js/config.js`, and add tests for behavior that changes.
 
-See [architecture and conventions](docs/architecture-and-conventions.md) for module boundaries, naming, and change rules. [System design](docs/system-design.md), [concept research](docs/dataset-atlas-concept-and-research.md), and the [2026 research audit](docs/research-audit-2026-09-20.md) provide more background.
+See [architecture and conventions](docs/architecture-and-conventions.md) for module boundaries, naming, and change rules. The [repository cleanup audit](docs/repository-cleanup-audit-2026-09-21.md) explains which files were removed or retained. The [2026 product audit](docs/research-audit-2026-09-20.md) records dated findings; its P0 search, mobile, and dialog issues were resolved in PR #38.

@@ -2,6 +2,8 @@
 
 20 September 2026 · Research and read-only testing against `main` at `117569c` and the published GitHub Pages site.
 
+**Historical snapshot:** the search, 320px navigation, and workbench focus findings below were addressed in [PR #38](https://github.com/santoshshinde2012/dataset-atlas/pull/38). Measurements and observations in this report describe the checked revision, not current behavior.
+
 ## Executive finding
 
 The atlas is a sound static discovery prototype with 171 curated links, useful source filters, saved selections, and a 15-source research pilot. Its central promise is not yet consistently delivered: a user can often find a source page, but usually cannot tell whether that source contains the exact geography, dates, variables, usable file, and join keys they need. Expanding the count alone will make this problem harder. The next product milestone should be **a reliable path from a question to a verified, accessible resource**.
