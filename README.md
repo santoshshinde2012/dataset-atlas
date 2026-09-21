@@ -2,9 +2,11 @@
 
 [Live atlas](https://santoshshinde2012.github.io/dataset-atlas/) · [License](LICENSE)
 
-The Dataset Atlas helps people find datasets by geography and subject — and tells them whether those datasets can actually be used together. Select a region or country on the map, choose a domain, and open a **verified file** when one exists, or an honest source page when it does not. The catalog currently contains 171 curated entries across eight domains and seven world regions, plus global datasets. This is a reviewed starting set, not an exhaustive index of every dataset.
+The Dataset Atlas helps people find datasets by geography and subject — and tells them whether those datasets can actually be used together. Select a region or country on the map, choose a domain, and open a **verified file** when one exists, or an honest source page when it does not. The catalog currently contains 173 curated entries across eight domains and seven world regions, plus global datasets. This is a reviewed starting set, not an exhaustive index of every dataset.
 
 The browser app is a static site with no runtime package dependencies, account, or backend. It deploys to GitHub Pages at zero cost. D3 and TopoJSON are vendored in `vendor/` so the app can also run offline when served locally. Deployment copies browser assets into a clean `dist/` directory; it does not compile the app.
+
+**Required reading:** [join kits](docs/join-kits.md) · [MCP](docs/mcp.md) · [contributing](CONTRIBUTING.md) · [architecture](docs/architecture-and-conventions.md)
 
 ## Features
 
@@ -17,9 +19,9 @@ The browser app is a static site with no runtime package dependencies, account, 
 - Share a filtered view or pinned collection through a URL.
 - Export an annotated shell manifest and BibTeX references (citation year is coverage end, not the freshness bar).
 - Crawlable per-dataset HTML pages, `sitemap.xml`, and schema.org Dataset JSON-LD for Google Dataset Search.
-- Local MCP server: `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `assess_fit`, `build_passport`.
+- Local MCP server: `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `recommend_kit`, `assess_fit`, `assess_join`, `check_identifiers`, `get_crosswalk`, `build_passport`. Agents must not invent a join when `recommend_kit` is empty.
 - Search beyond the atlas through official catalogs. Those results are **unreviewed**.
-- Research Workbench with two runnable kits: **energy vs CO₂** (OWID, country-year) and **India crop + rainfall** (IMD subdivision crosswalk + offline samples). COVID vs population has a documented daily→annual rule (no notebook yet).
+- Research Workbench with verified kits: **energy vs CO₂**, **India crop + rainfall**, **COVID vs population**, **Nigeria P-code population**, and a verified **do-not-join** kit (OpenAQ stations vs national PM2.5).
 
 **Export scope:** Kaggle entries include executable `kaggle datasets download` commands. World Bank indicators and selected OWID series include direct file or API URLs. Other entries are source-page URLs in shell comments. The manifest is a source inventory, not a complete automated downloader. Dataset licenses and access terms remain those of the source providers.
 
@@ -84,9 +86,11 @@ GitHub Pages publishes only `dist/`, which contains the application shell, brows
 
 ## MCP interface
 
-Run `node scripts/atlas-mcp.js`, or use the checked-in [`.mcp.json`](.mcp.json) with a compatible MCP client. The server exposes `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `assess_fit`, and `build_passport`. It uses the same sanitizer, fit checks, resource model, and citation generator as the browser app.
+Run `node scripts/atlas-mcp.js`, or use the checked-in [`.mcp.json`](.mcp.json) with a compatible MCP client. The server exposes `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `recommend_kit`, `assess_fit`, `assess_join`, `check_identifiers`, `get_crosswalk`, and `build_passport`. It uses the same sanitizer, fit checks, identifier list, resource model, and citation generator as the browser app.
 
-Verified join kits live in `js/kits.js`. The India crop/rainfall kit ships `data/india-district-subdivision.json`, offline samples, and `data/crop-rainfall-example.ipynb`. The energy/CO₂ kit ships `data/energy-co2-example.ipynb`.
+Typical agent flow: **recommend_kit** → **check_identifiers** / **get_crosswalk** → **get_resource** → **assess_join** → **build_passport**. If `recommend_kit` returns no kit, do not write join code. `assess_join` without a kit stays unknown or conflict — never a guessed `match`.
+
+Verified join kits live in `js/kits.js`. Identifier aggregates live in `js/identifiers.js`. The India crop/rainfall kit ships `data/india-district-subdivision.json`. The Nigeria P-code kit ships `data/nga-pcode-admin1.json`. OpenAQ vs national PM2.5 is a checked **do-not-join**.
 
 ## Repository layout
 
@@ -105,4 +109,4 @@ index.html, styles.css  Static application shell and styles
 
 `js/main.js` wires the app together. `js/store.js` owns state and selectors. `js/catalog.js` sanitizes catalog entries before either UI or MCP code consumes them. Keep domain and region definitions in `js/config.js`, and add tests for behavior that changes.
 
-See [architecture and conventions](docs/architecture-and-conventions.md) for module boundaries, naming, and change rules. The [repository cleanup audit](docs/repository-cleanup-audit-2026-09-21.md) explains which files were removed or retained. The [2026 product audit](docs/research-audit-2026-09-20.md) records dated findings; its P0 search, mobile, and dialog issues were resolved in PR #38.
+See [architecture and conventions](docs/architecture-and-conventions.md) for module boundaries, naming, and change rules. How to contribute: [CONTRIBUTING.md](CONTRIBUTING.md). The [repository cleanup audit](docs/repository-cleanup-audit-2026-09-21.md) explains which files were removed or retained. The [2026 product audit](docs/research-audit-2026-09-20.md) records dated findings; its P0 search, mobile, and dialog issues were resolved in PR #38.

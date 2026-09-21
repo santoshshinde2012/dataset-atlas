@@ -4938,6 +4938,70 @@
         }
       ],
       "coverageKind": "global-country-series"
+    },
+    {
+      "title": "OpenAQ Global Air Quality Measurements",
+      "description": "Station-level air quality measurements (PM2.5 and other pollutants) from reference monitors and sensors worldwide. Point observations, not a city or national average. Sample for Pune is committed at data/samples/openaq-pune-sample.csv.",
+      "domain": "climate",
+      "region": "global",
+      "source": "OpenAQ",
+      "sourceType": "ngo",
+      "url": "https://openaq.org",
+      "formats": [
+        "API",
+        "CSV",
+        "JSON"
+      ],
+      "license": "CC BY 4.0",
+      "licenseOpenness": 0.8,
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "freshnessYear": 2026,
+      "coverageStart": 2015,
+      "coverageEnd": 2026,
+      "granularity": "point",
+      "approxSizeMB": 500,
+      "verified": "2026-09-21",
+      "landingPage": "https://explore.openaq.org",
+      "providerId": "openaq",
+      "resources": [
+        {
+          "url": "https://api.openaq.org/v3/locations",
+          "format": "JSON",
+          "kind": "api",
+          "label": "OpenAQ v3 locations API"
+        }
+      ],
+      "coverageKind": "unknown"
+    },
+    {
+      "title": "Nigeria - Subnational Administrative Boundaries (COD-AB)",
+      "description": "OCHA Common Operational Dataset of Nigeria administrative boundaries with official P-codes at admin 0–2. Join population and operational layers on P-code, never on state name. Companion to COD-PS Nigeria.",
+      "domain": "demographics",
+      "region": "africa",
+      "source": "UN OCHA via HDX",
+      "sourceType": "intl-org",
+      "url": "https://data.humdata.org/dataset/cod-ab-nga",
+      "formats": [
+        "Geo",
+        "SHP",
+        "CSV"
+      ],
+      "license": "CC BY 3.0 IGO",
+      "licenseOpenness": 0.8,
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/igo/",
+      "freshnessYear": 2026,
+      "coverageStart": 2022,
+      "coverageEnd": 2026,
+      "granularity": "admin",
+      "approxSizeMB": 8,
+      "countries": [
+        "NG"
+      ],
+      "verified": "2026-09-21",
+      "landingPage": "https://data.humdata.org/dataset/cod-ab-nga",
+      "providerId": "hdx",
+      "resources": [],
+      "coverageKind": "tagged-countries"
     }
   ],
   "generated": "2026-09-20"
