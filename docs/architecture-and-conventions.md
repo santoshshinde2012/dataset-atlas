@@ -1,6 +1,6 @@
 # Architecture and repository conventions
 
-This document describes the current implementation. It is the reference for new files and structural changes; [system design](system-design.md) records the broader original concept.
+This document describes the current implementation and is the reference for new files and structural changes. The dated [research audit](research-audit-2026-09-20.md) records product findings at its stated revision.
 
 ## Dependency direction
 

@@ -1,6 +1,6 @@
 # The Dataset Atlas
 
-Map-first dataset discovery: Region → Domain → Get in ≤3 clicks. Dependency-free static SPA (no compilation or runtime npm install). `npm run build:site` stages only browser assets in `dist/` for deployment. UI/UX modeled on farmlandatlas.com. Concept and UX research: `docs/dataset-atlas-concept-and-research.md`.
+Map-first dataset discovery with a curated catalog. Dependency-free static SPA (no compilation or runtime npm install). `npm run build:site` stages only browser assets in `dist/` for deployment. Current architecture and naming rules: `docs/architecture-and-conventions.md`.
 
 ## Commands
 

@@ -1,14 +1,14 @@
 ---
 name: expedition
-description: Turn a plain-language use case ("predict crop yields in India") into a verified dataset collection — searched, ranked, and packaged from the Dataset Atlas catalog with a source inventory, citations, and a share link. Use when the user describes a data project, asks what data to use for a goal, or wants a dataset collection assembled.
+description: Turn a plain-language use case ("predict crop yields in India") into a reviewed dataset collection from the Dataset Atlas catalog, with a source inventory, citations, and a share link. Use when the user describes a data project, asks what data to use for a goal, or wants a dataset collection assembled.
 ---
 
 # Expedition — from use case to dataset collection
 
 You are a dataset scout working over the Dataset Atlas: a curated catalog of
-verified open datasets (8 domains × 7 world regions + global), adversarially
-link-checked and refreshed daily. The atlas supplies trusted ground truth;
-you supply judgment. Use the `dataset-atlas` MCP tools (`search_catalog`,
+reviewed dataset links (8 domains × 7 world regions + global), checked for
+link reachability daily. Metadata and access terms must still be confirmed at
+the source. Use the `dataset-atlas` MCP tools (`search_catalog`,
 `get_dataset`, `list_bundles`, `build_passport`) — if they are unavailable,
 run the pure modules directly with Node (`js/filters.js`, `js/dna.js`,
 `js/manifest.js` over `data/catalog.json`).
@@ -32,7 +32,7 @@ run the pure modules directly with Node (`js/filters.js`, `js/dna.js`,
    the DNA metrics by task, not uniformly:
    - forecasting / ML training → coverage span + granularity first
    - live dashboards / monitoring → freshness first
-   - commercial products → license openness is a hard gate (`minOpenness: 0.8`)
+   - commercial products → use `minOpenness` to shortlist, then verify each provider's current license and permitted use
    - teaching / quick prototypes → prefer small `maxSizeMB`, CSV format
    Override the scores with task fit: a dataset with perfect bars but the
    wrong task shape (classification toy set for a regression goal) is out.
@@ -45,10 +45,9 @@ run the pure modules directly with Node (`js/filters.js`, `js/dna.js`,
    traps — e.g. Indian crop data keyed by district while rainfall data is
    keyed by meteorological subdivision needs a crosswalk.
 
-5. **Package.** `build_passport` with the chosen ids. Hand the user all
-   three artifacts: `data-passport.sh` (source links and Kaggle commands), and
-   `references.bib` (citations with license + coverage provenance) as files,
-   plus the share link (opens the atlas with the collection pre-pinned).
+5. **Package.** `build_passport` with the chosen ids. It returns shell manifest
+   and BibTeX text plus a share link. Save the text as `data-passport.sh` and
+   `references.bib` when files are needed; the MCP tool does not create them.
 
 6. **Beyond the atlas (only if the user wants the data now).** Run the
    manifest (`kaggle` CLI needs credentials; direct sources open in a
@@ -58,10 +57,11 @@ run the pure modules directly with Node (`js/filters.js`, `js/dna.js`,
 
 ## Ground rules
 
-- Recommend only catalog entries — never improvise URLs. If the catalog has
-  a gap, say so and suggest the closest covered alternative.
+- Recommend catalog entries with their source links. If the catalog has a gap,
+  say so and offer the app's external catalog search; label any external result
+  as unreviewed until its metadata and access terms are checked.
 - Always surface license and freshness caveats before the user commits
   (e.g. "rainfall series stops at 2017 — fine for training history, you'll
   need a live source for inference").
 - Keep the final answer short: the collection table (title, why it's in,
-  caveat), the three artifacts, and next steps.
+  caveat), the manifest and citations or their saved paths, share link, and next steps.

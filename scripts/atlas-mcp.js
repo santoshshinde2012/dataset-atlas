@@ -220,7 +220,7 @@ export function toolDefinitions() {
   return [
     {
       name: 'search_catalog',
-      description: 'Search the verified dataset catalog with facets and ranking. Returns compact entries with per-dataset DNA scores (frs freshness, cov coverage span, grn granularity, siz size, lic license openness — each 0-1). Pass country (ISO alpha-2) to rank country-tagged datasets first (countryMatch). Regional queries include global datasets unless includeGlobal=false.',
+      description: 'Search the curated dataset catalog with facets and ranking. Returns compact entries with per-dataset DNA scores (frs freshness, cov coverage span, grn granularity, siz size, lic license openness — each 0-1). Source metadata and license terms should be confirmed at the provider. Pass country (ISO alpha-2) to rank country-tagged datasets first (countryMatch). Regional queries include global datasets unless includeGlobal=false.',
       inputSchema: {
         type: 'object',
         properties: {
