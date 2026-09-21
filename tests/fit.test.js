@@ -35,3 +35,11 @@ test('verified energy pair joins on ISO and year; conflicting grains are flagged
   assert.equal(assessJoin(energy.profile, plant.profile, energy.dataset, plant.dataset).status, 'conflict');
   assert.match(projectReport(pilot.tasks[2], [energy, co2], [energy, co2]), /Pair compatibility/);
 });
+
+test('matching key names alone leave an unverified pair under review', () => {
+  const fao = get('faostat');
+  const yields = get('crop-yields');
+  const result = assessJoin(fao.profile, yields.profile, fao.dataset, yields.dataset);
+  assert.equal(result.status, 'review');
+  assert.ok(result.notes.some((note) => note.text.includes('cardinality')));
+});

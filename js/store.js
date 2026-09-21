@@ -9,6 +9,7 @@
 import { SOURCE_TYPE_META, PRESETS, FORMAT_ORDER, THEMES, DEFAULT_THEME } from './config.js';
 import { filterCatalog, regionCounts, domainCounts, matchesFacets } from './filters.js';
 import { normFormat } from './utils/text.js';
+import { searchScore } from './search.js';
 
 /** Sort comparators for dataset lists (country-focus always wins first). */
 const SORTERS = {
@@ -77,12 +78,13 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
       const by = SORTERS[state.sort] || SORTERS.freshness;
       return filterCatalog(catalog, state)
         .filter((d) => d.region === region)
-        .sort((a, b) => covers(b) - covers(a) || by(a, b));
+        .sort((a, b) => covers(b) - covers(a) || (state.search ? searchScore(b, state.search) - searchScore(a, state.search) : 0) || by(a, b));
     },
     /** All filtered datasets grouped for the search-anywhere rail. */
     searchResults: () => {
       const by = SORTERS[state.sort] || SORTERS.freshness;
-      return filterCatalog(catalog, state).sort(by);
+      return filterCatalog(catalog, state).sort((a, b) =>
+        (state.search ? searchScore(b, state.search) - searchScore(a, state.search) : 0) || by(a, b));
     },
     compareDatasets: () => catalog.filter((d) => state.compare.has(d.id)),
     changeCount: () => state.changes.newIds.size + state.changes.updatedIds.size,

@@ -58,12 +58,13 @@ js/
   store.js           single source of truth: state, actions, selectors, pub/sub
   catalog.js         loading + sanitization choke point
   filters.js         composable facet predicates + faceted counting
+  search.js          shared token matching and relevance scoring
   dna.js             dataset "DNA" scoring (5 normalized metrics)
   manifest.js        Data Passport shell-script generation
   citation.js        BibTeX citation generation (pure over entry fields)
   access.js          access-requirement signal (account/paywall warning)
   url-state.js       shareable view state ⇄ location.hash (pure serialize/parse)
-  lib.js             adapter over vendored d3/topojson globals
+  vendor-globals.js  adapter over vendored d3/topojson globals
   utils/             pure helpers (esc, oneLine/oneLineUrl, hashId, normFormat; $/el)
   services/          ports: pins storage (localStorage), clipboard, toast
   map/projections.js globe/flat strategies behind one interface
@@ -157,12 +158,12 @@ Modeled on farmlandatlas.com's interaction grammar: the map is the persistent st
 
 - **81 unit tests** (`node --test`, zero dependencies) over the pure modules: sanitizer (including injection and country-tag cases), facet predicates, manifest hardening, DNA scoring, store behavior (country-focus ordering, pin import, starter bundles), URL-hash state round-trips, citation/BibTeX generation, access-signal detection, the MCP tool handlers (facet queries, ranking, passport artifacts, and that manifests stay hardened through the agent path), and a **theme-drift test** that fails CI if CSS and config accent colors diverge.
 - **Live verification** during development: every feature exercised in a real browser (projections, filters, pinning, manifest export, keyboard paths, mobile layout).
-- **CI** (GitHub Actions): syntax-check every module → unit tests → catalog validation. No install step — the pipeline is as dependency-free as the app.
+- **CI** (GitHub Actions): install Playwright test tooling → syntax-check every module → unit tests → catalog validation → browser tests. The browser app itself has no runtime package dependency.
 - Four adversarial multi-agent review rounds (4 lenses each, findings verified by independent skeptic agents before being acted on) ran during development — three across the runtime SPA plus one dedicated pass over the agent interface (§12); 40 confirmed findings were fixed.
 
 ## 9. Performance characteristics
 
-- **Payload**: ~110 KB world topology + ~120 KB catalog + ~280 KB vendored D3 (all cacheable, no CDN dependency). First paint is the static shell; the map renders as soon as three parallel fetches resolve.
+- **Payload**: ~110 KB world topology + ~136 KB catalog + ~280 KB vendored D3 (all cacheable, no CDN dependency). First paint is the static shell; the map renders after the parallel catalog, pilot, and geographic reference fetches resolve.
 - **Interaction**: filter changes trigger cheap in-place updates (attribute/text writes + one fill recompute over 177 country paths). Full path regeneration happens only on drag/zoom/rotate frames, which the 110m-resolution topology sustains comfortably.
 - **Memory**: the whole dataset lives in one in-memory array; selectors recompute rather than cache.
 
@@ -201,4 +202,4 @@ The catalog is machine-readable ground truth, so the same data that powers the m
 | `list_bundles` | `PRESETS` (js/config.js) | The curated 5-dataset starter kits with resolved ids |
 | `build_passport` | `manifestText` (js/manifest.js) + `bibliographyFor` (js/citation.js) | `data-passport.sh`, `references.bib`, and a pre-pinned share link |
 
-The catalog still flows through `buildCatalog` (the §6 sanitizer) whether it is read from the local `data/catalog.json` or fetched from the live GitHub Pages copy, so the security model is unchanged — an agent cannot reach an unsanitized entry, and every manifest string is shell-hardened exactly as in the browser. The **acquisition/preparation half stays in the client agent** (download via the Kaggle CLI or the URL, then profile and join): the atlas handles discovery and source hand-off. The [`expedition`](../.claude/skills/expedition/SKILL.md) skill encodes the six-step flow (clarify → search → rank by DNA → assemble → package → hand off) that drives these four tools.
+The catalog still flows through `buildCatalog` (the §6 sanitizer) whether it is read from the local `data/catalog.json` or fetched from the live GitHub Pages copy, so the security model is unchanged — an agent cannot reach an unsanitized entry, and every manifest string is shell-hardened exactly as in the browser. The **acquisition/preparation half stays in the client agent** (download via the Kaggle CLI or the URL, then profile and join): the atlas handles discovery and source hand-off. The six-step flow (clarify → search → rank by DNA → assemble → package → hand off) describes the intended agent workflow.

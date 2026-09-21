@@ -9,7 +9,7 @@ The browser app is a static site with no runtime package dependencies, account, 
 ## Features
 
 - Browse availability on a globe or flat map; focus a region or country.
-- Search and filter by domain, source type, format, and license openness.
+- Search with word-order-independent terms and filter by domain, source type, format, and license openness.
 - Compare up to four datasets and pin selections in a Data Passport.
 - Share a filtered view or pinned collection through a URL.
 - Export an annotated shell manifest and BibTeX references.
@@ -92,7 +92,7 @@ scripts/                Catalog validator, refresh job, and MCP server
 dist/                   Generated browser-only deployment package (ignored by Git)
 tests/                  Node.js unit tests
 e2e/                    Playwright browser smoke tests
-vendor/                 Runtime D3 and TopoJSON copies
+vendor/                 Runtime D3 and TopoJSON copies and license notices
 .github/workflows/       CI, refresh, and Pages deployment
 docs/                   Design and deployment notes
 index.html, styles.css  Static application shell and styles
@@ -100,4 +100,4 @@ index.html, styles.css  Static application shell and styles
 
 `js/main.js` wires the app together. `js/store.js` owns state and selectors. `js/catalog.js` sanitizes catalog entries before either UI or MCP code consumes them. Keep domain and region definitions in `js/config.js`, and add tests for behavior that changes.
 
-See [system design](docs/system-design.md) and [concept research](docs/dataset-atlas-concept-and-research.md) for more background.
+See [architecture and conventions](docs/architecture-and-conventions.md) for module boundaries, naming, and change rules. [System design](docs/system-design.md), [concept research](docs/dataset-atlas-concept-and-research.md), and the [2026 research audit](docs/research-audit-2026-09-20.md) provide more background.

@@ -1,5 +1,6 @@
 import { assessFit, assessJoin, projectReport } from '../fit.js';
 import { esc } from '../utils/text.js';
+import { trapModalFocus } from './focus-trap.js';
 
 const status = (value) => `<strong class="fit-${value}">${value}</strong>`;
 const link = (url, label) => `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
@@ -10,7 +11,7 @@ export function initWorkbench({ catalog, pilot, toast }) {
   const button = document.getElementById('workbench-btn');
   let task = { ...pilot.tasks[0] };
   let shown = [];
-  const close = () => { dialog.hidden = true; button.focus(); };
+  const close = () => dialog.close();
 
   function render() {
     shown = pilot.profiles.filter((p) => p.task === task.id).map((profile) => ({ profile, dataset: catalog.find((d) => d.url === profile.url) })).filter((x) => x.dataset);
@@ -64,8 +65,15 @@ export function initWorkbench({ catalog, pilot, toast }) {
       toast('Project brief exported');
     };
   }
-  button.onclick = () => { render(); dialog.hidden = false; dialog.querySelector('#workbench-close').focus(); };
+  button.onclick = () => { render(); dialog.showModal(); dialog.querySelector('#workbench-close').focus(); };
   dialog.querySelector('#workbench-close').onclick = close;
-  dialog.addEventListener('click', (event) => { if (event.target === dialog) close(); });
-  document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !dialog.hidden) { event.stopImmediatePropagation(); close(); } }, true);
+  dialog.addEventListener('close', () => button.focus());
+  dialog.addEventListener('click', (event) => {
+    const rect = dialog.querySelector('.workbench-inner').getBoundingClientRect();
+    if (event.target === dialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) close();
+  });
+  document.addEventListener('keydown', (event) => {
+    trapModalFocus(dialog, event);
+    if (event.key === 'Escape' && dialog.open) { event.preventDefault(); event.stopImmediatePropagation(); close(); }
+  }, true);
 }

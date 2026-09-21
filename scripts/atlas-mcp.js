@@ -22,6 +22,7 @@
  *   node scripts/atlas-mcp.js
  */
 import { readFileSync } from 'node:fs';
+import { queryTerms, searchScore } from '../js/search.js';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildCatalog } from '../js/catalog.js';
@@ -133,8 +134,8 @@ export function searchCatalog(catalog, args = {}) {
     onlyChanged: false,
   };
   let list = filterCatalog(catalog, state);
-  const q = String(query).toLowerCase().slice(0, 80);
-  if (q) list = list.filter((d) => `${d.title} ${d.description} ${d.source}`.toLowerCase().includes(q));
+  const q = String(query).slice(0, 80);
+  if (queryTerms(q).length) list = list.filter((d) => searchScore(d, q, { includeFacets: false }) > 0);
   if (region) list = list.filter((d) => d.region === region || (includeGlobal && d.region === GLOBAL_REGION));
   if (maxSizeMB) list = list.filter((d) => d.approxSizeMB <= +maxSizeMB);
 
@@ -142,7 +143,7 @@ export function searchCatalog(catalog, args = {}) {
   const isMatch = (d) => !!iso && (d.countries || []).includes(iso);
   const dnaMean = (d) => dnaMetrics(d).reduce((s, m) => s + m.value, 0) / 5;
   const score = (d) => (isMatch(d) ? 2 : 0)
-    + (q && d.title.toLowerCase().includes(q) ? 1 : 0)
+    + (q ? searchScore(d, q, { includeFacets: false }) / 5 : 0)
     + dnaMean(d);
   const cmp = {
     relevance: (a, b) => score(b) - score(a),
@@ -223,7 +224,7 @@ export function toolDefinitions() {
       inputSchema: {
         type: 'object',
         properties: {
-          query: { type: 'string', description: 'substring match over title/description/source' },
+          query: { type: 'string', description: 'word-order-independent match over title/description/source' },
           domain: { type: 'string', enum: DOMAINS },
           region: { type: 'string', enum: REGIONS },
           includeGlobal: { type: 'boolean', description: 'when region is set, also include global datasets (default true)' },

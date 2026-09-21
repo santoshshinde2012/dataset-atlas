@@ -20,6 +20,9 @@ export function assessFit(dataset, profile, task) {
 
 export function assessJoin(a, b, aDataset, bDataset) {
   const notes = [];
+  const pairUrls = new Set([a.url, b.url]);
+  const verifiedPilotPair = pairUrls.has('https://github.com/owid/energy-data')
+    && pairUrls.has('https://github.com/owid/co2-data');
   const start = Math.max(aDataset.coverageStart, bDataset.coverageStart);
   const end = Math.min(aDataset.coverageEnd, bDataset.coverageEnd);
   if (start > end) notes.push({ status: 'conflict', text: 'No overlapping years' });
@@ -30,8 +33,10 @@ export function assessJoin(a, b, aDataset, bDataset) {
   else notes.push({ status: 'match', text: `Both use ${a.time} time grain` });
   const shared = a.joinKeys.filter((key) => b.joinKeys.includes(key));
   notes.push(shared.length ? { status: 'match', text: `Shared named keys: ${shared.join(', ')}` } : { status: 'unknown', text: 'No shared named join keys; inspect source schemas or map identifiers' });
+  if (!verifiedPilotPair) notes.push({ status: 'unknown', text: 'Key values, units and one-to-one cardinality have not been verified for this pair' });
+  if (!verifiedPilotPair && (!a.countries.length || !b.countries.length)) notes.push({ status: 'unknown', text: 'Country overlap is not documented for both sources' });
   if (a.countries.length && b.countries.length && !a.countries.some((c) => b.countries.includes(c))) notes.push({ status: 'conflict', text: 'Documented country coverage does not overlap' });
-  if (a.url.includes('owid/energy-data') && b.url.includes('owid/co2-data') || b.url.includes('owid/energy-data') && a.url.includes('owid/co2-data')) notes.push({ status: 'match', text: 'Verified pilot pair: filter ISO country rows, then join on iso_code and year; preserve metric units' });
+  if (verifiedPilotPair) notes.push({ status: 'match', text: 'Verified pilot pair: filter ISO country rows, then join on iso_code and year; preserve metric units' });
   return { status: notes.some((n) => n.status === 'conflict') ? 'conflict' : notes.some((n) => n.status === 'unknown') ? 'review' : 'match', notes };
 }
 

@@ -22,9 +22,20 @@ test('searches the catalog and restores a shared view', async ({ page }) => {
   await expect(page.locator('#external-catalogs a').first()).toHaveAttribute('href', /q=malaria/);
 });
 
+test('word-order-independent search finds known datasets', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#global-count')).not.toHaveText('0');
+  await page.locator('#search-input').fill('India crop production');
+  await expect(page.locator('#card-list .card')).toHaveCount(2);
+  await expect(page.locator('#card-list')).toContainText('Crop Production in India');
+});
+
 test('the deploy package omits repository-only files', async ({ request }) => {
-  for (const path of ['/README.md', '/scripts/atlas-mcp.js', '/js/catalog-metadata.js']) {
+  for (const path of ['/README.md', '/scripts/atlas-mcp.js', '/js/catalog-metadata.js', '/js/lib.js']) {
     expect((await request.get(path)).status()).toBe(404);
+  }
+  for (const path of ['/vendor/d3.LICENSE', '/vendor/topojson-client.LICENSE']) {
+    expect((await request.get(path)).status()).toBe(200);
   }
 });
 
@@ -62,4 +73,24 @@ test('research workbench checks fit and exports evidence-backed handoff', async 
   const notebookEvent = page.waitForEvent('download');
   await page.getByText('Download verified Energy + CO₂ notebook').click();
   expect((await notebookEvent).suggestedFilename()).toBe('energy-co2-example.ipynb');
+});
+
+test('mobile actions fit and the workbench contains keyboard focus', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto('/');
+  await expect(page.locator('#global-count')).not.toHaveText('0');
+  for (const id of ['#proj-globe', '#proj-flat', '#theme-toggle', '#workbench-btn', '#passport-btn']) {
+    const box = await page.locator(id).boundingBox();
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(320);
+  }
+  await page.locator('#workbench-btn').click();
+  await expect(page.locator('#workbench')).toHaveAttribute('open', '');
+  for (let i = 0; i < 35; i++) {
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.querySelector('#workbench').contains(document.activeElement))).toBe(true);
+  }
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#workbench')).not.toHaveAttribute('open', '');
+  await expect(page.locator('#workbench-btn')).toBeFocused();
 });

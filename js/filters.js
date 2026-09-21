@@ -8,9 +8,7 @@
  */
 import { REGION_META, GLOBAL_REGION } from './config.js';
 import { normFormat } from './utils/text.js';
-
-const haystack = (d) =>
-  `${d.title} ${d.description} ${d.source} ${d.domain} ${d.region}`.toLowerCase();
+import { queryTerms, searchScore } from './search.js';
 
 /** @type {Record<string, (d: object, s: object) => boolean>} */
 export const FACETS = {
@@ -18,7 +16,7 @@ export const FACETS = {
   source: (d, s) => s.sourceTypes.has(d.sourceType),
   format: (d, s) => (d.formats || []).some((f) => s.formats.has(normFormat(f))),
   license: (d, s) => (d.licenseOpenness ?? 0) >= s.minOpenness,
-  search: (d, s) => !s.search || haystack(d).includes(s.search),
+  search: (d, s) => !s.search || !queryTerms(s.search).length || searchScore(d, s.search) > 0,
   changed: (d, s) => !s.onlyChanged ||
     !s.changes || s.changes.newIds.has(d.id) || s.changes.updatedIds.has(d.id),
 };
