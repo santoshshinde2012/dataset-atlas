@@ -8,8 +8,12 @@ import { domainCounts } from '../filters.js';
 import { icon } from '../icons.js';
 import { bibtexFor } from '../citation.js';
 import { accessRequirement } from '../access.js';
+import { accessAction } from '../resource.js';
+import { countryCoverage } from '../coverage.js';
+import { licenseUse, licenseUseSummary } from '../license-use.js';
+import { linkHealth } from '../link-health.js';
 
-export function initCardRail({ store, toast, copyText, countryNames = {} }) {
+export function initCardRail({ store, toast, copyText, countryNames = {}, generated = null }) {
   const rail = $('#card-rail');
   const list = $('#card-list');
   let lastRenderedKey = null; // render signature, so pin toggles keep scroll/focus
@@ -88,12 +92,16 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
       ? `${icon('globe')} Global datasets`
       : esc(REGION_META[region].name);
     const focusName = state.focusCountry ? countryNames[state.focusCountry] : null;
-    const focusCount = state.focusCountry
-      ? datasets.filter((d) => (d.countries || []).includes(state.focusCountry)).length
+    const taggedCount = state.focusCountry
+      ? datasets.filter((d) => countryCoverage(d, state.focusCountry) === 'tagged').length
+      : 0;
+    const seriesCount = state.focusCountry
+      ? datasets.filter((d) => countryCoverage(d, state.focusCountry) === 'series').length
       : 0;
     $('#rail-region-sub').textContent =
       `${datasets.length} dataset${datasets.length === 1 ? '' : 's'}` +
-      (focusName && focusCount ? ` · ${focusCount} specific to ${focusName}` : '') +
+      (focusName && taggedCount ? ` · ${taggedCount} tagged ${focusName}` : '') +
+      (focusName && seriesCount ? ` · ${seriesCount} global series` : '') +
       (state.domain !== 'all' ? ` · ${DOMAIN_META[state.domain].name}` : '');
     renderCountryTool(region);
   }
@@ -165,15 +173,25 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
     }
 
     const focusName = state.focusCountry ? countryNames[state.focusCountry] : null;
-    const coversFocus = (d) => (d.countries || []).includes(state.focusCountry);
-    const focusCount = focusName ? datasets.filter(coversFocus).length : 0;
-    if (focusName && focusCount > 0 && focusCount < datasets.length) {
-      list.appendChild(groupLabel(`Specific to ${focusName}`, focusCount));
-      for (const d of datasets.filter(coversFocus)) list.appendChild(datasetCard(d));
-      list.appendChild(groupLabel(
-        `Region-wide · ${region === GLOBAL_REGION ? 'Global' : REGION_META[region].name}`,
-        datasets.length - focusCount));
-      for (const d of datasets.filter((d) => !coversFocus(d))) list.appendChild(datasetCard(d));
+    const kindOf = (d) => countryCoverage(d, state.focusCountry);
+    const tagged = focusName ? datasets.filter((d) => kindOf(d) === 'tagged') : [];
+    const series = focusName ? datasets.filter((d) => kindOf(d) === 'series') : [];
+    const rest = focusName ? datasets.filter((d) => !kindOf(d)) : datasets;
+    if (focusName && (tagged.length || series.length) && rest.length < datasets.length) {
+      if (tagged.length) {
+        list.appendChild(groupLabel(`Tagged ${focusName}`, tagged.length));
+        for (const d of tagged) list.appendChild(datasetCard(d));
+      }
+      if (series.length) {
+        list.appendChild(groupLabel(`Global country-year series (candidate for ${focusName})`, series.length));
+        for (const d of series) list.appendChild(datasetCard(d));
+      }
+      if (rest.length) {
+        list.appendChild(groupLabel(
+          `Region-wide · ${region === GLOBAL_REGION ? 'Global' : REGION_META[region].name}`,
+          rest.length));
+        for (const d of rest) list.appendChild(datasetCard(d));
+      }
       return;
     }
     for (const d of datasets) list.appendChild(datasetCard(d));
@@ -271,8 +289,12 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
     if (change) {
       badges.appendChild(el('span', 'badge change-badge', `${icon('sparkles')} ${change === 'new' ? 'New' : 'Updated'}`));
     }
-    if (state.focusCountry && (d.countries || []).includes(state.focusCountry)) {
+    if (state.focusCountry && countryCoverage(d, state.focusCountry) === 'tagged') {
       badges.appendChild(el('span', 'badge country-badge', esc(countryNames[state.focusCountry] || state.focusCountry)));
+    } else if (state.focusCountry && countryCoverage(d, state.focusCountry) === 'series') {
+      const series = el('span', 'badge series-badge', 'country series');
+      series.title = 'Global country-year series — this country is a candidate, not a verified row';
+      badges.appendChild(series);
     }
     const access = accessRequirement(d);
     if (access) {
@@ -289,10 +311,21 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
     for (const f of (d.formats || []).slice(0, 3)) badges.appendChild(el('span', 'badge plain', esc(f)));
     badges.appendChild(el('span', 'badge plain', esc(d.license)));
     if (d.verified) {
-      const v = el('span', 'badge verified-badge', `${icon('shield')} ${esc(d.verified)}`);
-      v.title = `Dataset link last returned a successful response ${d.verified}`;
+      const health = linkHealth(d, generated);
+      const v = el('span', 'badge ' + (health.status === 'verified' ? 'verified-badge' : health.status === 'stale' ? 'stale-badge' : 'plain'),
+        `${icon('shield')} ${esc(health.label)}`);
+      v.title = health.title;
+      badges.appendChild(v);
+    } else {
+      const health = linkHealth(d, generated);
+      const v = el('span', 'badge stale-badge', `${icon('shield')} ${esc(health.label)}`);
+      v.title = health.title;
       badges.appendChild(v);
     }
+    const use = licenseUse(d);
+    const reuse = el('span', 'badge plain', 'Reuse');
+    reuse.title = licenseUseSummary(use) + '. ' + use.note;
+    badges.appendChild(reuse);
     if (d.sourceModifiedYear) {
       const modified = el('span', 'badge plain', `Source changed ${d.sourceModifiedYear}`);
       modified.title = 'Source page, repository, or package activity; dataset content year may differ';
@@ -304,20 +337,24 @@ export function initCardRail({ store, toast, copyText, countryNames = {} }) {
     card.appendChild(dnaStrip(d));
 
     const actions = el('div', 'card-actions');
-    const get = el('a', 'get-btn', `Get data ${icon('external')}`);
-    get.href = d.url;
+    const action = accessAction(d);
+    const get = el('a', 'get-btn' + (action.primary.kind === 'page' ? ' page' : ''), `${esc(action.primary.label)} ${icon('external')}`);
+    get.href = action.primary.href;
     get.target = '_blank';
     get.rel = 'noopener';
     actions.appendChild(get);
-    const cliLabel = d.kaggleRef ? `${icon('terminal')} Copy CLI` : `${icon('copy')} Copy link`;
+    if (action.secondary) {
+      const src = el('a', 'cli-btn', `${esc(action.secondary.label)} ${icon('external')}`);
+      src.href = action.secondary.href;
+      src.target = '_blank';
+      src.rel = 'noopener';
+      actions.appendChild(src);
+    }
+    const cliLabel = `${icon(action.copy.kind === 'cli' ? 'terminal' : 'copy')} ${esc(action.copy.label)}`;
     const cli = el('button', 'cli-btn', cliLabel);
-    cli.title = d.kaggleRef
-      ? `Copy: kaggle datasets download -d ${d.kaggleRef}`
-      : 'Copy dataset URL';
+    cli.title = action.copy.text;
     cli.onclick = () => {
-      copyText(
-        d.kaggleRef ? `kaggle datasets download -d ${d.kaggleRef}` : d.url,
-        d.kaggleRef ? 'Kaggle CLI command copied' : 'Link copied');
+      copyText(action.copy.text, action.copy.kind === 'cli' ? 'Kaggle CLI command copied' : 'Link copied');
       cli.classList.add('copied');
       cli.innerHTML = `${icon('check')} Copied`;
       setTimeout(() => {

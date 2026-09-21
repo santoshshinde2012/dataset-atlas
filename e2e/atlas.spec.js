@@ -34,9 +34,13 @@ test('the deploy package omits repository-only files', async ({ request }) => {
   for (const path of ['/README.md', '/scripts/atlas-mcp.js', '/js/catalog-metadata.js', '/js/lib.js']) {
     expect((await request.get(path)).status()).toBe(404);
   }
-  for (const path of ['/vendor/d3.LICENSE', '/vendor/topojson-client.LICENSE']) {
+  for (const path of ['/vendor/d3.LICENSE', '/vendor/topojson-client.LICENSE', '/sitemap.xml', '/robots.txt']) {
     expect((await request.get(path)).status()).toBe(200);
   }
+  const sitemap = await (await request.get('/sitemap.xml')).text();
+  expect(sitemap).toContain('/dataset/');
+  const first = sitemap.match(/dataset\/(d[a-z0-9]+)\.html/)[1];
+  expect((await request.get(`/dataset/${first}.html`)).status()).toBe(200);
 });
 
 test('pins a dataset and exports the passport manifest', async ({ page }) => {
@@ -71,7 +75,7 @@ test('research workbench checks fit and exports evidence-backed handoff', async 
   await page.locator('#workbench-export').click();
   expect((await briefEvent).suggestedFilename()).toBe('dataset-atlas-energy-brief.md');
   const notebookEvent = page.waitForEvent('download');
-  await page.getByText('Download verified Energy + CO₂ notebook').click();
+  await page.getByText(/Download Energy use vs/).click();
   expect((await notebookEvent).suggestedFilename()).toBe('energy-co2-example.ipynb');
 });
 

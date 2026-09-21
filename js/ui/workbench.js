@@ -1,4 +1,5 @@
 import { assessFit, assessJoin, projectReport } from '../fit.js';
+import { kitsForTask } from '../kits.js';
 import { esc } from '../utils/text.js';
 import { trapModalFocus } from './focus-trap.js';
 
@@ -15,8 +16,13 @@ export function initWorkbench({ catalog, pilot, toast }) {
 
   function render() {
     shown = pilot.profiles.filter((p) => p.task === task.id).map((profile) => ({ profile, dataset: catalog.find((d) => d.url === profile.url) })).filter((x) => x.dataset);
+    const kits = kitsForTask(task.id);
+    const kitLinks = kits.map((kit) => kit.notebook
+      ? ` <a href="${esc(kit.notebook)}" download>Download ${esc(kit.label)} notebook</a>`
+      : '').join('');
     body.innerHTML = `
-      <p>Screen reviewed pilot sources against a research question. Results show evidence and remaining checks; previews are source samples, not live data.</p>
+      <p>Screen reviewed pilot sources against a research question. Results show evidence and remaining checks; previews are source samples, not live data. A <b>match</b> requires documented overlap — key names alone are never enough.</p>
+      ${kits.length ? `<p class="workbench-note">Kit: ${kits.map((k) => `${esc(k.label)} (${esc(k.status)})`).join(' · ')}</p>` : ''}
       <label>Research task <select id="workbench-task">${pilot.tasks.map((t) => `<option value="${esc(t.id)}" ${t.id === task.id ? 'selected' : ''}>${esc(t.title)}</option>`).join('')}</select></label>
       <div class="workbench-inputs"><label>Country ISO-2 <input id="fit-country" maxlength="2" pattern="[A-Za-z]{2}" value="${esc(task.country)}"></label><label>From year <input id="fit-start" type="number" min="1800" max="2100" value="${task.startYear}"></label><label>To year <input id="fit-end" type="number" min="1800" max="2100" value="${task.endYear}"></label><label>Geographic level <select id="fit-level">${['country','state','district','county','subdivision','point'].map((level) => `<option value="${level}" ${level === task.level ? 'selected' : ''}>${level}</option>`).join('')}</select></label></div>
       <p>${esc(task.description)} <b>Target:</b> ${esc(task.country)}, ${task.startYear}–${task.endYear}, ${esc(task.level)}; ${esc(task.variables.join(', '))}.</p>
@@ -31,7 +37,7 @@ export function initWorkbench({ catalog, pilot, toast }) {
           <label><input type="checkbox" class="workbench-select" value="${i}" checked> Include in project brief</label></article>`;
       }).join('')}</div>
       <section class="workbench-join"><h3>Pair compatibility</h3><label>First source <select id="join-a">${shown.map((x, i) => `<option value="${i}">${esc(x.dataset.title)}</option>`).join('')}</select></label><label>Second source <select id="join-b">${shown.map((x, i) => `<option value="${i}" ${i === 1 ? 'selected' : ''}>${esc(x.dataset.title)}</option>`).join('')}</select></label><div id="join-result"></div></section>
-      <button id="workbench-export" class="primary">Export project brief (.md)</button>${task.id === 'energy' ? ` <a href="data/energy-co2-example.ipynb" download>Download verified Energy + CO₂ notebook</a>` : ''}`;
+      <button id="workbench-export" class="primary">Export project brief (.md)</button>${kitLinks}`;
     body.querySelector('#workbench-task').onchange = (e) => { task = { ...pilot.tasks.find((t) => t.id === e.target.value) }; render(); };
     for (const id of ['fit-country', 'fit-start', 'fit-end', 'fit-level']) body.querySelector(`#${id}`).onchange = () => {
       const country = body.querySelector('#fit-country').value.toUpperCase().trim();

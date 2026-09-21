@@ -2,23 +2,26 @@
 
 [Live atlas](https://santoshshinde2012.github.io/dataset-atlas/) · [License](LICENSE)
 
-The Dataset Atlas helps people find datasets by geography and subject. Select a region or country on the map, choose a domain, and open the source dataset page. The catalog currently contains 171 curated entries across eight domains and seven world regions, plus global datasets. This is a reviewed starting set, not an exhaustive index of every dataset.
+The Dataset Atlas helps people find datasets by geography and subject — and tells them whether those datasets can actually be used together. Select a region or country on the map, choose a domain, and open a **verified file** when one exists, or an honest source page when it does not. The catalog currently contains 171 curated entries across eight domains and seven world regions, plus global datasets. This is a reviewed starting set, not an exhaustive index of every dataset.
 
-The browser app is a static site with no runtime package dependencies, account, or backend. D3 and TopoJSON are vendored in `vendor/` so the app can also run offline when served locally. Deployment copies browser assets into a clean `dist/` directory; it does not compile the app.
+The browser app is a static site with no runtime package dependencies, account, or backend. It deploys to GitHub Pages at zero cost. D3 and TopoJSON are vendored in `vendor/` so the app can also run offline when served locally. Deployment copies browser assets into a clean `dist/` directory; it does not compile the app.
 
 ## Features
 
-- Browse availability on a globe or flat map; focus a region or country.
+- Browse availability on a globe or flat map; focusing a country also surfaces **global country-year series** as candidates (World Bank, OWID), labelled as such — never as proven rows.
 - Search with word-order-independent terms and filter by domain, source type, format, and license openness.
+- Honest access actions: **Download file** / **Open API** when a DCAT-style resource is verified; **Open source** when only a landing page exists. Cards never pretend a portal homepage is a file.
+- Reuse screening on each card (analysis / redistribute / AI training). Unknown stays unknown; this is not legal advice.
+- Link health: last successful URL check, distinct from editorial content year and coverage end.
 - Compare up to four datasets and pin selections in a Data Passport.
 - Share a filtered view or pinned collection through a URL.
-- Export an annotated shell manifest and BibTeX references.
-- Use the local MCP server to search the same catalog and build a passport from an agent.
-- See the last successful link check on dataset cards and the catalog's last check date.
-- Search beyond the atlas through official and broad discovery catalogs. Data.gov, HDX, and Google Dataset Search receive the current search terms; World Bank, India Open Government Data, and Eurostat open their catalog home pages for further filtering. External results have their own metadata and access terms.
-- Use the Research Workbench to screen 15 reviewed sources against three practical questions: India crop and rainfall analysis, COVID-19 and population comparisons, and energy versus CO₂. Adjust country, years, and geographic level; inspect direct resources, schema evidence, sample rows, and pair compatibility; export a Markdown project brief. The verified OWID energy/CO₂ pair also has a downloadable notebook.
+- Export an annotated shell manifest and BibTeX references (citation year is coverage end, not the freshness bar).
+- Crawlable per-dataset HTML pages, `sitemap.xml`, and schema.org Dataset JSON-LD for Google Dataset Search.
+- Local MCP server: `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `assess_fit`, `build_passport`.
+- Search beyond the atlas through official catalogs. Those results are **unreviewed**.
+- Research Workbench with two runnable kits: **energy vs CO₂** (OWID, country-year) and **India crop + rainfall** (IMD subdivision crosswalk + offline samples). COVID vs population has a documented daily→annual rule (no notebook yet).
 
-**Export scope:** Kaggle entries include executable `kaggle datasets download` commands. Other entries are source-page URLs in shell comments; those sites may require manual navigation, an account, or their own API. The manifest is a source inventory, not a complete automated downloader. Dataset licenses and access terms remain those of the source providers.
+**Export scope:** Kaggle entries include executable `kaggle datasets download` commands. World Bank indicators and selected OWID series include direct file or API URLs. Other entries are source-page URLs in shell comments. The manifest is a source inventory, not a complete automated downloader. Dataset licenses and access terms remain those of the source providers.
 
 ## Run locally
 
@@ -47,7 +50,7 @@ npm run test:e2e
 
 ## Catalog and data provenance
 
-The catalog lives in [`data/catalog.json`](data/catalog.json). Each entry records its source URL, domain, region, format, license, approximate size, coverage years, and an editorially reviewed `freshnessYear`. Optional `countries` tags mark country-specific entries.
+The catalog lives in [`data/catalog.json`](data/catalog.json). Each entry records its landing page, optional `resources[]` (file or API), domain, region, format, license, approximate size, coverage years, `coverageKind`, and an editorially reviewed `freshnessYear`. Optional `countries` tags mark country-specific entries. `coverageKind: global-country-series` means a worldwide country-year indicator — focusing India can show it as a **candidate**, not a verified India extract.
 
 The 16 additional World Bank indicators were checked against the official indicator and observations APIs. Their start and end years are the first and last nonempty observations for recognized countries across the entire series; individual countries may have shorter coverage. The size field is an estimate of the source API's full JSON response, not a promised download size. Provider catalog links are maintained in [`js/external-catalogs.js`](js/external-catalogs.js).
 
@@ -81,12 +84,14 @@ GitHub Pages publishes only `dist/`, which contains the application shell, brows
 
 ## MCP interface
 
-Run `node scripts/atlas-mcp.js`, or use the checked-in [`.mcp.json`](.mcp.json) with a compatible MCP client. The server exposes `search_catalog`, `get_dataset`, `list_bundles`, and `build_passport`. It uses the same catalog sanitizer, filters, DNA metrics, manifest generator, and citation generator as the browser app.
+Run `node scripts/atlas-mcp.js`, or use the checked-in [`.mcp.json`](.mcp.json) with a compatible MCP client. The server exposes `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `assess_fit`, and `build_passport`. It uses the same sanitizer, fit checks, resource model, and citation generator as the browser app.
+
+Verified join kits live in `js/kits.js`. The India crop/rainfall kit ships `data/india-district-subdivision.json`, offline samples, and `data/crop-rainfall-example.ipynb`. The energy/CO₂ kit ships `data/energy-co2-example.ipynb`.
 
 ## Repository layout
 
 ```text
-data/                   Catalog, pilot metadata, notebook, and map reference data
+data/                   Catalog, pilot metadata, notebooks, crosswalk, samples, map data
 js/                     Browser app, pure logic, UI, and map modules
 scripts/                Catalog validator, refresh job, and MCP server
 dist/                   Generated browser-only deployment package (ignored by Git)

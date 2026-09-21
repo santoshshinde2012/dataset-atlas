@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  searchCatalog, getDataset, listBundles, buildPassport, toolDefinitions, loadCatalog, dispatch,
+  searchCatalog, getDataset, getResource, listBundles, listKits, assessFitTool, buildPassport, toolDefinitions, loadCatalog, dispatch,
 } from '../scripts/atlas-mcp.js';
 import { buildCatalog } from '../js/catalog.js';
 import { PRESETS } from '../js/config.js';
@@ -155,11 +155,11 @@ test('manifest strings stay hardened through the passport path', () => {
 test('tool definitions carry the vocabulary agents need', () => {
   const defs = toolDefinitions();
   assert.deepEqual(defs.map((t) => t.name),
-    ['search_catalog', 'get_dataset', 'list_bundles', 'build_passport']);
+    ['search_catalog', 'get_dataset', 'get_resource', 'list_bundles', 'list_kits', 'assess_fit', 'build_passport']);
   const search = defs[0].inputSchema.properties;
   assert.ok(search.domain.enum.includes('agriculture'));
   assert.ok(search.region.enum.includes('global'));
-  assert.equal(defs[3].inputSchema.required[0], 'ids');
+  assert.equal(defs.find((t) => t.name === 'build_passport').inputSchema.required[0], 'ids');
 });
 
 test('compact() truncates a long description on a code-point boundary', () => {
@@ -181,7 +181,7 @@ test('dispatch routes requests and notifications by JSON-RPC semantics', async (
   assert.ok('tools' in init.result.capabilities);
 
   const list = await dispatch(cat, { jsonrpc: '2.0', id: 'a', method: 'tools/list' });
-  assert.equal(list.result.tools.length, 4, 'string ids are echoed');
+  assert.equal(list.result.tools.length, 7, 'string ids are echoed');
 
   const call = await dispatch(cat, { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'list_bundles', arguments: {} } });
   const payload = JSON.parse(call.result.content[0].text);
@@ -199,6 +199,21 @@ test('dispatch never replies to a notification, even for a known method', async 
   assert.equal(await dispatch(cat, { jsonrpc: '2.0', method: 'notifications/initialized' }), null);
   assert.equal(await dispatch(cat, { jsonrpc: '2.0', method: 'tools/list' }), null,
     'a known method with no id is a notification and gets no reply');
+});
+
+test('list_kits resolves verified pairs and assess_fit screens the energy kit', async () => {
+  const real = await loadCatalog();
+  const kits = listKits(real);
+  assert.equal(kits.kits.length, 3);
+  const energy = kits.kits.find((k) => k.id === 'energy-co2');
+  assert.equal(energy.status, 'verified');
+  assert.equal(energy.datasets.length, 2);
+  const crop = kits.kits.find((k) => k.id === 'india-crop-rainfall');
+  assert.ok(crop.crosswalk.endsWith('india-district-subdivision.json'));
+  const fit = assessFitTool(real, { task: 'energy', country: 'IN' });
+  assert.equal(fit.pair.join.status, 'match');
+  const resource = getResource(real, { id: energy.datasets[0].id });
+  assert.equal(resource.access.primary.kind, 'download');
 });
 
 test('dispatch answers a request whose method happens to start with notifications/', async () => {

@@ -8,7 +8,10 @@
  *
  *   search_catalog   faceted query + ranking over the verified catalog
  *   get_dataset      full metadata + DNA profile for one entry
+ *   get_resource     landing page vs file/API, license-use, link health
  *   list_bundles     the curated "I want to…" starter bundles
+ *   list_kits        verified and documented join kits
+ *   assess_fit       workbench fit + pair join for a research task
  *   build_passport   source inventory and download commands + BibTeX + share link
  *
  * Every tool body reuses the app's own pure modules — the catalog always
@@ -30,12 +33,18 @@ import { filterCatalog } from '../js/filters.js';
 import { dnaMetrics } from '../js/dna.js';
 import { manifestText } from '../js/manifest.js';
 import { bibliographyFor } from '../js/citation.js';
+import { countryCoverage } from '../js/coverage.js';
+import { accessAction, primaryResource } from '../js/resource.js';
+import { licenseUse } from '../js/license-use.js';
+import { linkHealth } from '../js/link-health.js';
+import { KITS } from '../js/kits.js';
+import { assessFit, assessJoin } from '../js/fit.js';
 import {
-  DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION, PRESETS, FORMAT_ORDER,
+  DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION, PRESETS, FORMAT_ORDER, SITE_BASE,
 } from '../js/config.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const LIVE_BASE = 'https://santoshshinde2012.github.io/dataset-atlas/';
+const LIVE_BASE = SITE_BASE;
 const SERVER_INFO = { name: 'dataset-atlas', version: '1.0.0' };
 const PROTOCOL_VERSION = '2025-06-18';
 
@@ -56,6 +65,11 @@ export async function loadCatalog() {
     return buildCatalog(await res.json());
   }
   return buildCatalog(JSON.parse(raw)); // parse/shape errors on a present file must fail loudly
+}
+
+export function loadPilot() {
+  const raw = readFileSync(join(root, 'data/pilot.json'), 'utf8');
+  return JSON.parse(raw);
 }
 
 /* ---------- tool bodies (pure over a sanitized catalog; exported for tests) ---------- */
@@ -81,7 +95,10 @@ const compact = (d, extra = {}) => ({
   domain: d.domain,
   region: d.region,
   countries: d.countries,
+  coverageKind: d.coverageKind,
   url: d.url,
+  landingPage: d.landingPage || d.url,
+  resources: d.resources || [],
   ...(d.kaggleRef ? { kaggleRef: d.kaggleRef } : {}),
   formats: d.formats,
   license: d.license,
@@ -140,9 +157,10 @@ export function searchCatalog(catalog, args = {}) {
   if (maxSizeMB) list = list.filter((d) => d.approxSizeMB <= +maxSizeMB);
 
   const iso = country ? String(country).toUpperCase() : null;
-  const isMatch = (d) => !!iso && (d.countries || []).includes(iso);
+  const coverageOf = (d) => countryCoverage(d, iso);
+  const isMatch = (d) => coverageOf(d) === 'tagged';
   const dnaMean = (d) => dnaMetrics(d).reduce((s, m) => s + m.value, 0) / 5;
-  const score = (d) => (isMatch(d) ? 2 : 0)
+  const score = (d) => (isMatch(d) ? 2 : coverageOf(d) === 'series' ? 1 : 0)
     + (q ? searchScore(d, q, { includeFacets: false }) / 5 : 0)
     + dnaMean(d);
   const cmp = {
@@ -159,22 +177,93 @@ export function searchCatalog(catalog, args = {}) {
   return {
     total: list.length,
     returned: Math.min(n, list.length),
-    results: list.slice(0, n).map((d) => compact(d, iso ? { countryMatch: isMatch(d) } : {})),
+    results: list.slice(0, n).map((d) => compact(d, iso ? { countryMatch: isMatch(d), countryCoverage: coverageOf(d) } : {})),
   };
 }
 
 export function getDataset(catalog, args = {}) {
   const d = catalog.find((x) => x.id === args.id);
   if (!d) throw new Error(`no dataset with id "${args.id}" — ids come from search_catalog / list_bundles`);
+  const action = accessAction(d);
   return {
     ...compact(d),
     description: d.description,
     dnaDetail: dnaMetrics(d).map((m) => ({ metric: m.label, value: Math.round(m.value * 100) / 100, note: m.tip })),
-    download: d.kaggleRef
-      ? `kaggle datasets download -d ${d.kaggleRef}`
-      : 'open the url (deep link to the dataset page) — or include it in build_passport for an annotated manifest',
+    download: action.copy.kind === 'cli' ? action.copy.text : action.primary.href,
+    access: action,
     share_url: shareUrl([d.id]),
   };
+}
+
+export function getResource(catalog, args = {}) {
+  const d = catalog.find((x) => x.id === args.id);
+  if (!d) throw new Error(`no dataset with id "${args.id}"`);
+  const resource = primaryResource(d);
+  return {
+    id: d.id,
+    title: d.title,
+    landingPage: d.landingPage || d.url,
+    resources: d.resources || [],
+    primaryResource: resource,
+    access: accessAction(d),
+    licenseUse: licenseUse(d),
+    linkHealth: linkHealth(d),
+    coverageKind: d.coverageKind,
+    countries: d.countries,
+  };
+}
+
+export function listKits(catalog) {
+  return {
+    kits: KITS.map((kit) => ({
+      id: kit.id,
+      status: kit.status,
+      task: kit.task,
+      label: kit.label,
+      joinNote: kit.joinNote,
+      resultGrain: kit.resultGrain,
+      notebook: kit.notebook || null,
+      crosswalk: kit.crosswalk || null,
+      datasets: kit.pair
+        .map((url) => catalog.find((d) => d.url === url))
+        .filter(Boolean)
+        .map((d) => ({ id: d.id, title: d.title, url: d.url, landingPage: d.landingPage || d.url })),
+    })),
+  };
+}
+
+export function assessFitTool(catalog, args = {}, pilot = loadPilot()) {
+  const taskBase = (pilot.tasks || []).find((t) => t.id === (args.task || 'energy'));
+  if (!taskBase) throw new Error(`unknown task "${args.task}" — one of: ${(pilot.tasks || []).map((t) => t.id).join(', ')}`);
+  const task = { ...taskBase };
+  if (args.country) task.country = String(args.country).toUpperCase();
+  if (args.startYear) task.startYear = Number(args.startYear);
+  if (args.endYear) task.endYear = Number(args.endYear);
+  if (args.level) task.level = String(args.level);
+  const shown = (pilot.profiles || [])
+    .filter((profile) => profile.task === task.id)
+    .map((profile) => ({ profile, dataset: catalog.find((d) => d.url === profile.url) }))
+    .filter((row) => row.dataset);
+  const sources = shown.map(({ dataset, profile }) => ({
+    id: dataset.id,
+    title: dataset.title,
+    url: dataset.url,
+    fit: assessFit(dataset, profile, task),
+    resource: profile.resource || primaryResource(dataset),
+  }));
+  let pair = null;
+  if (shown.length >= 2) {
+    const a = args.urlA ? shown.find((row) => row.profile.url === args.urlA) : shown[0];
+    const b = args.urlB ? shown.find((row) => row.profile.url === args.urlB) : shown[1];
+    if (a && b && a !== b) {
+      pair = {
+        a: a.dataset.title,
+        b: b.dataset.title,
+        join: assessJoin(a.profile, b.profile, a.dataset, b.dataset),
+      };
+    }
+  }
+  return { task, sources, pair };
 }
 
 export function listBundles(catalog) {
@@ -248,9 +337,39 @@ export function toolDefinitions() {
       },
     },
     {
+      name: 'get_resource',
+      description: 'Landing page vs verified file/API, reuse screening (analysis/redistribute/AI training), and link health. A missing file is reported as unknown — never invented.',
+      inputSchema: {
+        type: 'object',
+        properties: { id: { type: 'string' } },
+        required: ['id'],
+      },
+    },
+    {
       name: 'list_bundles',
       description: 'The curated "I want to…" starter bundles — expert-picked 5-dataset kits per use case (crop yields, disease outbreaks, climate risk, economic modeling, energy transition). Use their dataset ids directly in build_passport.',
       inputSchema: { type: 'object', properties: {} },
+    },
+    {
+      name: 'list_kits',
+      description: 'Verified and documented join kits (energy/CO2, India crop+rainfall, COVID/population). Verified kits include a runnable notebook. Use assess_fit for the screening result.',
+      inputSchema: { type: 'object', properties: {} },
+    },
+    {
+      name: 'assess_fit',
+      description: 'Screen the research-workbench sources for a task. Returns per-source fit and pair join status. match requires documented overlap; key names alone stay review.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          task: { type: 'string', enum: ['crop', 'health', 'energy'] },
+          country: { type: 'string', description: 'ISO 3166-1 alpha-2' },
+          startYear: { type: 'number' },
+          endYear: { type: 'number' },
+          level: { type: 'string' },
+          urlA: { type: 'string' },
+          urlB: { type: 'string' },
+        },
+      },
     },
     {
       name: 'build_passport',
@@ -271,7 +390,10 @@ export async function callTool(catalog, name, args) {
   switch (name) {
     case 'search_catalog': return searchCatalog(catalog, args);
     case 'get_dataset': return getDataset(catalog, args);
+    case 'get_resource': return getResource(catalog, args);
     case 'list_bundles': return listBundles(catalog);
+    case 'list_kits': return listKits(catalog);
+    case 'assess_fit': return assessFitTool(catalog, args);
     case 'build_passport': return buildPassport(catalog, args, today);
     default: throw new Error(`unknown tool "${name}"`);
   }
@@ -279,10 +401,9 @@ export async function callTool(catalog, name, args) {
 
 /* ---------- stdio JSON-RPC 2.0 transport ---------- */
 
-const INSTRUCTIONS = 'Dataset discovery over a curated, adversarially verified, daily-refreshed catalog. '
-  + 'Typical flow: search_catalog (facets: domain/region/country/license/format) or list_bundles for a curated starting kit -> '
-  + 'get_dataset to inspect candidates -> build_passport with the chosen ids for a source inventory, Kaggle commands, citations, and a share link. '
-  + 'Downloading and profiling the actual data files is the client agent\'s job (kaggle CLI for kaggleRef entries, the url for the rest).';
+const INSTRUCTIONS = 'Dataset discovery over a curated catalog with verified files and join kits. '
+  + 'Typical flow: search_catalog or list_kits -> get_resource to see whether a file exists -> assess_fit for join evidence -> build_passport. '
+  + 'Landing pages are not files. A match is screening evidence, not a statistical guarantee.';
 
 const ok = (id, res) => ({ jsonrpc: '2.0', id, result: res });
 const fail = (id, code, message) => ({ jsonrpc: '2.0', id, error: { code, message } });

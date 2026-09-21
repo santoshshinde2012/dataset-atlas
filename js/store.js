@@ -10,6 +10,7 @@ import { SOURCE_TYPE_META, PRESETS, FORMAT_ORDER, THEMES, DEFAULT_THEME } from '
 import { filterCatalog, regionCounts, domainCounts, matchesFacets } from './filters.js';
 import { normFormat } from './utils/text.js';
 import { searchScore } from './search.js';
+import { countryCoverage } from './coverage.js';
 
 /** Sort comparators for dataset lists (country-focus always wins first). */
 const SORTERS = {
@@ -18,6 +19,13 @@ const SORTERS = {
   openness: (a, b) => (b.licenseOpenness || 0) - (a.licenseOpenness || 0),
   size: (a, b) => (a.approxSizeMB || 0) - (b.approxSizeMB || 0),
   title: (a, b) => a.title.localeCompare(b.title),
+};
+
+const coverageRank = (d, focus) => {
+  const kind = countryCoverage(d, focus);
+  if (kind === 'tagged') return 2;
+  if (kind === 'series') return 1;
+  return 0;
 };
 
 /**
@@ -74,11 +82,12 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     matches: (d, ignore = []) => matchesFacets(d, state, ignore),
     regionDatasets: (region) => {
       const focus = state.focusCountry;
-      const covers = (d) => (focus && (d.countries || []).includes(focus) ? 1 : 0);
       const by = SORTERS[state.sort] || SORTERS.freshness;
       return filterCatalog(catalog, state)
-        .filter((d) => d.region === region)
-        .sort((a, b) => covers(b) - covers(a) || (state.search ? searchScore(b, state.search) - searchScore(a, state.search) : 0) || by(a, b));
+        .filter((d) => d.region === region || (focus && d.region === 'global' && countryCoverage(d, focus)))
+        .sort((a, b) => coverageRank(b, focus) - coverageRank(a, focus)
+          || (state.search ? searchScore(b, state.search) - searchScore(a, state.search) : 0)
+          || by(a, b));
     },
     /** All filtered datasets grouped for the search-anywhere rail. */
     searchResults: () => {
@@ -93,7 +102,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
         : state.changes.updatedIds.has(id) ? 'updated' : null,
     /** Filtered datasets tagged as covering a specific country (cca2). */
     countryDatasets: (cca2) =>
-      filterCatalog(catalog, state).filter((d) => (d.countries || []).includes(cca2)),
+      filterCatalog(catalog, state).filter((d) => countryCoverage(d, cca2) === 'tagged'),
     pinnedDatasets: () => catalog.filter((d) => state.pins.has(d.id)),
     isPinned: (id) => state.pins.has(id),
     /** Which right-rail view applies: 'region' | 'search' | null. */

@@ -864,6 +864,8 @@ button {
 .badge.access-badge { --badge-color: #b45309; background: rgba(180, 83, 9, 0.1); }
 :root[data-theme="dark"] .badge.access-badge { --badge-color: #fbbf24; background: rgba(251, 191, 36, 0.12); }
 .badge.verified-badge { --badge-color: #0a7a3d; background: rgba(10, 122, 61, 0.08); }
+.badge.stale-badge { --badge-color: #b45309; background: rgba(180, 83, 9, 0.1); }
+.badge.series-badge { --badge-color: var(--accent); background: rgba(var(--accent-rgb), 0.1); }
 :root[data-theme="dark"] .badge.verified-badge { --badge-color: #4ade80; background: rgba(74, 222, 128, 0.1); }
 
 .card-desc { font-size: 12px; color: var(--muted); line-height: 1.45; margin-bottom: 9px; }
@@ -897,6 +899,12 @@ button {
   color: var(--btn-primary-text);
 }
 .card-actions .get-btn:hover { background: var(--btn-primary-hover); }
+.card-actions .get-btn.page {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+}
+.card-actions .get-btn.page:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
 .card-actions .cli-btn:hover { border-color: var(--accent-dim); }
 .card-actions .cli-btn.copied { border-color: var(--accent); color: var(--accent); }
 
