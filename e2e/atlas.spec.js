@@ -21,6 +21,9 @@ test('author credit publishes GitHub, LinkedIn, and Medium with rel=me', async (
   await expect(credit.nth(0)).toHaveAttribute('rel', /(?:^|\s)me(?:\s|$)/);
   await expect(credit.nth(0)).toHaveAttribute('rel', /noopener/);
   await expect(page.locator('#author-credit a')).toHaveCount(3);
+  await expect(page.locator('.author-credit-inline')).toBeInViewport();
+  await expect(page.locator('.author-credit-inline a').first()).toBeInViewport();
+  await expect(page.locator('.author-credit-inline')).toContainText('Santosh Shinde');
 });
 
 test('searches the catalog and restores a shared view', async ({ page }) => {

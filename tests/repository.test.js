@@ -63,6 +63,12 @@ test('author marketing links are https and published in the shell', () => {
   }
   assert.ok(html.includes('id="author-credit"'));
   assert.ok(html.includes('author-credit-inline'));
+  const rail = html.match(/<aside id="left-rail"[\s\S]*?<\/aside>/)[0];
+  assert.match(
+    rail,
+    /<div class="rail-inner">[\s\S]*<\/div>\s*<section class="rail-section rail-footnote">/,
+    'author footnote must sit outside the scrolling rail-inner so it stays on screen',
+  );
   assert.match(read('README.md'), /linkedin\.com\/in\/shindesantosh/);
 
   const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)[1]);

@@ -389,7 +389,7 @@ button {
 }
 #rail-expand:hover { color: var(--text); border-color: var(--accent); transform: translateY(-1px); }
 
-.rail-inner { overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 16px; }
+.rail-inner { overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 16px; flex: 1; min-height: 0; }
 .rail-inner::-webkit-scrollbar { width: 8px; }
 .rail-inner::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 4px; }
 
@@ -467,7 +467,13 @@ button {
 .slider-row input[type="range"] { flex: 1; accent-color: var(--accent); }
 #license-label { font-size: 11.5px; color: var(--muted); min-width: 52px; text-align: right; }
 
-.rail-footnote { border-top: 1px solid var(--panel-border); padding-top: 12px; }
+.rail-footnote {
+  border-top: 1px solid var(--panel-border);
+  padding: 12px 14px 14px;
+  flex-shrink: 0;
+  background: var(--panel);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
 #tally { font-size: 11.5px; color: var(--muted); margin-bottom: 8px; }
 #catalog-stamp { font-size: 10.5px; color: var(--muted); opacity: 0.8; margin: -4px 0 8px; }
 .footnote-row { display: flex; gap: 6px; }
@@ -627,8 +633,9 @@ button {
   margin-top: 4px;
 }
 
-/* Author credit — in the filter footnote while the rail is open;
-   a map pill only after the rail is collapsed so the two never stack. */
+/* Author credit — pinned in the filter footnote (sibling of the
+   scrolling .rail-inner) while the rail is open; a map pill only after
+   the rail is collapsed so the two never stack. */
 #author-credit {
   position: absolute;
   left: 16px;
@@ -683,6 +690,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
   font-size: 11.5px;
