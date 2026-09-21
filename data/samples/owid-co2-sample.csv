@@ -1,0 +1,9 @@
+country,iso_code,year,co2
+India,IND,2020,2400
+India,IND,2021,2500
+United States,USA,2020,4700
+United States,USA,2021,4750
+World,OWID_WRL,2020,35000
+World,,2020,35000
+Africa,,2020,1400
+European Union,OWID_EUR,2020,2800

@@ -16,6 +16,7 @@ export const KITS = [
       'https://github.com/owid/co2-data',
     ],
     notebook: 'data/energy-co2-example.ipynb',
+    samples: ['data/samples/owid-energy-sample.csv', 'data/samples/owid-co2-sample.csv'],
     joinNote: 'Verified pilot pair: drop aggregate rows without ISO-3 (and WLD / OWID_WRL), then join on iso_code and year (one-to-one). Energy is TWh; co2 is million tonnes.',
     resultGrain: 'country',
     triggers: ['energy', 'co2', 'emissions', 'carbon', 'owid', 'iso'],

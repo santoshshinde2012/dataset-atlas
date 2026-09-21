@@ -1,6 +1,6 @@
 # The Dataset Atlas
 
-Map-first dataset discovery with a curated catalog. Dependency-free static SPA (no compilation or runtime npm install). `npm run build:site` stages only browser assets in `dist/` for deployment. Current architecture and naming rules: `docs/architecture-and-conventions.md`.
+Map-first dataset discovery with a curated catalog. Dependency-free static SPA (no compilation or runtime npm install). `npm run build:site` stages only browser assets in `dist/` for deployment. Current architecture and naming rules: `docs/architecture-and-conventions.md`. Join rules: `docs/join-kits.md`. MCP contract: `docs/mcp.md`. How to contribute: `CONTRIBUTING.md`.
 
 ## Commands
 

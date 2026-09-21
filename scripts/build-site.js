@@ -23,6 +23,8 @@ const files = [
   'data/nga-pcode-admin1.json',
   'data/samples/india-crop-sample.csv',
   'data/samples/india-rainfall-sample.csv',
+  'data/samples/owid-energy-sample.csv',
+  'data/samples/owid-co2-sample.csv',
   'data/samples/covid-cases-sample.csv',
   'data/samples/wb-population-sample.csv',
   'data/samples/openaq-pune-sample.csv',

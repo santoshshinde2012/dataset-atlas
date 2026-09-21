@@ -6,6 +6,8 @@ The Dataset Atlas helps people find datasets by geography and subject — and te
 
 The browser app is a static site with no runtime package dependencies, account, or backend. It deploys to GitHub Pages at zero cost. D3 and TopoJSON are vendored in `vendor/` so the app can also run offline when served locally. Deployment copies browser assets into a clean `dist/` directory; it does not compile the app.
 
+**Required reading:** [join kits](docs/join-kits.md) · [MCP](docs/mcp.md) · [contributing](CONTRIBUTING.md) · [architecture](docs/architecture-and-conventions.md)
+
 ## Features
 
 - Browse availability on a globe or flat map; focusing a country also surfaces **global country-year series** as candidates (World Bank, OWID), labelled as such — never as proven rows.
@@ -107,4 +109,4 @@ index.html, styles.css  Static application shell and styles
 
 `js/main.js` wires the app together. `js/store.js` owns state and selectors. `js/catalog.js` sanitizes catalog entries before either UI or MCP code consumes them. Keep domain and region definitions in `js/config.js`, and add tests for behavior that changes.
 
-See [architecture and conventions](docs/architecture-and-conventions.md) for module boundaries, naming, and change rules. The [repository cleanup audit](docs/repository-cleanup-audit-2026-09-21.md) explains which files were removed or retained. The [2026 product audit](docs/research-audit-2026-09-20.md) records dated findings; its P0 search, mobile, and dialog issues were resolved in PR #38.
+See [architecture and conventions](docs/architecture-and-conventions.md) for module boundaries, naming, and change rules. How to contribute: [CONTRIBUTING.md](CONTRIBUTING.md). The [repository cleanup audit](docs/repository-cleanup-audit-2026-09-21.md) explains which files were removed or retained. The [2026 product audit](docs/research-audit-2026-09-20.md) records dated findings; its P0 search, mobile, and dialog issues were resolved in PR #38.
