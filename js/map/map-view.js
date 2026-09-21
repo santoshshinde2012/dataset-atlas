@@ -3,7 +3,7 @@
  * nodes; owns drag/zoom/auto-rotate interaction. Depends on the store's
  * narrow interface and a projection strategy — never on other UI components.
  */
-import { d3, topojson } from '../lib.js';
+import { d3, topojson } from '../vendor-globals.js';
 import { REGION_META, DOMAIN_META, THEMES, domainColor, accentColor } from '../config.js';
 import { PROJECTIONS } from './projections.js';
 

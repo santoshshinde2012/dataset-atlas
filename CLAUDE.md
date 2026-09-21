@@ -19,7 +19,7 @@ Map-first dataset discovery: Region → Domain → Get in ≤3 clicks. Dependenc
 - `js/store.js` — single source of truth; persistence injected as a `{load, save}` port.
 - `js/catalog.js` — the ONE sanitization choke point for the third-party catalog (URL scheme + control-char whitelist, kaggleRef regex). Never bypass it; anything reaching the clipboard or the exported shell manifest flows through here plus `js/manifest.js`'s `oneLine`/`oneLineUrl` hardening.
 - `js/map/projections.js` — projection strategies; MapView consumes the documented interface blindly. New projection = new registry entry implementing the full contract in the header comment.
-- Pure modules (`config`, `utils/text`, `filters`, `dna`, `manifest`, `catalog`, `store`) must stay Node-importable — tests import them directly. Browser-only code goes in `js/ui/`, `js/map/`, `js/services/`, `js/lib.js`.
+- Pure modules (`config`, `utils/text`, `filters`, `dna`, `manifest`, `catalog`, `search`, `store`) must stay Node-importable — tests import them directly. Browser-only code goes in `js/ui/`, `js/map/`, `js/services/`, `js/vendor-globals.js`.
 - `scripts/atlas-mcp.js` — the agent interface (zero-dependency stdio MCP server). Every tool body reuses the pure modules above (`buildCatalog`, `filterCatalog`, `dnaMetrics`, `manifestText`, `bibliographyFor`); it must NEVER re-implement filtering or bypass the sanitizer, so agent output stays identical to the UI's. New tool = new entry in `toolDefinitions()` + `callTool()`. Keep it dependency-free.
 
 ## Conventions

@@ -26,13 +26,13 @@
 
   <div class="top-actions">
     <div class="proj-toggle" role="group" aria-label="Map projection">
-      <button id="proj-globe" class="active" title="Globe projection"><span data-icon="globe"></span> Globe</button>
-      <button id="proj-flat" title="Flat projection"><span data-icon="flat-map"></span> Flat</button>
+      <button id="proj-globe" class="active" title="Globe projection" aria-label="Globe projection"><span data-icon="globe"></span><span class="action-label">Globe</span></button>
+      <button id="proj-flat" title="Flat projection" aria-label="Flat projection"><span data-icon="flat-map"></span><span class="action-label">Flat</span></button>
     </div>
     <button id="theme-toggle" title="Switch theme" aria-label="Switch color theme"></button>
-    <button id="workbench-btn" title="Check dataset fit and joinability">Workbench</button>
-    <button id="passport-btn" title="Your Data Passport — pinned datasets">
-      <span data-icon="passport"></span> Passport <span id="passport-count" class="count-badge">0</span>
+    <button id="workbench-btn" title="Check dataset fit and joinability" aria-label="Research workbench"><span data-icon="compare"></span><span class="action-label">Workbench</span></button>
+    <button id="passport-btn" title="Your Data Passport — pinned datasets" aria-label="Data Passport — pinned datasets">
+      <span data-icon="passport"></span><span class="action-label">Passport</span><span id="passport-count" class="count-badge">0</span>
     </button>
   </div>
 </header>
@@ -128,7 +128,7 @@
     <label class="rail-tool">
       <span>Sort</span>
       <select id="sort-select" aria-label="Sort datasets">
-        <option value="freshness">Freshest first</option>
+        <option value="freshness">Best match / freshest</option>
         <option value="coverage">Longest coverage</option>
         <option value="openness">Most open license</option>
         <option value="size">Smallest download</option>
@@ -177,12 +177,12 @@
   </div>
 </div>
 
-<div id="workbench" role="dialog" aria-modal="true" aria-label="Research workbench" hidden>
+<dialog id="workbench" aria-label="Research workbench">
   <div class="workbench-inner">
     <header class="rail-header"><div><h2>Research workbench</h2><p>Fit, access, joinability and handoff</p></div><button id="workbench-close" aria-label="Close research workbench">×</button></header>
     <div id="workbench-body"></div>
   </div>
-</div>
+</dialog>
 
 <!-- first-visit orientation card (populated by js/ui/welcome.js) -->
 <div id="welcome-card" role="dialog" aria-label="Welcome to the Dataset Atlas" hidden></div>
