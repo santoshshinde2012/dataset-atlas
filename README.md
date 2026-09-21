@@ -6,6 +6,8 @@ The Dataset Atlas helps people find datasets by geography and subject — and te
 
 The browser app is a static site with no runtime package dependencies, account, or backend. It deploys to GitHub Pages at zero cost. D3 and TopoJSON are vendored in `vendor/` so the app can also run offline when served locally. Deployment copies browser assets into a clean `dist/` directory; it does not compile the app.
 
+**Required reading:** [join kits](docs/join-kits.md) · [MCP](docs/mcp.md) · [contributing](CONTRIBUTING.md) · [architecture](docs/architecture-and-conventions.md)
+
 ## Features
 
 - Browse availability on a globe or flat map; focusing a country also surfaces **global country-year series** as candidates (World Bank, OWID), labelled as such — never as proven rows.
@@ -86,7 +88,9 @@ GitHub Pages publishes only `dist/`, which contains the application shell, brows
 
 Run `node scripts/atlas-mcp.js`, or use the checked-in [`.mcp.json`](.mcp.json) with a compatible MCP client. The server exposes `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `assess_fit`, and `build_passport`. It uses the same sanitizer, fit checks, resource model, and citation generator as the browser app.
 
-Verified join kits live in `js/kits.js`. The India crop/rainfall kit ships `data/india-district-subdivision.json`, offline samples, and `data/crop-rainfall-example.ipynb`. The energy/CO₂ kit ships `data/energy-co2-example.ipynb`.
+People use the map. Agents should follow **search → get_resource → list_kits / assess_fit → build_passport**. Landing pages are not files. A `match` requires a verified kit or documented overlap — see [MCP for people and agents](docs/mcp.md) and [join kits](docs/join-kits.md).
+
+Verified join kits live in `js/kits.js`. The India crop/rainfall kit ships `data/india-district-subdivision.json`, offline samples, and `data/crop-rainfall-example.ipynb`. The energy/CO₂ kit ships `data/energy-co2-example.ipynb`. COVID vs population is documented (daily → year) until a notebook exists.
 
 ## Repository layout
 
@@ -105,4 +109,4 @@ index.html, styles.css  Static application shell and styles
 
 `js/main.js` wires the app together. `js/store.js` owns state and selectors. `js/catalog.js` sanitizes catalog entries before either UI or MCP code consumes them. Keep domain and region definitions in `js/config.js`, and add tests for behavior that changes.
 
-See [architecture and conventions](docs/architecture-and-conventions.md) for module boundaries, naming, and change rules. The [repository cleanup audit](docs/repository-cleanup-audit-2026-09-21.md) explains which files were removed or retained. The [2026 product audit](docs/research-audit-2026-09-20.md) records dated findings; its P0 search, mobile, and dialog issues were resolved in PR #38.
+See [architecture and conventions](docs/architecture-and-conventions.md) for module boundaries, naming, and change rules. How to contribute: [CONTRIBUTING.md](CONTRIBUTING.md). The [repository cleanup audit](docs/repository-cleanup-audit-2026-09-21.md) explains which files were removed or retained. The [2026 product audit](docs/research-audit-2026-09-20.md) records dated findings; its P0 search, mobile, and dialog issues were resolved in PR #38.

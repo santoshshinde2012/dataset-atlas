@@ -1,6 +1,6 @@
 # Architecture and repository conventions
 
-This document describes the current implementation and is the reference for new files and structural changes. The dated [research audit](research-audit-2026-09-20.md) records product findings at its stated revision.
+This document describes the current implementation and is the reference for new files and structural changes. The dated [research audit](research-audit-2026-09-20.md) records product findings at its stated revision. Product rules for joins: [join kits](join-kits.md). Agent contract: [MCP](mcp.md). How to change the catalog or add a kit: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Dependency direction
 
