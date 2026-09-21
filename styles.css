@@ -627,6 +627,78 @@ button {
   margin-top: 4px;
 }
 
+/* Author credit — in the filter footnote while the rail is open;
+   a map pill only after the rail is collapsed so the two never stack. */
+#author-credit {
+  position: absolute;
+  left: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px 5px 12px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  z-index: 21;
+  font-size: 12px;
+  color: var(--muted);
+}
+#left-rail.collapsed ~ #stage #author-credit { display: flex; }
+#author-credit .author-name,
+.author-credit-inline .author-name { color: var(--text); font-weight: 650; }
+#author-credit .author-links,
+.author-credit-inline .author-links,
+.about-author .author-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+#author-credit a,
+.author-credit-inline a,
+.about-author .author-links a {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  color: var(--muted);
+  text-decoration: none;
+}
+#author-credit a:hover,
+#author-credit a:focus-visible,
+.author-credit-inline a:hover,
+.author-credit-inline a:focus-visible,
+.about-author .author-links a:hover,
+.about-author .author-links a:focus-visible {
+  color: var(--accent);
+  background: var(--hover-wash);
+}
+#author-credit .icon,
+.author-credit-inline .icon,
+.about-author .author-links .icon { width: 15px; height: 15px; }
+.author-credit-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.about-author {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--panel-border);
+}
+
 #hint {
   position: absolute;
   bottom: 22px;
@@ -1215,6 +1287,8 @@ button {
     border-radius: 16px 16px 0 0;
   }
   #welcome-card { width: calc(100vw - 24px); }
+  #author-credit .author-by,
+  #author-credit .author-name { display: none; }
 }
 @keyframes sheet-up {
   from { transform: translateY(40px); opacity: 0; }
@@ -1232,10 +1306,13 @@ button {
   .card-actions a, .card-actions button { padding: 10px 8px; }
   .filter-row { padding: 8px 2px; }
   #theme-toggle, #passport-btn, .proj-toggle button { min-height: 40px; }
+  #author-credit a,
+  .author-credit-inline a { width: 40px; height: 40px; }
 }
 
 /* keep floating chrome above the iOS home indicator / toolbars */
 #legend { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+#author-credit { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
 #zoom-controls { bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
 #hint { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
 #compare-tray { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }

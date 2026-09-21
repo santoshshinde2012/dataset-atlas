@@ -3,6 +3,9 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { AUTHOR } from '../js/config.js';
+import { icon } from '../js/icons.js';
+import { catalogJsonLd, personJsonLd } from '../scripts/schema-dataset.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFileSync(resolve(root, path), 'utf8');
@@ -39,4 +42,33 @@ test('maintainer documentation has no broken local links', () => {
       assert.ok(existsSync(resolve(root, dirname(file), decodeURI(target))), `${file} links to missing ${target}`);
     }
   }
+});
+
+test('author marketing links are https and published in the shell', () => {
+  const html = read('index.html');
+  assert.equal(AUTHOR.name, 'Santosh Shinde');
+  assert.deepEqual(AUTHOR.links.map((link) => link.id), ['github', 'linkedin', 'medium']);
+  const hrefs = AUTHOR.links.map((link) => link.href);
+  assert.equal(new Set(hrefs).size, hrefs.length, 'author hrefs must be unique');
+  for (const link of AUTHOR.links) {
+    assert.match(link.href, /^https:\/\/[^\s"'<>]+$/);
+    assert.ok(html.includes(`href="${link.href}"`), `index.html missing ${link.id}`);
+    assert.ok(html.includes(`data-icon="${link.id}"`), `index.html missing ${link.id} icon`);
+    assert.equal(
+      [...html.matchAll(/rel="me noopener noreferrer"/g)].length,
+      6,
+      'both credit navs must publish three rel=me identity links',
+    );
+    assert.notEqual(icon(link.id), icon('file'), `${link.id} must have its own icon`);
+  }
+  assert.ok(html.includes('id="author-credit"'));
+  assert.ok(html.includes('author-credit-inline'));
+  assert.match(read('README.md'), /linkedin\.com\/in\/shindesantosh/);
+
+  const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)[1]);
+  assert.equal(jsonLd.creator.name, AUTHOR.name);
+  assert.deepEqual(jsonLd.creator.sameAs, hrefs);
+  assert.deepEqual(personJsonLd().sameAs, hrefs);
+  assert.equal(personJsonLd().url, 'https://github.com/santoshshinde2012');
+  assert.deepEqual(catalogJsonLd('https://example.test/', 1).creator, personJsonLd());
 });

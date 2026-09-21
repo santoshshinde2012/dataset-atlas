@@ -5,7 +5,7 @@
  */
 import { loadAtlasData } from './catalog.js';
 import { createStore } from './store.js';
-import { THEMES, DEFAULT_THEME } from './config.js';
+import { THEMES, DEFAULT_THEME, AUTHOR } from './config.js';
 import { localPinStorage } from './services/storage.js';
 import { createToast } from './services/toast.js';
 import { createClipboard } from './services/clipboard.js';
@@ -250,6 +250,9 @@ function showAboutPanel(generated) {
           openness — tap any bar for the exact value. <b>Lock badges</b> warn about
           account or sign-up requirements before you leave the atlas.</p>
           <p>Source and pipeline: <a href="https://github.com/santoshshinde2012/dataset-atlas" target="_blank" rel="noopener">github.com/santoshshinde2012/dataset-atlas</a></p>
+          <p class="about-author"><span>Built by <b>${esc(AUTHOR.name)}</b></span><span class="author-links">${AUTHOR.links.map((link) =>
+            `<a href="${esc(link.href)}" target="_blank" rel="me noopener noreferrer" title="${esc(link.label)}" aria-label="${esc(AUTHOR.name)} on ${esc(link.label)}">${icon(link.id)}</a>`
+          ).join('')}</span></p>
         </div>
       </div>`;
     document.body.appendChild(panel);

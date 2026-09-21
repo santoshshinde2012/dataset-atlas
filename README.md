@@ -2,6 +2,8 @@
 
 [Live atlas](https://santoshshinde2012.github.io/dataset-atlas/) · [License](LICENSE)
 
+Built by [Santosh Shinde](https://github.com/santoshshinde2012) · [LinkedIn](https://www.linkedin.com/in/shindesantosh) · [Medium](https://medium.com/@santosh-shinde)
+
 The Dataset Atlas helps people find datasets by geography and subject — and tells them whether those datasets can actually be used together. Select a region or country on the map, choose a domain, and open a **verified file** when one exists, or an honest source page when it does not. The catalog currently contains 176 curated entries across eight domains and seven world regions, plus global datasets. This is a reviewed starting set, not an exhaustive index of every dataset.
 
 The browser app is a static site with no runtime package dependencies, account, or backend. It deploys to GitHub Pages at zero cost. D3 and TopoJSON are vendored in `vendor/` so the app can also run offline when served locally. Deployment copies browser assets into a clean `dist/` directory; it does not compile the app.

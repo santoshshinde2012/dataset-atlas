@@ -15,7 +15,7 @@ Map-first dataset discovery with a curated catalog. Dependency-free static SPA (
 
 `js/main.js` is the composition root — the only module that knows every piece. Components depend on the store's `getState/select/actions/subscribe` surface and never import each other.
 
-- `js/config.js` — registries: domains, regions, source types, presets, color ramp. Adding one is a config change; no rendering/filter code should need edits.
+- `js/config.js` — registries: domains, regions, source types, presets, color ramp, author credit (`AUTHOR`). Adding one is a config change; no rendering/filter code should need edits.
 - `js/store.js` — single source of truth; persistence injected as a `{load, save}` port.
 - `js/catalog.js` — the ONE sanitization choke point for the third-party catalog (URL scheme + control-char whitelist, kaggleRef regex, resources, coverageKind). Never bypass it.
 - `js/resource.js` — DCAT landing page vs file/API. Never invent a download URL.

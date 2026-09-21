@@ -4,6 +4,17 @@
  */
 import { licenseUse, licenseUseSummary } from '../js/license-use.js';
 import { primaryResource } from '../js/resource.js';
+import { AUTHOR } from '../js/config.js';
+
+export function personJsonLd() {
+  const home = AUTHOR.links.find((link) => link.id === 'github') || AUTHOR.links[0];
+  return {
+    '@type': 'Person',
+    name: AUTHOR.name,
+    url: home.href,
+    sameAs: AUTHOR.links.map((link) => link.href),
+  };
+}
 
 export function datasetJsonLd(d, pageUrl) {
   const resource = primaryResource(d);
@@ -33,7 +44,7 @@ export function datasetJsonLd(d, pageUrl) {
 }
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
-  ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": '&#39;' }[c]));
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 export function datasetPageHtml(d, { pageUrl, appUrl, jsonLd }) {
   const use = licenseUse(d);
@@ -80,5 +91,6 @@ export function catalogJsonLd(siteUrl, count) {
     description: 'A curated, map-first catalog of public-interest datasets with verified access and join evidence.',
     numberOfItems: count,
     license: 'https://www.apache.org/licenses/LICENSE-2.0',
+    creator: personJsonLd(),
   };
 }
