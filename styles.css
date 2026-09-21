@@ -1284,6 +1284,8 @@ button {
 .fit-match { color: #087845; }.fit-conflict { color: #b43c2a; }.fit-review, .fit-unknown { color: #986400; }
 .workbench-join { margin-bottom: 18px; }
 .workbench-note { opacity: .75; }
+.workbench-donot { margin: 0 0 0.75rem; padding-left: 1.2rem; font-size: 0.9rem; }
+.workbench-donot li { margin: 0.15rem 0; }
 @media (max-width: 640px) {
   .top-actions { flex: 1 1 100%; width: 100%; justify-content: space-between; gap: 4px; }
   .top-actions .action-label { display: none; }

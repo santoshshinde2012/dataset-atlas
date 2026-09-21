@@ -16,3 +16,17 @@ test('non-commercial licenses block AI training and commercial redistribution', 
   assert.equal(use.redistribute, 'no-commercial');
   assert.equal(use.aiTraining, 'no-commercial');
 });
+
+test('unspecified licenses stay unknown even with a high openness score', () => {
+  const use = licenseUse({ license: 'Unknown', licenseOpenness: 1 });
+  assert.equal(use.specified, false);
+  assert.equal(use.analysis, 'unknown');
+  assert.equal(use.aiTraining, 'unknown');
+  assert.match(use.note, /not public domain/);
+});
+
+test('Kaggle CC0 still flags portal terms for AI training', () => {
+  const use = licenseUse({ license: 'CC0 / Public domain', licenseOpenness: 1, sourceType: 'kaggle' });
+  assert.equal(use.aiTraining, 'with-terms');
+  assert.match(use.portalTerms, /Kaggle/);
+});

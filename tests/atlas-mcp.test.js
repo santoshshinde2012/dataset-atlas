@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   searchCatalog, getDataset, getResource, listBundles, listKits, assessFitTool, buildPassport, toolDefinitions, loadCatalog, dispatch,
+  recommendKitTool, checkIdentifiersTool, assessJoinTool, getCrosswalkTool,
 } from '../scripts/atlas-mcp.js';
 import { buildCatalog } from '../js/catalog.js';
 import { PRESETS } from '../js/config.js';
@@ -155,7 +156,7 @@ test('manifest strings stay hardened through the passport path', () => {
 test('tool definitions carry the vocabulary agents need', () => {
   const defs = toolDefinitions();
   assert.deepEqual(defs.map((t) => t.name),
-    ['search_catalog', 'get_dataset', 'get_resource', 'list_bundles', 'list_kits', 'assess_fit', 'build_passport']);
+    ['search_catalog', 'get_dataset', 'get_resource', 'list_bundles', 'list_kits', 'recommend_kit', 'assess_fit', 'assess_join', 'check_identifiers', 'get_crosswalk', 'build_passport']);
   const search = defs[0].inputSchema.properties;
   assert.ok(search.domain.enum.includes('agriculture'));
   assert.ok(search.region.enum.includes('global'));
@@ -181,7 +182,7 @@ test('dispatch routes requests and notifications by JSON-RPC semantics', async (
   assert.ok('tools' in init.result.capabilities);
 
   const list = await dispatch(cat, { jsonrpc: '2.0', id: 'a', method: 'tools/list' });
-  assert.equal(list.result.tools.length, 7, 'string ids are echoed');
+  assert.equal(list.result.tools.length, 11, 'string ids are echoed');
 
   const call = await dispatch(cat, { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'list_bundles', arguments: {} } });
   const payload = JSON.parse(call.result.content[0].text);
@@ -204,16 +205,46 @@ test('dispatch never replies to a notification, even for a known method', async 
 test('list_kits resolves verified pairs and assess_fit screens the energy kit', async () => {
   const real = await loadCatalog();
   const kits = listKits(real);
-  assert.equal(kits.kits.length, 3);
+  assert.equal(kits.kits.length, 5);
   const energy = kits.kits.find((k) => k.id === 'energy-co2');
   assert.equal(energy.status, 'verified');
   assert.equal(energy.datasets.length, 2);
   const crop = kits.kits.find((k) => k.id === 'india-crop-rainfall');
   assert.ok(crop.crosswalk.endsWith('india-district-subdivision.json'));
+  const covid = kits.kits.find((k) => k.id === 'covid-population');
+  assert.equal(covid.status, 'verified');
+  const air = kits.kits.find((k) => k.id === 'openaq-national-pm25');
+  assert.equal(air.outcome, 'do-not-join');
   const fit = assessFitTool(real, { task: 'energy', country: 'IN' });
   assert.equal(fit.pair.join.status, 'match');
   const resource = getResource(real, { id: energy.datasets[0].id });
   assert.equal(resource.access.primary.kind, 'download');
+});
+
+test('MCP recommend_kit, identifiers, crosswalk, and assess_join refuse unsafe joins', async () => {
+  const real = await loadCatalog();
+  const rec = recommendKitTool({ query: 'join India crop production to rainfall' });
+  assert.equal(rec.kits[0].id, 'india-crop-rainfall');
+  const none = recommendKitTool({ query: 'spotify playlists' });
+  assert.equal(none.kits.length, 0);
+  assert.match(none.guidance, /Do not invent a join/);
+
+  const ids = checkIdentifiersTool({ codes: ['IN', 'WLD', 'OWID_WRL', 'World', 'SAS'] });
+  assert.deepEqual(ids.keep, ['IND']);
+  assert.ok(ids.drop.includes('WLD') && ids.drop.includes('OWID_WRL'));
+
+  const imd = getCrosswalkTool({ kit: 'india-crop-rainfall', state: 'Maharashtra', district: 'Pune' });
+  assert.equal(imd.subdivision, 'Madhya Maharashtra');
+  const pcode = getCrosswalkTool({ kit: 'nga-pcode-population', pcode: 'NG025' });
+  assert.equal(pcode.admin.name, 'Lagos');
+
+  const energy = listKits(real).kits.find((k) => k.id === 'energy-co2');
+  const joined = assessJoinTool(real, { idA: energy.datasets[0].id, idB: energy.datasets[1].id });
+  assert.equal(joined.status, 'match');
+  const air = listKits(real).kits.find((k) => k.id === 'openaq-national-pm25');
+  const refused = assessJoinTool(real, { idA: air.datasets[0].id, idB: air.datasets[1].id });
+  assert.equal(refused.status, 'conflict');
+  assert.equal(refused.doNotJoin, true);
 });
 
 test('dispatch answers a request whose method happens to start with notifications/', async () => {

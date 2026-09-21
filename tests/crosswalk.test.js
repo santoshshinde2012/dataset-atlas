@@ -17,3 +17,54 @@ test('sample crop rows all resolve to an IMD subdivision', () => {
   assert.equal(lookup('Maharashtra', 'Nagpur'), 'Vidarbha');
   assert.equal(lookup('Kerala', 'Thiruvananthapuram'), 'Kerala');
 });
+
+test('COVID sample drops aggregates and joins country-year one-to-one', () => {
+  const cases = readFileSync(new URL('../data/samples/covid-cases-sample.csv', import.meta.url), 'utf8').trim().split('\n').slice(1);
+  const pop = readFileSync(new URL('../data/samples/wb-population-sample.csv', import.meta.url), 'utf8').trim().split('\n').slice(1);
+  const drop = new Set(['OWID_WRL', 'WLD', 'SAS', '']);
+  const yearly = new Map();
+  for (const line of cases) {
+    const [iso, , date, n] = line.split(',');
+    if (drop.has(iso) || iso.startsWith('OWID_')) continue;
+    const key = `${iso}|${date.slice(0, 4)}`;
+    yearly.set(key, (yearly.get(key) || 0) + Number(n));
+  }
+  const popMap = new Map();
+  for (const line of pop) {
+    const [iso, , year, value] = line.split(',');
+    if (drop.has(iso)) continue;
+    popMap.set(`${iso}|${year}`, Number(value));
+  }
+  const joined = [...yearly.keys()].filter((k) => popMap.has(k));
+  assert.ok(joined.includes('IND|2020'));
+  assert.ok(!yearly.has('OWID_WRL|2020'));
+  assert.equal(joined.length, new Set(joined).size);
+});
+
+test('OpenAQ Pune sample shows intra-city spread; Nigeria P-codes beat names', () => {
+  const aq = readFileSync(new URL('../data/samples/openaq-pune-sample.csv', import.meta.url), 'utf8').trim().split('\n').slice(1);
+  const means = {};
+  for (const line of aq) {
+    const [id, , , , , , , value] = line.split(',');
+    means[id] = means[id] || [];
+    means[id].push(Number(value));
+  }
+  const avg = Object.fromEntries(Object.entries(means).map(([k, v]) => [k, v.reduce((a, b) => a + b, 0) / v.length]));
+  assert.ok(Object.keys(avg).length >= 3);
+  assert.ok(Math.max(...Object.values(avg)) / Math.min(...Object.values(avg)) >= 2);
+
+  const table = JSON.parse(readFileSync(new URL('../data/nga-pcode-admin1.json', import.meta.url)));
+  const ab = readFileSync(new URL('../data/samples/nga-cod-ab-sample.csv', import.meta.url), 'utf8').trim().split('\n').slice(1);
+  const ps = readFileSync(new URL('../data/samples/nga-cod-ps-sample.csv', import.meta.url), 'utf8').trim().split('\n').slice(1);
+  const byCode = Object.fromEntries(ab.map((line) => line.split(',')));
+  const nameJoin = ps.filter((line) => {
+    const name = line.split(',')[1].toLowerCase();
+    return Object.values(byCode).some((n) => n.toLowerCase() === name);
+  });
+  assert.ok(nameJoin.length < ps.length, 'name join misses Lagos State vs Lagos');
+  for (const line of ps) {
+    const pcode = line.split(',')[0];
+    assert.ok(table.byPcode[pcode], pcode);
+    assert.ok(byCode[pcode], pcode);
+  }
+});

@@ -20,12 +20,13 @@ Map-first dataset discovery with a curated catalog. Dependency-free static SPA (
 - `js/catalog.js` — the ONE sanitization choke point for the third-party catalog (URL scheme + control-char whitelist, kaggleRef regex, resources, coverageKind). Never bypass it.
 - `js/resource.js` — DCAT landing page vs file/API. Never invent a download URL.
 - `js/coverage.js` — tagged countries vs global country-year series candidates.
-- `js/kits.js` — verified/documented join kits (open/closed: add a kit here).
-- `js/license-use.js` / `js/link-health.js` — reuse screening and URL reachability.
+- `js/kits.js` — verified/documented join kits (open/closed: add a kit here). `outcome: do-not-join` is a checked refusal.
+- `js/identifiers.js` — ISO vs World Bank / OWID aggregates. Drop WLD, EUU, OWID_WRL before country-year joins.
+- `js/license-use.js` / `js/link-health.js` — reuse screening and URL reachability. Unspecified ≠ public domain.
 - `js/fit.js` — conservative fit/join; `match` only with documented overlap or a verified kit.
 - `js/map/projections.js` — projection strategies; MapView consumes the documented interface blindly. New projection = new registry entry implementing the full contract in the header comment.
-- Pure modules (`config`, `utils/text`, `filters`, `dna`, `manifest`, `catalog`, `search`, `store`, `resource`, `coverage`, `kits`, `fit`) must stay Node-importable — tests import them directly. Browser-only code goes in `js/ui/`, `js/map/`, `js/services/`, `js/vendor-globals.js`.
-- `scripts/atlas-mcp.js` — the agent interface (zero-dependency stdio MCP server). Every tool body reuses the pure modules above. New tool = new entry in `toolDefinitions()` + `callTool()`. Keep it dependency-free.
+- Pure modules (`config`, `utils/text`, `filters`, `dna`, `manifest`, `catalog`, `search`, `store`, `resource`, `coverage`, `kits`, `identifiers`, `fit`) must stay Node-importable — tests import them directly. Browser-only code goes in `js/ui/`, `js/map/`, `js/services/`, `js/vendor-globals.js`.
+- `scripts/atlas-mcp.js` — the agent interface (zero-dependency stdio MCP server). Every tool body reuses the pure modules above. New tool = new entry in `toolDefinitions()` + `callTool()`. Keep it dependency-free. Agents should `recommend_kit` before joining.
 
 ## Conventions
 

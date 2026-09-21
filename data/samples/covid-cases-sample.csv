@@ -1,0 +1,11 @@
+iso_code,location,date,new_cases
+IND,India,2020-03-01,1
+IND,India,2020-03-02,2
+IND,India,2021-01-15,10
+IND,India,2021-06-01,20
+USA,United States,2020-03-01,5
+USA,United States,2021-01-01,8
+OWID_WRL,World,2020-03-01,100
+OWID_WRL,World,2021-01-01,200
+,Africa,2020-03-01,30
+SAS,South Asia,2020-03-01,40
