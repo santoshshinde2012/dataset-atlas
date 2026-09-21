@@ -4,14 +4,18 @@
  *
  * A single-file, zero-dependency stdio MCP server (newline-delimited
  * JSON-RPC 2.0) that exposes the catalog to any MCP client — Claude Code,
- * Claude Desktop, or an Agent SDK agent — as four typed tools:
+ * Claude Desktop, or an Agent SDK agent — as typed tools:
  *
  *   search_catalog   faceted query + ranking over the verified catalog
  *   get_dataset      full metadata + DNA profile for one entry
  *   get_resource     landing page vs file/API, license-use, link health
  *   list_bundles     the curated "I want to…" starter bundles
- *   list_kits        verified and documented join kits
+ *   list_kits        verified join kits and explicit do-not-join pairs
+ *   recommend_kit    pick a kit for a question; empty means do not invent a join
  *   assess_fit       workbench fit + pair join for a research task
+ *   assess_join      can these two catalog ids be joined? no kit → do not join
+ *   check_identifiers country vs World Bank / OWID aggregate
+ *   get_crosswalk    district→IMD or Nigeria P-code lookup
  *   build_passport   source inventory and download commands + BibTeX + share link
  *
  * Every tool body reuses the app's own pure modules — the catalog always
@@ -37,8 +41,9 @@ import { countryCoverage } from '../js/coverage.js';
 import { accessAction, primaryResource } from '../js/resource.js';
 import { licenseUse } from '../js/license-use.js';
 import { linkHealth } from '../js/link-health.js';
-import { KITS } from '../js/kits.js';
-import { assessFit, assessJoin } from '../js/fit.js';
+import { KITS, recommendKits, publicKit, kitById } from '../js/kits.js';
+import { assessFit, assessJoin, assessJoinByIds } from '../js/fit.js';
+import { classifyIdentifiers } from '../js/identifiers.js';
 import {
   DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION, PRESETS, FORMAT_ORDER, SITE_BASE,
 } from '../js/config.js';
@@ -216,19 +221,79 @@ export function getResource(catalog, args = {}) {
 export function listKits(catalog) {
   return {
     kits: KITS.map((kit) => ({
-      id: kit.id,
-      status: kit.status,
-      task: kit.task,
-      label: kit.label,
-      joinNote: kit.joinNote,
-      resultGrain: kit.resultGrain,
-      notebook: kit.notebook || null,
-      crosswalk: kit.crosswalk || null,
+      ...publicKit(kit),
       datasets: kit.pair
         .map((url) => catalog.find((d) => d.url === url))
         .filter(Boolean)
         .map((d) => ({ id: d.id, title: d.title, url: d.url, landingPage: d.landingPage || d.url })),
     })),
+    guidance: 'Prefer a kit over inventing a join. outcome=do-not-join is a refusal. check_identifiers before any country-year join.',
+  };
+}
+
+export function recommendKitTool(args = {}) {
+  return recommendKits({ query: args.query || '', task: args.task || '' });
+}
+
+export function checkIdentifiersTool(args = {}) {
+  const codes = args.codes || (args.code ? [args.code] : []);
+  if (!codes.length) throw new Error('codes is required — an array of ISO-2, ISO-3, OWID, or World Bank identifiers');
+  const results = classifyIdentifiers(codes.slice(0, 50));
+  return {
+    results,
+    drop: results.filter((r) => r.drop).map((r) => r.input),
+    keep: results.filter((r) => r.status === 'country').map((r) => r.iso3 || r.input),
+    guidance: 'Drop every aggregate before joining country-year files. Unknown is not a country.',
+  };
+}
+
+export function assessJoinTool(catalog, args = {}, pilot = loadPilot()) {
+  if (!args.idA || !args.idB) throw new Error('idA and idB are required catalog dataset ids from search_catalog');
+  return assessJoinByIds(catalog, args.idA, args.idB, pilot.profiles || []);
+}
+
+export function getCrosswalkTool(args = {}) {
+  const kit = kitById(args.kit);
+  if (!kit) throw new Error(`unknown kit "${args.kit}" — one of: ${KITS.map((k) => k.id).join(', ')}`);
+  if (kit.id === 'india-crop-rainfall') {
+    const cross = JSON.parse(readFileSync(join(root, kit.crosswalk), 'utf8'));
+    const norm = (s) => String(s || '').toUpperCase().replace(/[^A-Z0-9]+/g, ' ').trim();
+    const state = args.state || '';
+    const district = args.district || '';
+    const key = `${norm(state)}|${norm(district)}`;
+    const subdivision = cross.byDistrict[key] || cross.byState[norm(state)] || null;
+    return {
+      kit: kit.id,
+      key,
+      subdivision,
+      resultGrain: kit.resultGrain,
+      unmatchedDropped: !subdivision,
+      guidance: subdivision
+        ? `Join rainfall on IMD subdivision "${subdivision}", not the district name.`
+        : 'Unmatched district — drop it, do not guess a subdivision.',
+    };
+  }
+  if (kit.id === 'nga-pcode-population') {
+    const table = JSON.parse(readFileSync(join(root, kit.crosswalk), 'utf8'));
+    const pcode = String(args.pcode || '').toUpperCase().trim();
+    const row = table.byPcode[pcode] || null;
+    return {
+      kit: kit.id,
+      pcode: pcode || null,
+      admin: row,
+      resultGrain: kit.resultGrain,
+      unmatchedDropped: !row,
+      guidance: row
+        ? `Join COD-PS on adm1_pcode ${pcode} (${row.name}). Do not join on "${row.name}" as a name.`
+        : 'Unknown P-code — drop the row. Do not join on state name.',
+    };
+  }
+  return {
+    kit: kit.id,
+    resultGrain: kit.resultGrain,
+    guidance: kit.agentGuidance,
+    doNot: kit.doNot,
+    notebook: kit.notebook || null,
   };
 }
 
@@ -352,16 +417,27 @@ export function toolDefinitions() {
     },
     {
       name: 'list_kits',
-      description: 'Verified and documented join kits (energy/CO2, India crop+rainfall, COVID/population). Verified kits include a runnable notebook. Use assess_fit for the screening result.',
+      description: 'Verified join kits and explicit do-not-join pairs (energy/CO2, India crop+rainfall, COVID/population, OpenAQ vs national PM2.5, Nigeria P-codes). Follow doNot and agentGuidance. Use recommend_kit to pick one; assess_join for two catalog ids.',
       inputSchema: { type: 'object', properties: {} },
     },
     {
-      name: 'assess_fit',
-      description: 'Screen the research-workbench sources for a task. Returns per-source fit and pair join status. match requires documented overlap; key names alone stay review.',
+      name: 'recommend_kit',
+      description: 'Given a research question, return matching join kits. An empty list means DO NOT invent a join from column names. Prefer this before writing join code.',
       inputSchema: {
         type: 'object',
         properties: {
-          task: { type: 'string', enum: ['crop', 'health', 'energy'] },
+          query: { type: 'string', description: 'natural-language question, e.g. "join India crop and rainfall" or "Pune AQI"' },
+          task: { type: 'string', enum: ['crop', 'health', 'energy', 'air', 'humanitarian'] },
+        },
+      },
+    },
+    {
+      name: 'assess_fit',
+      description: 'Screen the research-workbench sources for a task. Returns per-source fit and pair join status. match requires documented overlap; key names alone stay review. do-not-join kits return conflict.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          task: { type: 'string', enum: ['crop', 'health', 'energy', 'air', 'humanitarian'] },
           country: { type: 'string', description: 'ISO 3166-1 alpha-2' },
           startYear: { type: 'number' },
           endYear: { type: 'number' },
@@ -369,6 +445,43 @@ export function toolDefinitions() {
           urlA: { type: 'string' },
           urlB: { type: 'string' },
         },
+      },
+    },
+    {
+      name: 'assess_join',
+      description: 'Can these two catalog dataset ids be joined? Returns the kit if one exists. Without a kit the answer is do not join — never guess from titles or shared column names.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          idA: { type: 'string', description: 'catalog id from search_catalog' },
+          idB: { type: 'string', description: 'catalog id from search_catalog' },
+        },
+        required: ['idA', 'idB'],
+      },
+    },
+    {
+      name: 'check_identifiers',
+      description: 'Classify ISO-2 / ISO-3 / OWID / World Bank codes. Aggregates (WLD, EUU, SAS, OWID_WRL, World) must be dropped before a country-year join. Unknown is not a country.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          codes: { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 50 },
+        },
+        required: ['codes'],
+      },
+    },
+    {
+      name: 'get_crosswalk',
+      description: 'Look up a verified identifier map. india-crop-rainfall: pass state + district → IMD subdivision. nga-pcode-population: pass pcode → admin1. Unmatched keys are dropped, never guessed.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          kit: { type: 'string', enum: KITS.map((k) => k.id) },
+          state: { type: 'string' },
+          district: { type: 'string' },
+          pcode: { type: 'string' },
+        },
+        required: ['kit'],
       },
     },
     {
@@ -393,7 +506,11 @@ export async function callTool(catalog, name, args) {
     case 'get_resource': return getResource(catalog, args);
     case 'list_bundles': return listBundles(catalog);
     case 'list_kits': return listKits(catalog);
+    case 'recommend_kit': return recommendKitTool(args);
     case 'assess_fit': return assessFitTool(catalog, args);
+    case 'assess_join': return assessJoinTool(catalog, args);
+    case 'check_identifiers': return checkIdentifiersTool(args);
+    case 'get_crosswalk': return getCrosswalkTool(args);
     case 'build_passport': return buildPassport(catalog, args, today);
     default: throw new Error(`unknown tool "${name}"`);
   }
@@ -401,9 +518,11 @@ export async function callTool(catalog, name, args) {
 
 /* ---------- stdio JSON-RPC 2.0 transport ---------- */
 
-const INSTRUCTIONS = 'Dataset discovery over a curated catalog with verified files and join kits. '
-  + 'Typical flow: search_catalog or list_kits -> get_resource to see whether a file exists -> assess_fit for join evidence -> build_passport. '
-  + 'Landing pages are not files. A match is screening evidence, not a statistical guarantee.';
+const INSTRUCTIONS = 'Dataset Atlas helps people use public datasets together without inventing joins. '
+  + 'Flow: recommend_kit for the question → list_kits / get_crosswalk / check_identifiers → get_resource for files vs landing pages → assess_join on two catalog ids → build_passport. '
+  + 'If recommend_kit returns no kit, do not write join code. Drop WLD, EUU, SAS, OWID_WRL and region names before country-year joins. '
+  + 'Never average OpenAQ stations to a city AQI. Never join on Indian district names or Nigerian state names when a crosswalk exists. '
+  + 'Landing pages are not files. A match is screening evidence, not a statistical guarantee. Unspecified licenses are not public domain.';
 
 const ok = (id, res) => ({ jsonrpc: '2.0', id, result: res });
 const fail = (id, code, message) => ({ jsonrpc: '2.0', id, error: { code, message } });

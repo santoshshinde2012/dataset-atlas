@@ -59,6 +59,9 @@ export function sanitizeEntry(d) {
   e.coverageKind = sanitizeCoverageKind(e);
   if (PROVIDER_OK.test(d.providerId || '')) e.providerId = d.providerId;
   else delete e.providerId;
+  const licenseUrl = typeof d.licenseUrl === 'string' ? d.licenseUrl.trim() : '';
+  if (/^https?:\/\/[^\s\x00-\x1f\x7f"'<>\\`]+$/i.test(licenseUrl)) e.licenseUrl = licenseUrl;
+  else delete e.licenseUrl;
   return e;
 }
 
