@@ -1,0 +1,11 @@
+State_Name,District_Name,Crop_Year,Season,Crop,Area,Production
+Maharashtra,Pune,2014,Kharif,Rice,12000,24000
+Maharashtra,Pune,2014,Kharif,Jowar,8000,9600
+Maharashtra,Nagpur,2014,Kharif,Rice,9000,16500
+Maharashtra,Nagpur,2014,Kharif,Cotton,5000,7500
+Karnataka,Mysore,2014,Kharif,Rice,15000,33000
+Karnataka,Udupi,2014,Kharif,Rice,7000,16800
+Uttar Pradesh,Lucknow,2014,Kharif,Rice,11000,22000
+Uttar Pradesh,Meerut,2014,Kharif,Wheat,14000,35000
+Kerala,Thiruvananthapuram,2014,Kharif,Rice,4000,9200
+Odisha,Cuttack,2014,Kharif,Rice,18000,36000

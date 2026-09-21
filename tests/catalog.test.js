@@ -26,6 +26,8 @@ test('sanitizeEntry accepts a well-formed entry unchanged in essentials', () => 
   assert.equal(e.title, valid.title);
   assert.equal(e.kaggleRef, 'owner/slug');
   assert.deepEqual(e.formats, ['CSV']);
+  assert.equal(e.landingPage, valid.url);
+  assert.deepEqual(e.resources, []);
 });
 
 test('source metadata stays separate from the reviewed dataset year', () => {
@@ -95,4 +97,18 @@ test('buildCatalog filters invalid entries and assigns stable ids', () => {
   assert.equal(catalog.length, 2);
   assert.ok(catalog.every((d) => typeof d.id === 'string' && d.id.length > 1));
   assert.notEqual(catalog[0].id, catalog[1].id);
+});
+
+test('sanitizeEntry keeps only safe resources and infers coverage kind', () => {
+  const e = sanitizeEntry({
+    ...valid,
+    region: 'global',
+    source: 'World Bank Open Data',
+    resources: [
+      { url: 'https://api.worldbank.org/v2/en/indicator/X?downloadformat=csv', kind: 'download', format: 'CSV', label: 'CSV' },
+      { url: 'javascript:alert(1)', kind: 'download' },
+    ],
+  });
+  assert.equal(e.resources.length, 1);
+  assert.equal(e.coverageKind, 'global-country-series');
 });

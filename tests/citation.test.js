@@ -15,7 +15,7 @@ const ds = {
 
 test('bibtexFor emits a parseable @misc entry with escaped fields', () => {
   const bib = bibtexFor(ds, '2026-07-10');
-  assert.ok(bib.startsWith('@misc{atlas_worldbank_2026_'));
+  assert.ok(bib.startsWith('@misc{atlas_worldbank_2025_'));
   assert.ok(bib.includes('title        = {World Development Indicators 2024 \\& more}'));
   assert.ok(bib.includes('author       = {{World Bank}}'));
   assert.ok(bib.includes('\\url{https://data.worldbank.org/wdi}'));

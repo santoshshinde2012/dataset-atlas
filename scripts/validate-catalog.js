@@ -8,11 +8,12 @@
  *
  * Usage: npm run validate
  */
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { sanitizeEntry } from '../js/catalog.js';
 import { DOMAIN_META, REGION_META, GLOBAL_REGION, PRESETS } from '../js/config.js';
+import { KITS } from '../js/kits.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const raw = JSON.parse(readFileSync(join(root, 'data/catalog.json'), 'utf8'));
@@ -79,6 +80,24 @@ for (const profile of pilot.profiles) {
   if (!profile.evidence || !profile.access || !Array.isArray(profile.variables) || !Array.isArray(profile.joinKeys)) errors.push(`incomplete pilot profile: ${profile.url}`);
   if (profile.preview && (!profile.columns || profile.preview.rows.some((row) => row.length !== profile.preview.columns.length))) errors.push(`invalid preview: ${profile.url}`);
 }
+
+for (const kit of KITS) {
+  for (const url of kit.pair) {
+    if (!allUrls.has(url.toLowerCase().replace(/\/+$/, ''))) errors.push(`kit "${kit.id}" URL missing from catalog: ${url}`);
+  }
+  for (const file of [kit.notebook, kit.crosswalk, ...(kit.samples || [])].filter(Boolean)) {
+    if (!existsSync(join(root, file))) errors.push(`kit "${kit.id}" missing file ${file}`);
+  }
+}
+
+for (const d of entries) {
+  const e = sanitizeEntry(d);
+  if (!e) continue;
+  if (d.resources) {
+    if (e.resources.length !== d.resources.length) errors.push(`"${d.title}": resource URL rejected by sanitizer`);
+  }
+}
+
 
 console.log(`catalog: ${entries.length} entries, ${errors.length} errors, ${warnings.length} warnings`);
 for (const w of warnings) console.warn(`  warn: ${w}`);

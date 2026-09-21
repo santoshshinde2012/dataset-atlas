@@ -5,6 +5,7 @@
  * after the catalog sanitizer's whitelist check (see catalog.js).
  */
 import { oneLine, oneLineUrl } from './utils/text.js';
+import { resourceLines } from './resource.js';
 
 export function manifestText(list) {
   const lines = [
@@ -12,16 +13,19 @@ export function manifestText(list) {
     '# ════════════════════════════════════════════════════',
     '#  The Dataset Atlas — Data Passport',
     `#  ${list.length} dataset${list.length === 1 ? '' : 's'} · source inventory and available download commands`,
+    '#  Landing pages are not files. Only Kaggle CLI lines are executable.',
     '# ════════════════════════════════════════════════════',
     '',
   ];
   const kaggle = list.filter((d) => d.kaggleRef);
   const direct = list.filter((d) => !d.kaggleRef);
   if (direct.length) {
-    lines.push('# ── Direct sources — open in a browser, or curl where the URL is a file ──');
+    lines.push('# ── Direct sources — open in a browser, or curl only where a file URL is listed ──');
     direct.forEach((d, i) => {
       lines.push(`#  ${i + 1}. ${oneLine(d.title)} — ${oneLine(d.source)} [${oneLine(d.license)}]`);
-      lines.push(`#     ${oneLineUrl(d.url)}`);
+      for (const row of resourceLines(d)) {
+        lines.push(`#     ${oneLineUrl(row.text)}`);
+      }
     });
     lines.push('');
   }

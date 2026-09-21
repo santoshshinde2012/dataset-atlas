@@ -16,11 +16,14 @@ const clamp01 = (v, floor = 0.08) =>
  */
 export function dnaMetrics(d) {
   const span = Math.max(0, (d.coverageEnd || 0) - (d.coverageStart || 0));
+  const mismatch = d.freshnessYear > d.coverageEnd
+    ? ` Editorial review year is later than coverage end ${d.coverageEnd}; this is not a source-update stamp.`
+    : '';
   return [
     {
       label: 'FRS',
       value: clamp01((d.freshnessYear - 2008) / (CURRENT_YEAR - 2008)),
-      tip: `Freshness — data last updated ${d.freshnessYear}`,
+      tip: `Editorial content year ${d.freshnessYear} (not last HTTP check).${mismatch}`,
     },
     {
       label: 'COV',

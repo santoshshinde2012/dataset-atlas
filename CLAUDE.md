@@ -17,10 +17,15 @@ Map-first dataset discovery with a curated catalog. Dependency-free static SPA (
 
 - `js/config.js` — registries: domains, regions, source types, presets, color ramp. Adding one is a config change; no rendering/filter code should need edits.
 - `js/store.js` — single source of truth; persistence injected as a `{load, save}` port.
-- `js/catalog.js` — the ONE sanitization choke point for the third-party catalog (URL scheme + control-char whitelist, kaggleRef regex). Never bypass it; anything reaching the clipboard or the exported shell manifest flows through here plus `js/manifest.js`'s `oneLine`/`oneLineUrl` hardening.
+- `js/catalog.js` — the ONE sanitization choke point for the third-party catalog (URL scheme + control-char whitelist, kaggleRef regex, resources, coverageKind). Never bypass it.
+- `js/resource.js` — DCAT landing page vs file/API. Never invent a download URL.
+- `js/coverage.js` — tagged countries vs global country-year series candidates.
+- `js/kits.js` — verified/documented join kits (open/closed: add a kit here).
+- `js/license-use.js` / `js/link-health.js` — reuse screening and URL reachability.
+- `js/fit.js` — conservative fit/join; `match` only with documented overlap or a verified kit.
 - `js/map/projections.js` — projection strategies; MapView consumes the documented interface blindly. New projection = new registry entry implementing the full contract in the header comment.
-- Pure modules (`config`, `utils/text`, `filters`, `dna`, `manifest`, `catalog`, `search`, `store`) must stay Node-importable — tests import them directly. Browser-only code goes in `js/ui/`, `js/map/`, `js/services/`, `js/vendor-globals.js`.
-- `scripts/atlas-mcp.js` — the agent interface (zero-dependency stdio MCP server). Every tool body reuses the pure modules above (`buildCatalog`, `filterCatalog`, `dnaMetrics`, `manifestText`, `bibliographyFor`); it must NEVER re-implement filtering or bypass the sanitizer, so agent output stays identical to the UI's. New tool = new entry in `toolDefinitions()` + `callTool()`. Keep it dependency-free.
+- Pure modules (`config`, `utils/text`, `filters`, `dna`, `manifest`, `catalog`, `search`, `store`, `resource`, `coverage`, `kits`, `fit`) must stay Node-importable — tests import them directly. Browser-only code goes in `js/ui/`, `js/map/`, `js/services/`, `js/vendor-globals.js`.
+- `scripts/atlas-mcp.js` — the agent interface (zero-dependency stdio MCP server). Every tool body reuses the pure modules above. New tool = new entry in `toolDefinitions()` + `callTool()`. Keep it dependency-free.
 
 ## Conventions
 

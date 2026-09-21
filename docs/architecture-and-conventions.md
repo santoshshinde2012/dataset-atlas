@@ -19,8 +19,8 @@ Pure modules must not import DOM or browser globals. `main.js` wires them togeth
 
 These rules give the SOLID principles concrete meaning here:
 
-- **Single responsibility:** `search.js` handles query terms and scoring; `filters.js` combines facets; `store.js` owns state; UI modules render and handle events; `focus-trap.js` handles modal keyboard containment.
-- **Open/closed:** domain, region, source type, and preset registries live in `config.js`. New search providers belong in `external-catalogs.js`. Add a new adapter at its boundary instead of adding provider-specific branches throughout the UI.
+- **Single responsibility:** `search.js` handles query terms and scoring; `filters.js` combines facets; `store.js` owns state; `resource.js` owns distributions; `coverage.js` owns geography claims; `kits.js` owns verified pairs; `fit.js` owns screening; `license-use.js` owns reuse labels; `link-health.js` owns URL reachability; UI modules render and handle events; `focus-trap.js` handles modal keyboard containment.
+- **Open/closed:** domain, region, source type, and preset registries live in `config.js`. Join kits are added in `js/kits.js`. New search providers belong in `external-catalogs.js`. Add a new adapter at its boundary instead of adding provider-specific branches throughout the UI.
 - **Liskov substitution and interface segregation:** browser services (`clipboard`, `storage`, `toast`) expose small, documented interfaces. A fake storage port can replace browser storage in store tests without changing consumer behavior.
 - **Dependency inversion:** the store accepts its persistence port and components accept the store/services from `main.js`; pure logic does not reach into the DOM or filesystem.
 
@@ -44,7 +44,7 @@ These rules give the SOLID principles concrete meaning here:
 
 `catalog.js` sanitizes external catalog entries before they reach cards, exports or the MCP server. New curated metadata requires source evidence and validation; unknown country coverage, license, schema and joins should stay unknown. The workbench is a screening tool. Only a documented, tested source pair should receive a verified join label. [DCAT 3](https://www.w3.org/TR/vocab-dcat-3/) is the reference for separating a dataset landing page from access services and downloadable resources when extending the schema.
 
-The deployed app has no runtime API secret. Provider APIs requiring a key must be used during controlled build-time import or through a separately designed server, never from browser code. Source links and third-party content are data, not trusted HTML.
+The deployed app has no runtime API secret. Provider APIs requiring a key must be used during controlled build-time import or through a separately designed server, never from browser code. Source links and third-party content are data, not trusted HTML. Unknown country coverage, license, schema and joins stay unknown — never guessed into a `match`.
 
 ## Change sequence
 

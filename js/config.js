@@ -33,6 +33,9 @@ export const REGION_META = {
 /** The pseudo-region for datasets covering the whole world. */
 export const GLOBAL_REGION = 'global';
 
+/** Canonical GitHub Pages origin — used for share links, sitemap, JSON-LD. */
+export const SITE_BASE = 'https://santoshshinde2012.github.io/dataset-atlas/';
+
 export const SOURCE_TYPE_META = {
   kaggle:       { name: 'Kaggle',            color: '#20beff' },
   'intl-org':   { name: 'International org', color: '#4ade80' },

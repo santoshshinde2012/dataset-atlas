@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-09-20",
+  "reviewed": "2026-09-21",
   "tasks": [
     {
       "id": "crop",
@@ -29,7 +29,7 @@
     },
     {
       "id": "energy",
-      "title": "Compare energy use and CO₂ emissions",
+      "title": "Compare energy use and CO\u2082 emissions",
       "description": "Join national energy and emissions series by ISO country code and year.",
       "country": "IN",
       "startYear": 2000,
@@ -37,7 +37,7 @@
       "level": "country",
       "variables": [
         "energy consumption",
-        "CO₂ emissions"
+        "CO\u2082 emissions"
       ]
     }
   ],
@@ -58,8 +58,46 @@
         "district",
         "year"
       ],
-      "access": "Kaggle account and dataset terms may be required; open the source page to download.",
-      "evidence": "https://www.kaggle.com/datasets/abhinand05/crop-production-in-india"
+      "access": "Kaggle account required. Committed sample: data/samples/india-crop-sample.csv. Full file via kaggle datasets download -d abhinand05/crop-production-in-india.",
+      "evidence": "https://www.kaggle.com/datasets/abhinand05/crop-production-in-india",
+      "columns": [
+        "State_Name",
+        "District_Name",
+        "Crop_Year",
+        "Season",
+        "Crop",
+        "Area",
+        "Production"
+      ],
+      "preview": {
+        "columns": [
+          "State_Name",
+          "District_Name",
+          "Crop_Year",
+          "Season",
+          "Crop",
+          "Area",
+          "Production"
+        ],
+        "rows": [
+          [
+            "Maharashtra",
+            "Pune",
+            "2014",
+            "Kharif",
+            "Rice",
+            "12000",
+            "24000"
+          ]
+        ],
+        "source": "https://www.kaggle.com/datasets/abhinand05/crop-production-in-india"
+      },
+      "crosswalk": {
+        "url": "data/india-district-subdivision.json",
+        "from": "district",
+        "to": "subdivision",
+        "note": "IMD 36 meteorological subdivisions. Map district to subdivision, aggregate production, join on imd_subdivision + year. Unmatched districts are dropped. Result grain is subdivision, not district."
+      }
     },
     {
       "url": "https://www.data.gov.in/catalog/district-wise-season-wise-crop-production-statistics-0",
@@ -97,8 +135,47 @@
         "year",
         "month"
       ],
-      "access": "Open the Government of India resource page. A district to meteorological subdivision crosswalk is needed for district analysis.",
-      "evidence": "https://www.data.gov.in/resource/sub-divisional-monthly-rainfall-1901-2017"
+      "access": "Open the data.gov.in resource. Committed sample: data/samples/india-rainfall-sample.csv. Join crop via the IMD subdivision crosswalk.",
+      "evidence": "https://www.data.gov.in/resource/sub-divisional-monthly-rainfall-1901-2017",
+      "columns": [
+        "SUBDIVISION",
+        "YEAR",
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MAY",
+        "JUN",
+        "JUL",
+        "AUG",
+        "SEP",
+        "OCT",
+        "NOV",
+        "DEC"
+      ],
+      "preview": {
+        "columns": [
+          "SUBDIVISION",
+          "YEAR",
+          "JUN",
+          "JUL"
+        ],
+        "rows": [
+          [
+            "Madhya Maharashtra",
+            "2014",
+            "140",
+            "220"
+          ]
+        ],
+        "source": "https://www.data.gov.in/resource/sub-divisional-monthly-rainfall-1901-2017"
+      },
+      "crosswalk": {
+        "url": "data/india-district-subdivision.json",
+        "from": "district",
+        "to": "subdivision",
+        "note": "IMD 36 meteorological subdivisions. Map district to subdivision, aggregate production, join on imd_subdivision + year. Unmatched districts are dropped. Result grain is subdivision, not district."
+      }
     },
     {
       "url": "https://ourworldindata.org/crop-yields",
@@ -180,7 +257,7 @@
       "resource": {
         "url": "https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv",
         "format": "CSV",
-        "label": "Current OWID COVID compact CSV"
+        "label": "OWID COVID compact CSV"
       },
       "columns": [
         "country",
@@ -190,7 +267,12 @@
         "code",
         "population"
       ],
-      "evidence": "https://github.com/owid/covid-19-data/blob/master/public/data/README.md"
+      "evidence": "https://github.com/owid/covid-19-data/blob/master/public/data/README.md",
+      "alignment": {
+        "from": "day",
+        "to": "year",
+        "rule": "Sum new_cases to calendar year before joining annual population. Do not treat a daily row as comparable to a mid-year population estimate."
+      }
     },
     {
       "url": "https://www.who.int/data/gho/data/indicators/indicator-details/GHO/life-expectancy-at-birth-(years)",
@@ -223,16 +305,21 @@
       ],
       "access": "World Bank API is paginated. Request all pages and exclude aggregate regions before joining.",
       "resource": {
-        "url": "https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?format=json&per_page=100",
-        "format": "JSON API",
-        "label": "Population API, first page"
+        "url": "https://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=csv",
+        "format": "CSV",
+        "label": "World Bank population CSV ZIP"
       },
       "columns": [
         "countryiso3code",
         "date",
         "value"
       ],
-      "evidence": "https://data.worldbank.org/indicator/SP.POP.TOTL"
+      "evidence": "https://data.worldbank.org/indicator/SP.POP.TOTL",
+      "alignment": {
+        "from": "year",
+        "to": "year",
+        "rule": "World Bank SP.POP.TOTL is a mid-year estimate. Join only after daily case counts are aggregated to calendar year."
+      }
     },
     {
       "url": "https://www.kaggle.com/datasets/sudalairajkumar/covid19-in-india",
@@ -329,7 +416,7 @@
       "level": "country",
       "time": "year",
       "variables": [
-        "CO₂ emissions"
+        "CO\u2082 emissions"
       ],
       "joinKeys": [
         "iso_code",
@@ -339,7 +426,7 @@
       "resource": {
         "url": "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
         "format": "CSV",
-        "label": "OWID CO₂ data"
+        "label": "OWID CO\u2082 data"
       },
       "columns": [
         "country",

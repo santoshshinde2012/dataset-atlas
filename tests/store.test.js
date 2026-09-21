@@ -114,6 +114,14 @@ test('regionDatasets sorts by freshness descending', () => {
   assert.deepEqual(asia.map((d) => d.title), ['A']);
 });
 
+test('country focus includes global country-year series as candidates', () => {
+  const store = mkStore();
+  store.actions.selectRegion('asia', 'IN');
+  const titles = store.select.regionDatasets('asia').map((d) => d.title);
+  assert.ok(titles.includes('A'));
+  assert.ok(titles.includes('B'), 'WHO global country series should appear for India as a candidate');
+});
+
 test('sort control reorders datasets (A–Z, openness)', () => {
   const raw = { datasets: [
     { ...rawCatalog.datasets[0], title: 'Zeta', url: 'https://x.com/z', licenseOpenness: 1, freshnessYear: 2020 },

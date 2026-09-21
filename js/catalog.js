@@ -7,6 +7,8 @@
  */
 import { DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION } from './config.js';
 import { hashId } from './utils/text.js';
+import { sanitizeResources, sanitizeLandingPage } from './resource.js';
+import { sanitizeCoverageKind } from './coverage.js';
 
 const KAGGLE_REF_RE = /^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/;
 
@@ -17,6 +19,7 @@ const KAGGLE_REF_RE = /^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/;
  */
 /** Strip control characters that could smuggle line breaks into clipboard/shell contexts. */
 const clean = (s) => String(s).replace(/[\x00-\x1f\x7f]/g, ' ');
+const PROVIDER_OK = /^[a-z0-9][a-z0-9.-]{0,40}$/;
 
 export function sanitizeEntry(d) {
   if (!d || typeof d !== 'object') return null;
@@ -30,6 +33,7 @@ export function sanitizeEntry(d) {
   if (d.region !== GLOBAL_REGION && !REGION_META[d.region]) return null;
   const e = { ...d };
   e.url = url;
+  e.landingPage = sanitizeLandingPage(d.landingPage, url);
   e.title = clean(d.title || 'Untitled dataset');
   e.description = clean(d.description || '');
   e.source = clean(d.source || 'Unknown');
@@ -51,6 +55,10 @@ export function sanitizeEntry(d) {
     : [];
   // optional provenance stamp written by the refresh pipeline
   if (!/^\d{4}-\d{2}-\d{2}$/.test(e.verified || '')) delete e.verified;
+  e.resources = sanitizeResources(d.resources);
+  e.coverageKind = sanitizeCoverageKind(e);
+  if (PROVIDER_OK.test(d.providerId || '')) e.providerId = d.providerId;
+  else delete e.providerId;
   return e;
 }
 
@@ -77,6 +85,7 @@ export async function loadAtlasData(base = '') {
     countryRegion,
     countryCodes, // ISO-numeric id -> { cca2, name }
     catalog: buildCatalog(rawCatalog),
+    rawCatalog,
     pilot,
     generated: /^\d{4}-\d{2}-\d{2}$/.test(rawCatalog.generated || '') ? rawCatalog.generated : null,
   };

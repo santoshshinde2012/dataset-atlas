@@ -12,11 +12,11 @@ export function initWelcome({ store }) {
 
   const card = $('#welcome-card');
   card.innerHTML = `
-    <h2>Find datasets in 3 clicks</h2>
+    <h2>Find a usable dataset, not just a page</h2>
     <ol class="welcome-steps">
       <li>${icon('globe')} <div><b>Pick a region</b><span>click a glowing node — or any single country</span></div></li>
       <li>${icon('layers')} <div><b>Pick a domain</b><span>the dock above recolors the whole map</span></div></li>
-      <li>${icon('download')} <div><b>Get the data</b><span>deep link or one-click Kaggle command</span></div></li>
+      <li>${icon('download')} <div><b>Open the file or source</b><span>download when a file is verified; otherwise the landing page</span></div></li>
     </ol>
     <div class="welcome-actions">
       <button class="primary" id="welcome-try">${icon('search')} Try it: India's datasets</button>

@@ -5,6 +5,8 @@ import { $, el } from '../utils/dom.js';
 import { esc, sizeLabel } from '../utils/text.js';
 import { icon } from '../icons.js';
 import { accessRequirement } from '../access.js';
+import { accessAction } from '../resource.js';
+import { licenseUseSummary, licenseUse } from '../license-use.js';
 
 export function initCompare({ store, toast }) {
   const tray = $('#compare-tray');
@@ -48,8 +50,9 @@ export function initCompare({ store, toast }) {
         ${row('Source', (d) => esc(d.source))}
         ${row('Region', (d) => esc(d.region === GLOBAL_REGION ? 'Global' : REGION_META[d.region]?.name || d.region))}
         ${row('License', (d) => esc(d.license))}
+        ${row('Reuse', (d) => esc(licenseUseSummary(licenseUse(d))))}
         ${row('Coverage', (d) => `${d.coverageStart}–${d.coverageEnd}`)}
-        ${row('Updated', (d) => String(d.freshnessYear))}
+        ${row('Content year', (d) => String(d.freshnessYear))}
         ${row('Granularity', (d) => esc(d.granularity))}
         ${row('Size', (d) => `~${sizeLabel(d.approxSizeMB)}`)}
         ${row('Formats', (d) => esc((d.formats || []).join(', ')))}
@@ -57,7 +60,7 @@ export function initCompare({ store, toast }) {
       </tbody>
       <tfoot><tr><th></th>${items.map((d) => `
         <td class="compare-actions-cell" data-id="${esc(d.id)}">
-          <a class="get-btn" href="${esc(d.url)}" target="_blank" rel="noopener">Get ${icon('external')}</a>
+          <a class="get-btn${accessAction(d).primary.kind === 'page' ? ' page' : ''}" href="${esc(accessAction(d).primary.href)}" target="_blank" rel="noopener">${esc(accessAction(d).primary.label)} ${icon('external')}</a>
           <button class="compare-remove" title="Remove from comparison" aria-label="Remove ${esc(d.title)}">${icon('close')}</button>
         </td>`).join('')}</tr></tfoot>
     </table>`;

@@ -18,11 +18,18 @@ test('pilot profiles resolve to catalog entries', () => {
 
 test('fit exposes geographic conflict and unknown country coverage', () => {
   const rain = get('sub-divisional-monthly-rainfall');
-  const result = assessFit(rain.dataset, rain.profile, pilot.tasks[0]);
+  const result = assessFit(rain.dataset, rain.profile, { ...pilot.tasks[0], country: 'US' });
   assert.equal(result.status, 'conflict');
-  assert.ok(result.reasons.some((r) => r.text.includes('crosswalk')));
+  assert.ok(result.reasons.some((r) => r.text.includes('outside documented coverage')));
   const fao = get('faostat');
   assert.ok(assessFit(fao.dataset, fao.profile, pilot.tasks[0]).reasons.some((r) => r.status === 'unknown'));
+});
+
+test('rainfall vs district is review when a crosswalk is documented', () => {
+  const rain = get('sub-divisional-monthly-rainfall');
+  const result = assessFit(rain.dataset, rain.profile, pilot.tasks[0]);
+  assert.equal(result.status, 'review');
+  assert.ok(result.reasons.some((r) => /subdivision|crosswalk/i.test(r.text)));
 });
 
 test('verified energy pair joins on ISO and year; conflicting grains are flagged', () => {
@@ -42,4 +49,13 @@ test('matching key names alone leave an unverified pair under review', () => {
   const result = assessJoin(fao.profile, yields.profile, fao.dataset, yields.dataset);
   assert.equal(result.status, 'review');
   assert.ok(result.notes.some((note) => note.text.includes('cardinality')));
+});
+
+test('verified crop-rainfall kit joins via the IMD crosswalk', () => {
+  const crop = get('crop-production-in-india');
+  const rain = get('sub-divisional-monthly-rainfall');
+  const join = assessJoin(crop.profile, rain.profile, crop.dataset, rain.dataset);
+  assert.equal(join.status, 'match');
+  assert.equal(join.kit.id, 'india-crop-rainfall');
+  assert.ok(join.notes.some((n) => n.text.includes('subdivision')));
 });
