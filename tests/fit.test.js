@@ -12,7 +12,7 @@ const get = (fragment) => {
 };
 
 test('pilot profiles resolve to catalog entries', () => {
-  assert.equal(pilot.profiles.length, 15);
+  assert.equal(pilot.profiles.length, 19);
   for (const profile of pilot.profiles) assert.ok(catalog.some((d) => d.url === profile.url), profile.url);
 });
 
@@ -58,4 +58,22 @@ test('verified crop-rainfall kit joins via the IMD crosswalk', () => {
   assert.equal(join.status, 'match');
   assert.equal(join.kit.id, 'india-crop-rainfall');
   assert.ok(join.notes.some((n) => n.text.includes('subdivision')));
+});
+
+test('verified covid kit joins after daily→year; OpenAQ vs national PM2.5 is a refusal', () => {
+  const covid = get('covid-19-data');
+  const pop = get('SP.POP.TOTL');
+  const join = assessJoin(covid.profile, pop.profile, covid.dataset, pop.dataset);
+  assert.equal(join.status, 'match');
+  assert.equal(join.kit.id, 'covid-population');
+  const aq = get('openaq.org');
+  const pm = get('EN.ATM.PM25.MC.M3');
+  const refuse = assessJoin(aq.profile, pm.profile, aq.dataset, pm.dataset);
+  assert.equal(refuse.status, 'conflict');
+  assert.equal(refuse.doNotJoin, true);
+  const ab = get('cod-ab-nga');
+  const ps = get('cod-ps-nga');
+  const pcode = assessJoin(ab.profile, ps.profile, ab.dataset, ps.dataset);
+  assert.equal(pcode.status, 'match');
+  assert.equal(pcode.kit.id, 'nga-pcode-population');
 });

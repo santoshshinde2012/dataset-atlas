@@ -112,3 +112,10 @@ test('sanitizeEntry keeps only safe resources and infers coverage kind', () => {
   assert.equal(e.resources.length, 1);
   assert.equal(e.coverageKind, 'global-country-series');
 });
+
+test('sanitizeEntry keeps a safe licenseUrl and drops a bad one', () => {
+  const ok = sanitizeEntry({ ...valid, licenseUrl: 'https://creativecommons.org/licenses/by/4.0/' });
+  assert.equal(ok.licenseUrl, 'https://creativecommons.org/licenses/by/4.0/');
+  const bad = sanitizeEntry({ ...valid, licenseUrl: 'javascript:alert(1)' });
+  assert.equal(bad.licenseUrl, undefined);
+});

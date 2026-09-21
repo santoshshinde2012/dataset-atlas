@@ -66,7 +66,7 @@ for (const p of PRESETS) {
 }
 
 // The research pilot must resolve to curated catalog entries and safe source URLs.
-if (pilot.tasks.length !== 3 || pilot.profiles.length !== 15) errors.push('pilot requires 3 tasks and 15 profiles');
+if (pilot.tasks.length < 3 || pilot.profiles.length < 15) errors.push('pilot requires at least 3 tasks and 15 profiles');
 const taskIds = new Set(pilot.tasks.map((task) => task.id));
 const profileUrls = new Set();
 for (const profile of pilot.profiles) {

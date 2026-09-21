@@ -1,0 +1,11 @@
+{
+  "country": "NG",
+  "level": "admin1",
+  "source": "HDX COD-AB / COD-PS Nigeria. Sample of official admin-1 P-codes; unmatched names are dropped, never guessed.",
+  "byPcode": {
+    "NG001": { "name": "Abia", "aliases": ["Abia State"] },
+    "NG020": { "name": "Kano", "aliases": ["Kano State"] },
+    "NG025": { "name": "Lagos", "aliases": ["Lagos State"] },
+    "NG037": { "name": "Federal Capital Territory", "aliases": ["FCT", "FCT Abuja", "Abuja"] }
+  }
+}

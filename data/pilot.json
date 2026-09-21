@@ -39,6 +39,32 @@
         "energy consumption",
         "CO\u2082 emissions"
       ]
+    },
+    {
+      "id": "air",
+      "title": "Compare station air quality and national PM2.5",
+      "description": "See whether point air-quality monitors can be combined with a national annual PM2.5 series. They cannot — keep station grain.",
+      "country": "IN",
+      "startYear": 2024,
+      "endYear": 2026,
+      "level": "point",
+      "variables": [
+        "PM2.5",
+        "air quality"
+      ]
+    },
+    {
+      "id": "humanitarian",
+      "title": "Join Nigeria population to administrative boundaries",
+      "description": "Align humanitarian baseline population with COD boundaries using official P-codes.",
+      "country": "NG",
+      "startYear": 2022,
+      "endYear": 2026,
+      "level": "admin1",
+      "variables": [
+        "population",
+        "administrative boundaries"
+      ]
     }
   ],
   "profiles": [
@@ -253,7 +279,7 @@
         "code",
         "date"
       ],
-      "access": "The GitHub repository is archived; use the current OWID Data Catalog CSV for recent data. Check variable availability by date.",
+      "access": "The GitHub repository is archived; use the current OWID Data Catalog CSV for recent data. Check variable availability by date. Committed sample: data/samples/covid-cases-sample.csv.",
       "resource": {
         "url": "https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv",
         "format": "CSV",
@@ -303,7 +329,7 @@
         "countryiso3code",
         "date"
       ],
-      "access": "World Bank API is paginated. Request all pages and exclude aggregate regions before joining.",
+      "access": "World Bank API is paginated. Request all pages and exclude aggregate regions before joining. Committed sample: data/samples/wb-population-sample.csv.",
       "resource": {
         "url": "https://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=csv",
         "format": "CSV",
@@ -525,6 +551,119 @@
       ],
       "access": "Open the WRI source page for available distributions and terms. Aggregate plants to country-year before comparing to national series.",
       "evidence": "https://datasets.wri.org/dataset/globalpowerplantdatabase"
+    },
+    {
+      "url": "https://openaq.org",
+      "task": "air",
+      "countries": [
+        "IN"
+      ],
+      "level": "point",
+      "time": "hour",
+      "variables": [
+        "PM2.5",
+        "air quality"
+      ],
+      "joinKeys": [
+        "station_id",
+        "datetime"
+      ],
+      "access": "OpenAQ v3 API. Committed sample: data/samples/openaq-pune-sample.csv. Station observations; do not average to a city AQI.",
+      "evidence": "https://explore.openaq.org",
+      "resource": {
+        "url": "https://api.openaq.org/v3/locations",
+        "format": "JSON",
+        "label": "OpenAQ v3 locations API"
+      },
+      "columns": [
+        "station_id",
+        "station_name",
+        "city",
+        "datetime",
+        "parameter",
+        "value"
+      ],
+      "preview": {
+        "columns": [
+          "station_name",
+          "city",
+          "value"
+        ],
+        "rows": [
+          [
+            "AAQMS Karve Road",
+            "Pune",
+            "157"
+          ],
+          [
+            "Bhosari",
+            "Pune",
+            "22"
+          ]
+        ],
+        "source": "https://openaq.org"
+      }
+    },
+    {
+      "url": "https://data.worldbank.org/indicator/EN.ATM.PM25.MC.M3",
+      "task": "air",
+      "countries": [],
+      "level": "country",
+      "time": "year",
+      "variables": [
+        "PM2.5"
+      ],
+      "joinKeys": [
+        "countryiso3code",
+        "date"
+      ],
+      "access": "World Bank national annual population-weighted PM2.5. Not a rollup of OpenAQ stations.",
+      "evidence": "https://data.worldbank.org/indicator/EN.ATM.PM25.MC.M3",
+      "resource": {
+        "url": "https://api.worldbank.org/v2/en/indicator/EN.ATM.PM25.MC.M3?downloadformat=csv",
+        "format": "CSV",
+        "label": "World Bank PM2.5 CSV ZIP"
+      }
+    },
+    {
+      "url": "https://data.humdata.org/dataset/cod-ab-nga",
+      "task": "humanitarian",
+      "countries": [
+        "NG"
+      ],
+      "level": "admin1",
+      "time": "year",
+      "variables": [
+        "administrative boundaries"
+      ],
+      "joinKeys": [
+        "adm1_pcode"
+      ],
+      "access": "HDX COD-AB Nigeria. Join on adm1_pcode. Committed sample: data/samples/nga-cod-ab-sample.csv.",
+      "evidence": "https://data.humdata.org/dataset/cod-ab-nga",
+      "crosswalk": {
+        "url": "data/nga-pcode-admin1.json",
+        "from": "name",
+        "to": "adm1_pcode",
+        "note": "Official admin-1 P-codes. Do not join on state name."
+      }
+    },
+    {
+      "url": "https://data.humdata.org/dataset/cod-ps-nga",
+      "task": "humanitarian",
+      "countries": [
+        "NG"
+      ],
+      "level": "admin1",
+      "time": "year",
+      "variables": [
+        "population"
+      ],
+      "joinKeys": [
+        "adm1_pcode"
+      ],
+      "access": "HDX COD-PS Nigeria population by admin-1 P-code. Committed sample: data/samples/nga-cod-ps-sample.csv.",
+      "evidence": "https://data.humdata.org/dataset/cod-ps-nga"
     }
   ]
 }

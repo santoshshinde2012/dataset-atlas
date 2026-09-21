@@ -77,6 +77,9 @@ test('research workbench checks fit and exports evidence-backed handoff', async 
   const notebookEvent = page.waitForEvent('download');
   await page.getByText(/Download Energy use vs/).click();
   expect((await notebookEvent).suggestedFilename()).toBe('energy-co2-example.ipynb');
+  await page.locator('#workbench-task').selectOption('air');
+  await expect(page.locator('#join-result')).toContainText('Do not join');
+  await expect(page.locator('.workbench-donot')).toContainText('Do not average stations');
 });
 
 test('mobile actions fit and the workbench contains keyboard focus', async ({ page }) => {

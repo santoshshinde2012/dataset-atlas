@@ -23,6 +23,7 @@ CI on GitHub runs the same gates. Do not merge with a failing check.
 | Add or correct a dataset | `data/catalog.json`, then `npm run validate` | Guess country tags, files, or licenses |
 | Add a starter “I want to…” bundle | `PRESETS` in `js/config.js` | Point a bundle at a URL that is not in the catalog |
 | Add a join kit | `js/kits.js` plus tests, samples, and a notebook for `verified` | Label `match` from column names alone |
+| Add an aggregate to drop | `js/identifiers.js` | Guess a country from a display name |
 | Screen reuse or link health | `js/license-use.js` / `js/link-health.js` | Treat unspecified as public domain |
 | Change MCP | `scripts/atlas-mcp.js` using existing pure modules | Duplicate sanitizer or fit logic |
 | Change layout or map | `js/ui/` or `js/map/` | Import one UI module from another |
@@ -40,13 +41,15 @@ Module boundaries: [architecture and conventions](docs/architecture-and-conventi
 
 ## Join-kit rules
 
-A kit is `verified` only with a runnable notebook and checked cardinality. A kit is `documented` when the transform is explicit but not yet checked. Matching key names are never enough for `match`.
+A kit is `verified` only with a runnable notebook and checked cardinality. `outcome: do-not-join` is a checked incompatibility — ship it when the wrong join is the real bug.
 
-Unmatched geography is **dropped**, never guessed. Result grain must be stated (country, subdivision, …).
+Unmatched geography is **dropped**, never guessed. Result grain must be stated (country, subdivision, station, admin1, …).
+
+Add `triggers`, `doNot`, and `agentGuidance` so `recommend_kit` can steer agents.
 
 ## Pull requests
 
-1. One concern per PR (catalog edit, kit, UI, docs).
+1. One concern per PR when practical (catalog edit, kit, UI, docs).
 2. Tests for any behavior users or MCP clients can see.
 3. Short summary and the commands you ran.
 4. No secrets, no `.env`, no paid backend.
