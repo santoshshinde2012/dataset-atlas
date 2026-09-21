@@ -9,6 +9,20 @@ test('loads the map and opens a regional dataset rail', async ({ page }) => {
   await expect(page.locator('#card-list .card').first()).toBeVisible();
 });
 
+test('author credit publishes GitHub, LinkedIn, and Medium with rel=me', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#global-count')).not.toHaveText('0');
+  const credit = page.locator('.author-credit-inline a');
+  await expect(credit).toHaveCount(3);
+  await expect(credit.nth(0)).toHaveAttribute('href', 'https://github.com/santoshshinde2012');
+  await expect(credit.nth(1)).toHaveAttribute('href', 'https://www.linkedin.com/in/shindesantosh');
+  await expect(credit.nth(2)).toHaveAttribute('href', 'https://medium.com/@santosh-shinde');
+  await expect(credit.nth(0)).toHaveAttribute('target', '_blank');
+  await expect(credit.nth(0)).toHaveAttribute('rel', /(?:^|\s)me(?:\s|$)/);
+  await expect(credit.nth(0)).toHaveAttribute('rel', /noopener/);
+  await expect(page.locator('#author-credit a')).toHaveCount(3);
+});
+
 test('searches the catalog and restores a shared view', async ({ page }) => {
   await page.goto('/#d=health&r=global');
   await expect(page.locator('#card-rail')).toBeVisible();
@@ -95,6 +109,10 @@ test('mobile actions fit and the workbench contains keyboard focus', async ({ pa
     expect(box.x).toBeGreaterThanOrEqual(0);
     expect(box.x + box.width).toBeLessThanOrEqual(320);
   }
+  const credit = await page.locator('#author-credit a').first().boundingBox();
+  expect(credit).toBeTruthy();
+  expect(credit.x).toBeGreaterThanOrEqual(0);
+  expect(credit.x + credit.width).toBeLessThanOrEqual(320);
   await page.locator('#workbench-btn').click();
   await expect(page.locator('#workbench')).toHaveAttribute('open', '');
   for (let i = 0; i < 35; i++) {

@@ -28,6 +28,7 @@ CI on GitHub runs the same gates. Do not merge with a failing check.
 | Add a fiscal reporter | `js/vintage.js` | Shift dates to “fix” FY vs calendar |
 | Screen reuse or link health | `js/license-use.js` / `js/link-health.js` | Treat unspecified as public domain |
 | Change MCP | `scripts/atlas-mcp.js` using existing pure modules | Duplicate sanitizer or fit logic |
+| Change author credit | `AUTHOR` in `js/config.js`, then the shell and JSON-LD | Hardcode a second set of profile URLs |
 | Change layout or map | `js/ui/` or `js/map/` | Import one UI module from another |
 
 Module boundaries: [architecture and conventions](docs/architecture-and-conventions.md). Join rules: [join kits](docs/join-kits.md). Agent tools: [MCP](docs/mcp.md).
