@@ -95,6 +95,8 @@ async function boot() {
   }
   if (fromUrl.search) store.actions.setSearch(fromUrl.search);
   if (fromUrl.region) store.actions.selectRegion(fromUrl.region, fromUrl.focusCountry || null);
+  // ds= opens that dataset's region. It is not a pin — p= remains the share-import.
+  if (fromUrl.dataset) store.actions.openDataset(fromUrl.dataset);
 
   // theme is applied at the document root; every themed CSS token follows
   const applyTheme = () => {

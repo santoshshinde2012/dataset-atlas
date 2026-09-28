@@ -60,6 +60,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     pins: new Set(storedPins),
     sort: 'freshness',
     mapMetric: 'curated',
+    focusDataset: null,            // card opened from a crawlable dataset page
     compare: new Set(),            // dataset ids in the compare tray (session-only)
     compareOpen: false,
     onlyChanged: false,            // filter to new/updated since last visit
@@ -153,13 +154,30 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
       notify();
     },
     setMinOpenness(v) { state.minOpenness = +v; notify(); },
-    setSearch(q) { state.search = q.trim().toLowerCase(); notify(); },
+    setSearch(q) {
+      state.search = q.trim().toLowerCase();
+      state.focusDataset = null;
+      notify();
+    },
     selectRegion(key, focusCountry = null) {
       state.region = key;
       state.focusCountry = key ? focusCountry : null;
+      state.focusDataset = null;
       // the card rail and the passport drawer share the right edge
       if (key) state.passportOpen = false;
       notify();
+    },
+    /** Open one catalog entry on the map. Does not pin it. Unknown ids are ignored. */
+    openDataset(id) {
+      const dataset = catalog.find((d) => d.id === id);
+      if (!dataset) return false;
+      state.region = dataset.region;
+      state.focusCountry = null;
+      state.search = '';
+      state.focusDataset = id;
+      state.passportOpen = false;
+      notify();
+      return true;
     },
     setProjection(mode) { state.projection = mode; notify(); },
     setTheme(theme) {

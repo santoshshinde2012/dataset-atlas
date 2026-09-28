@@ -6,6 +6,7 @@
  *
  * Params: d=domain r=region c=focusCountry q=search o=minOpenness
  *         st=sourceTypes f=formats srt=sort v=projection p=pin ids (share only)
+ *         ds=dataset id to open once (not written back into the hash)
  */
 import { DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION } from './config.js';
 
@@ -62,5 +63,7 @@ export function parseState(hash) {
     const list = pins.split('.').filter((id) => /^d[a-z0-9]+$/.test(id)).slice(0, 100);
     if (list.length) out.pins = list;
   }
+  const dataset = p.get('ds');
+  if (dataset && /^d[a-z0-9]+$/.test(dataset)) out.dataset = dataset;
   return out;
 }

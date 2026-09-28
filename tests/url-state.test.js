@@ -87,3 +87,12 @@ test('pin ids parse only in the expected shape', () => {
   const parsed = parseState('#p=dabc123.dxyz789.junk!id');
   assert.deepEqual(parsed.pins, ['dabc123', 'dxyz789']);
 });
+
+test('ds opens one dataset and is not rewritten as a pin share', () => {
+  assert.equal(parseState('#ds=dabc123').dataset, 'dabc123');
+  assert.equal(parseState('#ds=not-an-id').dataset, undefined);
+  assert.equal(parseState('#p=dabc123').dataset, undefined);
+  const serialized = serializeState(baseState(), ['CSV', 'API']);
+  assert.equal(serialized.includes('ds='), false);
+  assert.equal(serialized.includes('p='), false);
+});
