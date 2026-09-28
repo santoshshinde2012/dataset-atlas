@@ -18,8 +18,9 @@
  *   check_units       same quantity? TWh ≠ Mt; current US$ ≠ PPP
  *   check_vintage     calendar vs fiscal; mid-year vs census
  *   get_crosswalk     IMD subdivision, LGD district, or Nigeria P-code
-
  *   build_passport   source inventory and download commands + BibTeX + share link
+ *   coverage_for_country  checked country-year span, or confirmed absence
+ *   search_variables pilot variables and columns for a question
  *
  * Every tool body reuses the app's own pure modules — the catalog always
  * flows through the js/catalog.js sanitization choke point, manifests
@@ -40,7 +41,7 @@ import { filterCatalog } from '../js/filters.js';
 import { dnaMetrics } from '../js/dna.js';
 import { manifestText } from '../js/manifest.js';
 import { bibliographyFor } from '../js/citation.js';
-import { countryCoverage } from '../js/coverage.js';
+import { countryCoverage, seriesObservation } from '../js/coverage.js';
 import { accessAction, primaryResource } from '../js/resource.js';
 import { licenseUse } from '../js/license-use.js';
 import { linkHealth } from '../js/link-health.js';
@@ -576,7 +577,106 @@ export function toolDefinitions() {
         required: ['ids'],
       },
     },
+    {
+      name: 'coverage_for_country',
+      description: 'Checked country-year span for datasets in data/country-coverage.json. Absence means the source was checked and had no non-null value. Datasets not listed were not checked. Aggregates are already excluded. This is not a packaged country extract.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          iso2: { type: 'string', description: 'ISO 3166-1 alpha-2' },
+          url: { type: 'string', description: 'Optional catalog URL to limit the lookup' },
+        },
+        required: ['iso2'],
+      },
+    },
+    {
+      name: 'search_variables',
+      description: 'Find reviewed pilot variables, columns, and join keys. This searches the workbench, not the open web. Empty means the pilot has no reviewed variable for that question.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          query: { type: 'string' },
+        },
+        required: ['query'],
+      },
+    },
   ];
+}
+
+function readCoverage() {
+  try {
+    return JSON.parse(readFileSync(join(root, 'data/country-coverage.json'), 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function readPilot() {
+  return JSON.parse(readFileSync(join(root, 'data/pilot.json'), 'utf8'));
+}
+
+export function coverageForCountry(args = {}) {
+  const iso = String(args.iso2 || '').trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(iso)) throw new Error('iso2 required — ISO 3166-1 alpha-2');
+  const index = readCoverage();
+  if (!index?.series) {
+    return { iso2: iso, checked: false, note: 'No country-coverage file. Do not treat missing coverage as worldwide coverage.' };
+  }
+  const url = typeof args.url === 'string' ? args.url : '';
+  const withRows = [];
+  let checkedWithoutRows = 0;
+  for (const [seriesUrl, row] of Object.entries(index.series)) {
+    if (url && seriesUrl !== url) continue;
+    const obs = seriesObservation(index, { url: seriesUrl }, iso);
+    if (obs && obs !== 'absent') withRows.push({ url: seriesUrl, start: obs.start, end: obs.end });
+    else if (obs === 'absent') checkedWithoutRows += 1;
+  }
+  return {
+    iso2: iso,
+    checked: true,
+    generated: index.generated || null,
+    withRows,
+    checkedWithoutRows,
+    note: 'withRows are non-null observations after aggregates were dropped. checkedWithoutRows were looked up and empty. Datasets not in this file were not checked.',
+  };
+}
+
+export function searchVariables(catalog, args = {}) {
+  const query = String(args.query || '').trim();
+  if (!queryTerms(query).length) throw new Error('query required');
+  const pilot = readPilot();
+  const results = [];
+  for (const profile of pilot.profiles || []) {
+    const dataset = catalog.find((d) => d.url === profile.url);
+    const blob = [
+      dataset?.title, dataset?.description, dataset?.source,
+      ...(profile.variables || []), ...(profile.columns || []), ...(profile.joinKeys || []),
+      profile.level, profile.time,
+    ].filter(Boolean).join(' ');
+    if (searchScore({
+      title: dataset?.title || '',
+      description: blob,
+      source: dataset?.source || '',
+      countries: profile.countries || dataset?.countries || [],
+      coverageKind: dataset?.coverageKind,
+    }, query, { includeFacets: false }) <= 0) continue;
+    results.push({
+      task: profile.task,
+      url: profile.url,
+      title: dataset?.title || null,
+      variables: profile.variables || [],
+      columns: profile.columns || [],
+      joinKeys: profile.joinKeys || [],
+      level: profile.level,
+      time: profile.time,
+    });
+  }
+  return {
+    total: results.length,
+    returned: Math.min(20, results.length),
+    results: results.slice(0, 20),
+    note: results.length ? 'Pilot variables only. A column list is not a join.' : 'No reviewed pilot variable matched. Do not invent columns.',
+  };
 }
 
 export async function callTool(catalog, name, args) {
@@ -595,6 +695,8 @@ export async function callTool(catalog, name, args) {
     case 'check_vintage': return checkVintageTool(args);
     case 'get_crosswalk': return getCrosswalkTool(args);
     case 'build_passport': return buildPassport(catalog, args, today);
+    case 'coverage_for_country': return coverageForCountry(args);
+    case 'search_variables': return searchVariables(catalog, args);
     default: throw new Error(`unknown tool "${name}"`);
   }
 }
@@ -603,6 +705,7 @@ export async function callTool(catalog, name, args) {
 
 const INSTRUCTIONS = 'Dataset Atlas helps people use public datasets together without inventing joins. '
   + 'Flow: recommend_kit → check_identifiers → check_units / check_vintage → get_crosswalk → get_resource → assess_join → build_passport. '
+  + 'coverage_for_country reports checked rows or a confirmed absence; datasets missing from that file were not checked. '
   + 'If recommend_kit returns no kit, do not write join code. Drop WLD, EUU, SAS, OWID_WRL. '
   + 'TWh is not million tonnes. Current US$ is not PPP. Fiscal-year GDP is not calendar-year emissions. '
   + 'Never average OpenAQ stations to a city AQI. Never join CHIRPS grid cells to IMD subdivisions. '

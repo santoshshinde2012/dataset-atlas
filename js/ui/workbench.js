@@ -76,7 +76,7 @@ export function initWorkbench({ catalog, pilot, toast }) {
       toast('Project brief exported');
     };
   }
-  button.onclick = () => { render(); dialog.showModal(); dialog.querySelector('#workbench-close').focus(); };
+  button.onclick = () => open();
   dialog.querySelector('#workbench-close').onclick = close;
   dialog.addEventListener('close', () => button.focus());
   dialog.addEventListener('click', (event) => {
@@ -87,4 +87,16 @@ export function initWorkbench({ catalog, pilot, toast }) {
     trapModalFocus(dialog, event);
     if (event.key === 'Escape' && dialog.open) { event.preventDefault(); event.stopImmediatePropagation(); close(); }
   }, true);
+
+  function open(taskId) {
+    if (taskId) {
+      const found = pilot.tasks.find((item) => item.id === taskId);
+      if (found) task = { ...found };
+    }
+    render();
+    if (!dialog.open) dialog.showModal();
+    dialog.querySelector('#workbench-close').focus();
+  }
+
+  return { open };
 }

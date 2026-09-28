@@ -43,8 +43,9 @@ test('word-order-independent search finds known datasets', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#global-count')).not.toHaveText('0');
   await page.locator('#search-input').fill('India crop production');
-  await expect(page.locator('#card-list .card')).toHaveCount(2);
+  await expect(page.locator('#card-list .card')).toHaveCount(5);
   await expect(page.locator('#card-list')).toContainText('Crop Production in India');
+  await expect(page.locator('#card-list')).toContainText('District-wise Crop Production');
 });
 
 test('the deploy package omits repository-only files', async ({ request }) => {

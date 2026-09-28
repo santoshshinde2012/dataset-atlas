@@ -13,6 +13,7 @@ const files = [
   'index.html',
   'styles.css',
   'data/catalog.json',
+  'data/country-coverage.json',
   'data/pilot.json',
   'data/energy-co2-example.ipynb',
   'data/crop-rainfall-example.ipynb',

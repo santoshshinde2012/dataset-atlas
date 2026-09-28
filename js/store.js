@@ -10,11 +10,12 @@ import { SOURCE_TYPE_META, PRESETS, FORMAT_ORDER, THEMES, DEFAULT_THEME } from '
 import { filterCatalog, regionCounts, domainCounts, matchesFacets } from './filters.js';
 import { normFormat } from './utils/text.js';
 import { searchScore } from './search.js';
-import { countryCoverage } from './coverage.js';
+import { countryCoverage, seriesObservation } from './coverage.js';
+import { primaryResource } from './resource.js';
 
 /** Sort comparators for dataset lists (country-focus always wins first). */
 const SORTERS = {
-  freshness: (a, b) => (b.freshnessYear || 0) - (a.freshnessYear || 0),
+  freshness: (a, b) => (b.coverageEnd || 0) - (a.coverageEnd || 0) || (b.freshnessYear || 0) - (a.freshnessYear || 0),
   coverage: (a, b) => ((b.coverageEnd || 0) - (b.coverageStart || 0)) - ((a.coverageEnd || 0) - (a.coverageStart || 0)),
   openness: (a, b) => (b.licenseOpenness || 0) - (a.licenseOpenness || 0),
   size: (a, b) => (a.approxSizeMB || 0) - (b.approxSizeMB || 0),
@@ -36,7 +37,7 @@ const coverageRank = (d, focus) => {
  * @param {{newIds?: Set<string>, updatedIds?: Set<string>}} [deps.changes]
  *        catalog diff vs the user's last visit (computed in main.js)
  */
-export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME, changes = {} }) {
+export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME, changes = {}, coverageIndex = null }) {
   const allFormats = [...new Set(catalog.flatMap((d) => (d.formats || []).map(normFormat)))]
     .sort((a, b) => FORMAT_ORDER.indexOf(a) - FORMAT_ORDER.indexOf(b));
 
@@ -58,6 +59,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     theme: THEMES[initialTheme] ? initialTheme : DEFAULT_THEME,
     pins: new Set(storedPins),
     sort: 'freshness',
+    mapMetric: 'curated',
     compare: new Set(),            // dataset ids in the compare tray (session-only)
     compareOpen: false,
     onlyChanged: false,            // filter to new/updated since last visit
@@ -78,13 +80,23 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     allFormats: () => allFormats,
     filtered: (ignore = []) => filterCatalog(catalog, state, ignore),
     regionCounts: () => regionCounts(filterCatalog(catalog, state)),
+    mapCounts: () => regionCounts(
+      state.mapMetric === 'files'
+        ? filterCatalog(catalog, state).filter((d) => primaryResource(d))
+        : filterCatalog(catalog, state),
+    ),
+    observation: (d, iso) => seriesObservation(coverageIndex, d, iso),
     domainCounts: (ignore = ['domain']) => domainCounts(filterCatalog(catalog, state, ignore)),
     matches: (d, ignore = []) => matchesFacets(d, state, ignore),
     regionDatasets: (region) => {
       const focus = state.focusCountry;
       const by = SORTERS[state.sort] || SORTERS.freshness;
       return filterCatalog(catalog, state)
-        .filter((d) => d.region === region || (focus && d.region === 'global' && countryCoverage(d, focus)))
+        .filter((d) => {
+          if (d.region === region) return true;
+          if (!(focus && d.region === 'global' && countryCoverage(d, focus))) return false;
+          return seriesObservation(coverageIndex, d, focus) !== 'absent';
+        })
         .sort((a, b) => coverageRank(b, focus) - coverageRank(a, focus)
           || (state.search ? searchScore(b, state.search) - searchScore(a, state.search) : 0)
           || by(a, b));
@@ -186,6 +198,9 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     },
     setSort(key) {
       if (SORTERS[key]) { state.sort = key; notify(); }
+    },
+    setMapMetric(metric) {
+      if (metric === 'curated' || metric === 'files') { state.mapMetric = metric; notify(); }
     },
     toggleCompare(id) {
       if (state.compare.has(id)) {

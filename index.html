@@ -66,6 +66,12 @@
     </section>
 
     <section class="rail-section">
+      <h3>Checked questions</h3>
+      <p class="rail-note">Reviewed joins and refusals. The map stays the way to browse.</p>
+      <div id="question-list"></div>
+    </section>
+
+    <section class="rail-section">
       <h3>Source type</h3>
       <div id="source-filters"><!-- checkboxes injected --></div>
     </section>
@@ -116,7 +122,11 @@
     <span data-icon="globe"></span> Global <span class="count-badge" id="global-count">0</span>
   </button>
   <div id="legend">
-    <span class="legend-label">data availability</span>
+    <div class="legend-metric" role="group" aria-label="What the map colors mean">
+      <button id="metric-curated" type="button" class="active" aria-pressed="true">Curated</button>
+      <button id="metric-files" type="button" aria-pressed="false">Verified files</button>
+    </div>
+    <span class="legend-label">curated datasets</span>
     <div class="legend-ramp"></div>
     <div class="legend-ends"><span>scarce</span><span>rich</span></div>
   </div>
@@ -147,7 +157,7 @@
     <label class="rail-tool">
       <span>Sort</span>
       <select id="sort-select" aria-label="Sort datasets">
-        <option value="freshness">Best match / freshest</option>
+        <option value="freshness">Latest coverage</option>
         <option value="coverage">Longest coverage</option>
         <option value="openness">Most open license</option>
         <option value="size">Smallest download</option>

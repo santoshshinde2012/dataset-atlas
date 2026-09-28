@@ -13,7 +13,8 @@ The browser app is a static site with no runtime package dependencies, account, 
 ## Features
 
 - Browse availability on a globe or flat map; focusing a country also surfaces **global country-year series** as candidates (World Bank, OWID), labelled as such — never as proven rows.
-- Search with word-order-independent terms and filter by domain, source type, format, and license openness.
+- Search with word-order-independent terms, place names, and a small set of topic aliases (PM2.5 / particulate, rainfall / precipitation). Filter by domain, source type, format, and license openness.
+- Focusing a country hides global series that were checked and have no rows for that country, and labels the ones that do with the observed year span. Unchecked series stay candidates.
 - Honest access actions: **Download file** / **Open API** when a DCAT-style resource is verified; **Open source** when only a landing page exists. Cards never pretend a portal homepage is a file.
 - Reuse screening on each card (analysis / redistribute / AI training). Unknown stays unknown; this is not legal advice.
 - Link health: last successful URL check, distinct from editorial content year and coverage end.
@@ -21,7 +22,7 @@ The browser app is a static site with no runtime package dependencies, account, 
 - Share a filtered view or pinned collection through a URL.
 - Export an annotated shell manifest and BibTeX references (citation year is coverage end, not the freshness bar).
 - Crawlable per-dataset HTML pages, `sitemap.xml`, and schema.org Dataset JSON-LD for Google Dataset Search.
-- Local MCP server: `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `recommend_kit`, `assess_fit`, `assess_join`, `check_identifiers`, `check_units`, `check_vintage`, `get_crosswalk`, `build_passport`. Agents must not invent a join when `recommend_kit` is empty.
+- Local MCP server: `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `recommend_kit`, `assess_fit`, `assess_join`, `check_identifiers`, `check_units`, `check_vintage`, `get_crosswalk`, `build_passport`, `coverage_for_country`, `search_variables`. Agents must not invent a join when `recommend_kit` is empty. The server is local (`node scripts/atlas-mcp.js`); GitHub Pages serves the same catalog and does not run MCP.
 - Search beyond the atlas through official catalogs. Those results are **unreviewed**.
 - Research Workbench with verified kits: **energy vs CO₂**, **India crop + rainfall**, **COVID vs population**, **OWID CO₂ per capita**, **Nigeria P-code population**, **India LGD**, and verified **do-not-join** kits (OpenAQ vs national PM2.5, WDI GDP current US$ vs OWID CO₂, CHIRPS grid vs IMD).
 
@@ -88,7 +89,7 @@ GitHub Pages publishes only `dist/`, which contains the application shell, brows
 
 ## MCP interface
 
-Run `node scripts/atlas-mcp.js`, or use the checked-in [`.mcp.json`](.mcp.json) with a compatible MCP client. The server exposes `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `recommend_kit`, `assess_fit`, `assess_join`, `check_identifiers`, `check_units`, `check_vintage`, `get_crosswalk`, and `build_passport`. It uses the same sanitizer, fit checks, identifier list, unit list, vintage list, resource model, and citation generator as the browser app.
+Run `node scripts/atlas-mcp.js`, or use the checked-in [`.mcp.json`](.mcp.json) with a compatible MCP client. The server exposes `search_catalog`, `get_dataset`, `get_resource`, `list_bundles`, `list_kits`, `recommend_kit`, `assess_fit`, `assess_join`, `check_identifiers`, `check_units`, `check_vintage`, `get_crosswalk`, `build_passport`, `coverage_for_country`, and `search_variables`. It uses the same sanitizer, fit checks, identifier list, unit list, vintage list, resource model, and citation generator as the browser app. `coverage_for_country` reads [`data/country-coverage.json`](data/country-coverage.json).
 
 Typical agent flow: **recommend_kit** → **check_identifiers** → **check_units** / **check_vintage** → **get_crosswalk** → **get_resource** → **assess_join** → **build_passport**. If `recommend_kit` returns no kit, do not write join code. `assess_join` without a kit stays unknown or conflict — never a guessed `match`. A [SKILL.md](skills/join-kits/SKILL.md) encodes the same contract for coding agents. Registry metadata lives in [`server.json`](server.json).
 

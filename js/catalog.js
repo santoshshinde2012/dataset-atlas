@@ -9,8 +9,39 @@ import { DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION } from './con
 import { hashId } from './utils/text.js';
 import { sanitizeResources, sanitizeLandingPage } from './resource.js';
 import { sanitizeCoverageKind } from './coverage.js';
+import { knownLicenseUrl } from './license-use.js';
 
 const KAGGLE_REF_RE = /^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/;
+const WEAK_PROVIDER = new Set(['data', 'datos', 'gov', 'hub', 'statistics', 'opendata', 'census', 'population', 'stats', 'sdd', 'datasource']);
+
+function refineProviderId(id, url) {
+  const current = typeof id === 'string' ? id : '';
+  if (current && !WEAK_PROVIDER.has(current) && PROVIDER_OK.test(current)) return current;
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, '');
+    const slug = host.toLowerCase().replace(/[^a-z0-9.]+/g, '').replace(/\./g, '-').replace(/-+/g, '-').slice(0, 40);
+    if (PROVIDER_OK.test(slug)) return slug;
+  } catch { /* keep the editorial id */ }
+  return PROVIDER_OK.test(current) ? current : '';
+}
+
+function sanitizeSample(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const columns = Array.isArray(raw.columns)
+    ? raw.columns.map((cell) => clean(String(cell)).slice(0, 40)).filter(Boolean).slice(0, 8)
+    : [];
+  if (columns.length < 2) return null;
+  const rows = (Array.isArray(raw.rows) ? raw.rows : []).slice(0, 3).map((row) => (
+    Array.isArray(row)
+      ? row.slice(0, columns.length).map((cell) => clean(String(cell ?? '')).slice(0, 48))
+      : null
+  )).filter((row) => row && row.length === columns.length);
+  if (!rows.length) return null;
+  const source = typeof raw.source === 'string' ? raw.source.trim() : '';
+  const sample = { columns, rows };
+  if (/^https?:\/\/[^\s\x00-\x1f\x7f"'<>\\`]+$/i.test(source)) sample.source = source;
+  return sample;
+}
 
 /**
  * Validate and normalize one raw catalog entry.
@@ -57,11 +88,19 @@ export function sanitizeEntry(d) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(e.verified || '')) delete e.verified;
   e.resources = sanitizeResources(d.resources);
   e.coverageKind = sanitizeCoverageKind(e);
-  if (PROVIDER_OK.test(d.providerId || '')) e.providerId = d.providerId;
+  const providerId = refineProviderId(d.providerId, url);
+  if (providerId) e.providerId = providerId;
   else delete e.providerId;
   const licenseUrl = typeof d.licenseUrl === 'string' ? d.licenseUrl.trim() : '';
   if (/^https?:\/\/[^\s\x00-\x1f\x7f"'<>\\`]+$/i.test(licenseUrl)) e.licenseUrl = licenseUrl;
-  else delete e.licenseUrl;
+  else if (!licenseUrl) {
+    const known = knownLicenseUrl(e.license);
+    if (known) e.licenseUrl = known;
+    else delete e.licenseUrl;
+  } else delete e.licenseUrl;
+  const sample = sanitizeSample(d.sample);
+  if (sample) e.sample = sample;
+  else delete e.sample;
   return e;
 }
 
@@ -76,12 +115,13 @@ export function buildCatalog(raw) {
 
 /** Fetch and build the catalog plus map data. Browser-only (uses fetch). */
 export async function loadAtlasData(base = '') {
-  const [world, countryRegion, countryCodes, rawCatalog, pilot] = await Promise.all([
+  const [world, countryRegion, countryCodes, rawCatalog, pilot, coverage] = await Promise.all([
     fetch(`${base}data/world-110m.json`).then((r) => r.json()),
     fetch(`${base}data/country-regions.json`).then((r) => r.json()),
     fetch(`${base}data/country-codes.json`).then((r) => r.json()),
     fetch(`${base}data/catalog.json`).then((r) => r.json()),
     fetch(`${base}data/pilot.json`).then((r) => r.json()),
+    fetch(`${base}data/country-coverage.json`).then((r) => (r.ok ? r.json() : { series: {} })).catch(() => ({ series: {} })),
   ]);
   return {
     world,
@@ -90,6 +130,7 @@ export async function loadAtlasData(base = '') {
     catalog: buildCatalog(rawCatalog),
     rawCatalog,
     pilot,
+    coverage,
     generated: /^\d{4}-\d{2}-\d{2}$/.test(rawCatalog.generated || '') ? rawCatalog.generated : null,
   };
 }

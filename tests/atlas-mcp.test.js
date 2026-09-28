@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   searchCatalog, getDataset, getResource, listBundles, listKits, assessFitTool, buildPassport, toolDefinitions, loadCatalog, dispatch,
   recommendKitTool, checkIdentifiersTool, assessJoinTool, getCrosswalkTool, checkUnitsTool, checkVintageTool,
+  coverageForCountry, searchVariables,
 } from '../scripts/atlas-mcp.js';
 import { buildCatalog } from '../js/catalog.js';
 import { PRESETS } from '../js/config.js';
@@ -156,7 +157,7 @@ test('manifest strings stay hardened through the passport path', () => {
 test('tool definitions carry the vocabulary agents need', () => {
   const defs = toolDefinitions();
   assert.deepEqual(defs.map((t) => t.name),
-    ['search_catalog', 'get_dataset', 'get_resource', 'list_bundles', 'list_kits', 'recommend_kit', 'assess_fit', 'assess_join', 'check_identifiers', 'check_units', 'check_vintage', 'get_crosswalk', 'build_passport']);
+    ['search_catalog', 'get_dataset', 'get_resource', 'list_bundles', 'list_kits', 'recommend_kit', 'assess_fit', 'assess_join', 'check_identifiers', 'check_units', 'check_vintage', 'get_crosswalk', 'build_passport', 'coverage_for_country', 'search_variables']);
   const search = defs[0].inputSchema.properties;
   assert.ok(search.domain.enum.includes('agriculture'));
   assert.ok(search.region.enum.includes('global'));
@@ -182,7 +183,7 @@ test('dispatch routes requests and notifications by JSON-RPC semantics', async (
   assert.ok('tools' in init.result.capabilities);
 
   const list = await dispatch(cat, { jsonrpc: '2.0', id: 'a', method: 'tools/list' });
-  assert.equal(list.result.tools.length, 13, 'string ids are echoed');
+  assert.equal(list.result.tools.length, 15, 'string ids are echoed');
 
   const call = await dispatch(cat, { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'list_bundles', arguments: {} } });
   const payload = JSON.parse(call.result.content[0].text);
@@ -269,4 +270,15 @@ test('dispatch answers a request whose method happens to start with notification
   const cat = await loadCatalog();
   const r = await dispatch(cat, { jsonrpc: '2.0', id: 9, method: 'notifications/whatever' });
   assert.equal(r.error.code, -32601, 'an id present means a reply is owed (no client hang)');
+});
+
+test('coverage_for_country reports checked rows and search_variables stays inside the pilot', async () => {
+  const real = await loadCatalog();
+  const india = coverageForCountry({ iso2: 'IN' });
+  assert.equal(india.checked, true);
+  assert.ok(india.withRows.some((row) => row.url.includes('SP.POP.TOTL') && row.start <= 1960 && row.end >= 2020));
+  const variables = searchVariables(real, { query: 'rainfall' });
+  assert.ok(variables.total >= 1);
+  assert.ok(variables.results.some((row) => `${row.variables} ${row.columns} ${row.title}`.toLowerCase().includes('rain')));
+  assert.throws(() => coverageForCountry({ iso2: 'India' }), /iso2 required/);
 });

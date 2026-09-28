@@ -40,3 +40,23 @@ export function coverageLabel(kind) {
   if (kind === 'series') return 'Global country-year series — this country is a candidate, not a verified row';
   return 'Country coverage is unknown';
 }
+
+/**
+ * Checked country rows for a global series.
+ * @returns {{start:number,end:number}|'absent'|null}
+ * null = this dataset was not in the coverage file (still a candidate).
+ * 'absent' = the file was checked and this country had no non-null value.
+ */
+export function seriesObservation(index, dataset, cca2) {
+  if (!index || !dataset || !cca2) return null;
+  const series = index.series || null;
+  if (!series) return null;
+  const row = series[dataset.url] || (dataset.landingPage ? series[dataset.landingPage] : undefined);
+  if (!row) return null;
+  const span = row[String(cca2).toUpperCase()];
+  if (!span) return 'absent';
+  const start = Number(span[0]);
+  const end = Number(span[1]);
+  if (!Number.isInteger(start) || !Number.isInteger(end)) return null;
+  return { start, end };
+}

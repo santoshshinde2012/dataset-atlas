@@ -3,6 +3,7 @@ import { REGION_META, DOMAIN_META, domainColor } from '../config.js';
 import { esc } from '../utils/text.js';
 import { domainCounts } from '../filters.js';
 import { icon } from '../icons.js';
+import { primaryResource } from '../resource.js';
 
 export function createTooltip(element, store, countryCodes = {}) {
   function show(event, regionKey, countryId = null) {
@@ -18,15 +19,18 @@ export function createTooltip(element, store, countryCodes = {}) {
     const regionName = REGION_META[regionKey].name;
     const country = countryId ? countryCodes[countryId] : null;
     const countrySpecific = country ? store.select.countryDatasets(country.cca2).length : 0;
+    const fileCount = list.filter((d) => primaryResource(d)).length;
 
     // a clear two-level picture: the exact country, then its region
     const stats = country
       ? `<div class="tt-stats">
            <div class="tt-stat"><b>${countrySpecific}</b><span>${esc(country.name)}-specific</span></div>
            <div class="tt-stat"><b>${list.length}</b><span>in ${esc(regionName)}</span></div>
+           <div class="tt-stat"><b>${fileCount}</b><span>verified files</span></div>
          </div>`
       : `<div class="tt-stats">
            <div class="tt-stat"><b>${list.length}</b><span>dataset${list.length === 1 ? '' : 's'} match filters</span></div>
+           <div class="tt-stat"><b>${fileCount}</b><span>verified file${fileCount === 1 ? '' : 's'}</span></div>
          </div>`;
 
     element.innerHTML = `
@@ -36,7 +40,9 @@ export function createTooltip(element, store, countryCodes = {}) {
       ${chips ? `<div class="tt-domains">${chips}</div>` : ''}
       <div class="tt-hint">${country && countrySpecific
         ? `Click to browse — ${esc(country.name)} first`
-        : 'Click to browse datasets'}</div>`;
+        : country
+          ? `No reviewed ${esc(country.name)} file in this filter — click for the region and checked global series`
+          : 'Click to browse datasets'}</div>`;
     element.hidden = false;
     move(event);
   }

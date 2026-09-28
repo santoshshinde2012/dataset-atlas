@@ -10,7 +10,7 @@ import { bibtexFor } from '../citation.js';
 import { accessRequirement } from '../access.js';
 import { accessAction } from '../resource.js';
 import { countryCoverage } from '../coverage.js';
-import { licenseUse, licenseUseSummary } from '../license-use.js';
+import { licenseUse, licenseUseSummary, licenseBadgeText } from '../license-use.js';
 import { linkHealth } from '../link-health.js';
 
 export function initCardRail({ store, toast, copyText, countryNames = {}, generated = null }) {
@@ -174,17 +174,24 @@ export function initCardRail({ store, toast, copyText, countryNames = {}, genera
 
     const focusName = state.focusCountry ? countryNames[state.focusCountry] : null;
     const kindOf = (d) => countryCoverage(d, state.focusCountry);
+    const observed = (d) => (state.focusCountry ? store.select.observation(d, state.focusCountry) : null);
     const tagged = focusName ? datasets.filter((d) => kindOf(d) === 'tagged') : [];
     const series = focusName ? datasets.filter((d) => kindOf(d) === 'series') : [];
+    const withRows = series.filter((d) => observed(d) && observed(d) !== 'absent');
+    const unchecked = series.filter((d) => !observed(d));
     const rest = focusName ? datasets.filter((d) => !kindOf(d)) : datasets;
     if (focusName && (tagged.length || series.length) && rest.length < datasets.length) {
       if (tagged.length) {
         list.appendChild(groupLabel(`Tagged ${focusName}`, tagged.length));
         for (const d of tagged) list.appendChild(datasetCard(d));
       }
-      if (series.length) {
-        list.appendChild(groupLabel(`Global country-year series (candidate for ${focusName})`, series.length));
-        for (const d of series) list.appendChild(datasetCard(d));
+      if (withRows.length) {
+        list.appendChild(groupLabel(`Global series with rows for ${focusName}`, withRows.length));
+        for (const d of withRows) list.appendChild(datasetCard(d));
+      }
+      if (unchecked.length) {
+        list.appendChild(groupLabel(`Global country-year series (candidate for ${focusName})`, unchecked.length));
+        for (const d of unchecked) list.appendChild(datasetCard(d));
       }
       if (rest.length) {
         list.appendChild(groupLabel(
@@ -200,7 +207,9 @@ export function initCardRail({ store, toast, copyText, countryNames = {}, genera
   /** Empty state with removable chips naming each active narrowing filter. */
   function renderEmptyState(state) {
     const wrap = el('div', 'empty-state');
-    wrap.appendChild(el('p', 'empty-note', 'No datasets match the current filters here.'));
+    wrap.appendChild(el('p', 'empty-note', state.focusCountry
+      ? `No reviewed dataset for ${esc(countryNames[state.focusCountry] || state.focusCountry)} matches these filters. Global series checked with no rows for this country stay hidden.`
+      : 'No datasets match the current filters here.'));
     const chips = el('div', 'active-filter-chips');
 
     const addChip = (label, clear) => {
@@ -292,9 +301,16 @@ export function initCardRail({ store, toast, copyText, countryNames = {}, genera
     if (state.focusCountry && countryCoverage(d, state.focusCountry) === 'tagged') {
       badges.appendChild(el('span', 'badge country-badge', esc(countryNames[state.focusCountry] || state.focusCountry)));
     } else if (state.focusCountry && countryCoverage(d, state.focusCountry) === 'series') {
-      const series = el('span', 'badge series-badge', 'country series');
-      series.title = 'Global country-year series — this country is a candidate, not a verified row';
-      badges.appendChild(series);
+      const obs = store.select.observation(d, state.focusCountry);
+      if (obs && obs !== 'absent') {
+        const series = el('span', 'badge series-badge', `rows ${obs.start}–${obs.end}`);
+        series.title = `Checked source rows for ${countryNames[state.focusCountry] || state.focusCountry}: ${obs.start}–${obs.end}. Aggregates excluded. This is not a packaged country extract.`;
+        badges.appendChild(series);
+      } else {
+        const series = el('span', 'badge series-badge', 'country series');
+        series.title = 'Global country-year series — this country is a candidate, not a verified row';
+        badges.appendChild(series);
+      }
     }
     const access = accessRequirement(d);
     if (access) {
@@ -309,7 +325,9 @@ export function initCardRail({ store, toast, copyText, countryNames = {}, genera
     domBadge.style.setProperty('--badge-color', dmColor || 'var(--muted)');
     badges.appendChild(domBadge);
     for (const f of (d.formats || []).slice(0, 3)) badges.appendChild(el('span', 'badge plain', esc(f)));
-    badges.appendChild(el('span', 'badge plain', esc(d.license)));
+    const lic = el('span', 'badge plain', esc(licenseBadgeText(d.license)));
+    lic.title = d.licenseUrl ? `${d.license} — ${d.licenseUrl}` : d.license;
+    badges.appendChild(lic);
     if (d.verified) {
       const health = linkHealth(d, generated);
       const v = el('span', 'badge ' + (health.status === 'verified' ? 'verified-badge' : health.status === 'stale' ? 'stale-badge' : 'plain'),
@@ -333,7 +351,26 @@ export function initCardRail({ store, toast, copyText, countryNames = {}, genera
     }
     card.appendChild(badges);
 
+    const yearNote = d.freshnessYear && d.freshnessYear !== d.coverageEnd
+      ? `Data ${d.coverageStart}–${d.coverageEnd} · Reviewed ${d.freshnessYear}`
+      : `Data ${d.coverageStart}–${d.coverageEnd}`;
+    const years = el('p', 'card-years', esc(yearNote));
+    years.title = 'Coverage is the data span. Reviewed is the editorial content year, not the day the link was checked.';
+    card.appendChild(years);
     card.appendChild(el('p', 'card-desc', esc(d.description)));
+    if (d.sample?.rows?.length) {
+      const details = el('details', 'card-sample');
+      const summary = document.createElement('summary');
+      summary.textContent = 'Sample rows';
+      details.appendChild(summary);
+      const pre = document.createElement('pre');
+      pre.textContent = [
+        d.sample.columns.join(' | '),
+        ...d.sample.rows.map((row) => row.join(' | ')),
+      ].join('\n');
+      details.appendChild(pre);
+      card.appendChild(details);
+    }
     card.appendChild(dnaStrip(d));
 
     const actions = el('div', 'card-actions');

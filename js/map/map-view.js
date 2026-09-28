@@ -32,9 +32,11 @@ export class MapView {
     this.lastProjectionKey = store.getState().projection;
     this.lastRegion = store.getState().region;
     this.lastTheme = store.getState().theme;
+    this.lastMapMetric = store.getState().mapMetric;
 
     this.#buildScene();
     this.#paintLegend();
+    this.#bindMetricToggle();
     this.applyProjection();
     this.#attachInteractions();
     this.#attachZoomControls();
@@ -177,15 +179,25 @@ export class MapView {
 
   /** The legend gradient and label follow the active domain's ramp. */
   #paintLegend() {
-    const { domain } = this.store.getState();
+    const { domain, mapMetric } = this.store.getState();
     const ramp = document.querySelector('.legend-ramp');
     if (ramp) ramp.style.background = `linear-gradient(90deg, ${this.#rampFor(domain).join(', ')})`;
     const label = document.querySelector('.legend-label');
     if (label) {
+      const metric = mapMetric === 'files' ? 'verified files' : 'curated datasets';
       label.textContent = domain === 'all'
-        ? 'data availability'
-        : `${DOMAIN_META[domain].name} data availability`;
+        ? metric
+        : `${DOMAIN_META[domain].name} · ${metric}`;
     }
+    document.getElementById('metric-curated')?.classList.toggle('active', mapMetric !== 'files');
+    document.getElementById('metric-files')?.classList.toggle('active', mapMetric === 'files');
+    document.getElementById('metric-curated')?.setAttribute('aria-pressed', mapMetric !== 'files' ? 'true' : 'false');
+    document.getElementById('metric-files')?.setAttribute('aria-pressed', mapMetric === 'files' ? 'true' : 'false');
+  }
+
+  #bindMetricToggle() {
+    document.getElementById('metric-curated')?.addEventListener('click', () => this.store.actions.setMapMetric('curated'));
+    document.getElementById('metric-files')?.addEventListener('click', () => this.store.actions.setMapMetric('files'));
   }
 
   #onCountryLeave() {
@@ -238,7 +250,7 @@ export class MapView {
   }
 
   paintCountries() {
-    const counts = this.store.select.regionCounts();
+    const counts = this.store.select.mapCounts();
     const max = Math.max(1, ...Object.keys(REGION_META).map((k) => counts[k]));
     this.gCountries.selectAll('path').attr('fill', (d) => {
       const region = this.countryRegion[d.id];
@@ -248,7 +260,7 @@ export class MapView {
   }
 
   positionNodes() {
-    const counts = this.store.select.regionCounts();
+    const counts = this.store.select.mapCounts();
     const max = Math.max(1, ...Object.keys(REGION_META).map((k) => counts[k]));
     const rScale = d3.scaleSqrt().domain([0, max]).range([5, 24]);
     const state = this.store.getState();
@@ -256,12 +268,14 @@ export class MapView {
       ? accentColor(state.theme)
       : domainColor(state.domain, state.theme);
     const s = this.strategy;
+    const filesOnly = state.mapMetric === 'files';
 
     // per-region domain mix for the "All domains" donut rings
     let regionDomainMix = null;
     if (state.domain === 'all') {
       regionDomainMix = {};
       for (const d of this.store.select.filtered()) {
+        if (filesOnly && !d.resources?.some((r) => r.kind === 'download' || r.kind === 'api')) continue;
         if (!REGION_META[d.region]) continue;
         (regionDomainMix[d.region] ||= {})[d.domain] =
           ((regionDomainMix[d.region] || {})[d.domain] || 0) + 1;
@@ -281,7 +295,9 @@ export class MapView {
       g.attr('transform', `translate(${x},${y})`)
         .classed('selected', state.region === key)
         .style('opacity', count === 0 ? 0.35 : 1)
-        .attr('aria-label', `Browse ${meta.name} datasets — ${count} matching`);
+        .attr('aria-label', filesOnly
+          ? `Browse ${meta.name} verified files — ${count} matching`
+          : `Browse ${meta.name} datasets — ${count} matching`);
       g.select('.halo').attr('r', r + 9).attr('fill', nodeColor).attr('opacity', 0.14);
       g.select('.core').attr('r', r).attr('fill', nodeColor).attr('fill-opacity', 0.4);
       g.select('.node-name').attr('y', -r - 10).text(meta.name);
@@ -452,10 +468,11 @@ export class MapView {
   /* ---------- store reaction ---------- */
 
   #onStateChange() {
-    const { projection, region, theme, domain } = this.store.getState();
-    if (theme !== this.lastTheme || domain !== this.lastDomain) {
+    const { projection, region, theme, domain, mapMetric } = this.store.getState();
+    if (theme !== this.lastTheme || domain !== this.lastDomain || mapMetric !== this.lastMapMetric) {
       this.lastTheme = theme;
       this.lastDomain = domain;
+      this.lastMapMetric = mapMetric;
       this.#paintLegend();
     }
     if (projection !== this.lastProjectionKey) {

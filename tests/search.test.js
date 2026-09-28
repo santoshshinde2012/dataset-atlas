@@ -18,3 +18,12 @@ test('search handles CO₂ spelling and keeps title matches ahead of description
   const description = { title: '', description: 'India crop production', source: '' };
   assert.ok(searchScore(title, 'India crop production') > searchScore(description, 'India crop production'));
 });
+
+test('search maps particulate to PM2.5 and does not treat a country name as a free pass', () => {
+  const pm = catalog.find((d) => /PM2\.5/i.test(d.title));
+  const crop = catalog.find((d) => d.title === 'Crop Production in India (Kaggle)');
+  assert.ok(searchScore(pm, 'particulate') > 0);
+  assert.equal(searchScore(crop, 'Brazil crop production'), 0);
+  const population = catalog.find((d) => d.title.includes('Population, total'));
+  assert.ok(searchScore(population, 'India population') > 0);
+});

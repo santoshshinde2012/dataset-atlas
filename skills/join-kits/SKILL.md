@@ -16,8 +16,9 @@ You are joining public datasets. The atlas is a **join referee**, not a warehous
 5. `check_units` and `check_vintage`. Conflict means do not treat columns as the same quantity or the same year.
 6. `get_crosswalk` instead of joining on place names (IMD, LGD, P-code).
 7. `get_resource` before telling the user they can download a file.
-8. `assess_join` on two catalog ids. `match` only with a verified join kit.
-9. `build_passport` for the source inventory.
+8. `coverage_for_country` before claiming a global series contains that country.
+9. `assess_join` on two catalog ids. `match` only with a verified join kit.
+10. `build_passport` for the source inventory.
 
 Run the server from this repo:
 

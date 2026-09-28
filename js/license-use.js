@@ -89,3 +89,40 @@ export function licenseUseSummary(use) {
   const extra = use.specified === false ? ' · unspecified≠public domain' : '';
   return `analysis ${use.analysis} · redistribute ${use.redistribute} · AI training ${use.aiTraining}${extra}`;
 }
+
+/** Short badge. The full license string stays in the tooltip. */
+export function licenseBadgeText(license) {
+  const text = String(license || 'Unknown');
+  const t = text.toLowerCase();
+  if (/cc0/.test(t)) return 'CC0';
+  if (/public domain/.test(t)) return 'Public domain';
+  if (/cc by-nc-sa/.test(t)) return 'CC BY-NC-SA';
+  if (/cc by-nc/.test(t)) return 'CC BY-NC';
+  if (/cc by-sa/.test(t)) return 'CC BY-SA';
+  if (/cc by-nd/.test(t)) return 'CC BY-ND';
+  if (/cc by/.test(t)) return 'CC BY';
+  if (/odbl/.test(t)) return 'ODbL';
+  if (/open government licence/.test(t)) return 'OGL';
+  if (/godl|open government data india|government open data license - india/.test(t)) return 'GODL India';
+  if (text.length > 32) return `${text.slice(0, 30)}…`;
+  return text;
+}
+
+/** Known deed URLs only. Vague licenses stay without a link. */
+export function knownLicenseUrl(license) {
+  const text = String(license || '').toLowerCase();
+  if (!text || /unspecified|unknown|custom|other|kaggle/.test(text)) return null;
+  if (/cc0/.test(text)) return 'https://creativecommons.org/publicdomain/zero/1.0/';
+  if (/cc by-nc-sa\s*4/.test(text)) return 'https://creativecommons.org/licenses/by-nc-sa/4.0/';
+  if (/cc by-nc-sa\s*3/.test(text)) return 'https://creativecommons.org/licenses/by-nc-sa/3.0/';
+  if (/cc by-sa\s*4/.test(text)) return 'https://creativecommons.org/licenses/by-sa/4.0/';
+  if (/cc by-nd\s*3/.test(text)) return 'https://creativecommons.org/licenses/by-nd/3.0/';
+  if (/cc by\s*4|cc-by-4|cc by-4/.test(text)) return 'https://creativecommons.org/licenses/by/4.0/';
+  if (/cc by\s*3\.0\s*igo/.test(text)) return 'https://creativecommons.org/licenses/by/3.0/igo/';
+  if (/cc by\s*3\.0\s*au/.test(text)) return 'https://creativecommons.org/licenses/by/3.0/au/';
+  if (/cc by\s*3\.0\s*us/.test(text)) return 'https://creativecommons.org/licenses/by/3.0/us/';
+  if (/cc by\s*2\.5/.test(text)) return 'https://creativecommons.org/licenses/by/2.5/';
+  if (/odbl/.test(text)) return 'https://opendatacommons.org/licenses/odbl/1-0/';
+  if (/open government licence v3/.test(text)) return 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/';
+  return null;
+}

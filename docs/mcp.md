@@ -44,6 +44,8 @@ Typical flow:
 | `check_vintage` | Calendar vs fiscal vs mid-year vs census | Shift Australia FY into a calendar year |
 | `get_crosswalk` | District → IMD or LGD; Nigeria `adm1_pcode` | Guess unmatched geography |
 | `build_passport` | Export manifest + bibliography + share link | Download non-Kaggle files for you |
+| `coverage_for_country` | Years actually present for one ISO-2 code in a checked series | Treat a missing file, or a missing country, as worldwide coverage |
+| `search_variables` | Find reviewed pilot columns and join keys | Invent a schema the pilot does not list |
 
 ## How MCP keeps agents honest
 

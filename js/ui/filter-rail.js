@@ -4,12 +4,13 @@ import { $, el } from '../utils/dom.js';
 import { esc, normFormat } from '../utils/text.js';
 import { externalCatalogs } from '../external-catalogs.js';
 
-export function initFilterRail({ store, generated = null, toast = () => {} }) {
+export function initFilterRail({ store, generated = null, toast = () => {}, tasks = [], onQuestion = () => {} }) {
   if (generated) {
     $('#catalog-stamp').textContent = `Catalog checked ${generated}`;
     $('#catalog-stamp').hidden = false;
   }
   buildPresets(store, toast);
+  buildQuestions(tasks, onQuestion);
   buildFacet(
     $('#source-filters'),
     Object.entries(SOURCE_TYPE_META).map(([k, m]) => [k, m.name]),
@@ -97,6 +98,19 @@ export function initFilterRail({ store, generated = null, toast = () => {} }) {
 export function setCollapsed(collapsed) {
   $('#left-rail').classList.toggle('collapsed', collapsed);
   $('#rail-expand').hidden = !collapsed;
+}
+
+function buildQuestions(tasks, onQuestion) {
+  const host = $('#question-list');
+  if (!host) return;
+  host.replaceChildren();
+  for (const task of tasks) {
+    const button = el('button', 'preset question');
+    button.type = 'button';
+    button.innerHTML = `${esc(task.title)}<small>${esc(task.country)} · ${esc(task.level)} · ${task.startYear}–${task.endYear}</small>`;
+    button.onclick = () => onQuestion(task.id);
+    host.appendChild(button);
+  }
 }
 
 function buildPresets(store, toast) {

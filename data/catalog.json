@@ -187,7 +187,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/apro_cpsh1",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/apro_cpsh1?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat apro_cpsh1 TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -213,7 +220,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/databrowser/view/apro_cpsh1/default/table?lang=en",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/apro_cpsh1?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat apro_cpsh1 TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -255,7 +269,36 @@
      "label": "World Bank API (paginated)"
     }
    ],
-   "coverageKind": "global-country-series"
+   "coverageKind": "global-country-series",
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "11.1111111111111",
+      "2023"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "58.4395075356853",
+      "2023"
+     ],
+     [
+      "Angola",
+      "AO",
+      "36.9479425683805",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/AG.LND.AGRI.ZS?downloadformat=csv"
+   }
   },
   {
    "title": "Crop Yields (Our World in Data)",
@@ -286,7 +329,36 @@
      "label": "OWID cereal yield CSV"
     }
    ],
-   "coverageKind": "global-country-series"
+   "coverageKind": "global-country-series",
+   "sample": {
+    "columns": [
+     "Entity",
+     "Code",
+     "Year",
+     "Cereals - Yield (tonnes per hectare)"
+    ],
+    "rows": [
+     [
+      "Afghanistan",
+      "AFG",
+      "1961",
+      "1.1151"
+     ],
+     [
+      "Afghanistan",
+      "AFG",
+      "1962",
+      "1.079"
+     ],
+     [
+      "Afghanistan",
+      "AFG",
+      "1963",
+      "0.9858"
+     ]
+    ],
+    "source": "https://ourworldindata.org/grapher/cereal-yield.csv"
+   }
   },
   {
    "title": "FAOSTAT: Crops and Livestock Products (QCL)",
@@ -310,7 +382,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://www.fao.org/faostat/en/#data/QCL",
    "providerId": "fao",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+     "format": "ZIP",
+     "kind": "download",
+     "label": "FAOSTAT QCL bulk ZIP"
+    }
+   ],
    "coverageKind": "global-country-series"
   },
   {
@@ -613,7 +692,20 @@
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.humdata.org/dataset/eth-rainfall-subnational",
    "providerId": "hdx",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://data.humdata.org/dataset/423143be-315f-48d7-9e90-ae23738da564/resource/49e3a707-d153-423e-b22b-30484d678dd7/download/eth-rainfall-subnat-full.csv",
+     "format": "CSV",
+     "kind": "download",
+     "label": "eth-rainfall-subnat-full.csv"
+    },
+    {
+     "url": "https://data.humdata.org/dataset/423143be-315f-48d7-9e90-ae23738da564/resource/45ca4594-766c-4e31-b429-d888959cdeb0/download/eth-rainfall-subnat-5ytd.csv",
+     "format": "CSV",
+     "kind": "download",
+     "label": "eth-rainfall-subnat-5ytd.csv"
+    }
+   ],
    "coverageKind": "tagged-countries"
   },
   {
@@ -746,7 +838,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/databrowser/view/env_air_gge/default/table?lang=en",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/env_air_gge?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat env_air_gge TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -1132,7 +1231,20 @@
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.humdata.org/dataset/cod-ps-nga",
    "providerId": "hdx",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://data.humdata.org/dataset/a7c3de5e-ff27-4746-99cd-05f2ad9b1066/resource/4710c51c-813b-481f-bb4e-ffb593e6f126/download/nga_admpop_adm0_2022.csv",
+     "format": "CSV",
+     "kind": "download",
+     "label": "nga_admpop_adm0_2022.csv"
+    },
+    {
+     "url": "https://data.humdata.org/dataset/a7c3de5e-ff27-4746-99cd-05f2ad9b1066/resource/d9fc551a-b5e4-4bed-9d0d-b047b6961817/download/nga_admpop_adm1_2022.csv",
+     "format": "CSV",
+     "kind": "download",
+     "label": "nga_admpop_adm1_2022.csv"
+    }
+   ],
    "coverageKind": "tagged-countries"
   },
   {
@@ -1237,7 +1349,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table?lang=en",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/demo_pjan?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat demo_pjan TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -1264,7 +1383,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/demo_pjan",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/demo_pjan?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat demo_pjan TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -1355,7 +1481,36 @@
      "label": "World Bank API (paginated)"
     }
    ],
-   "coverageKind": "global-country-series"
+   "coverageKind": "global-country-series",
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "108785",
+      "2025"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "43844111",
+      "2025"
+     ],
+     [
+      "Angola",
+      "AO",
+      "39040039",
+      "2025"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=csv"
+   }
   },
   {
    "title": "World Population Dataset (Kaggle)",
@@ -1408,7 +1563,20 @@
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.humdata.org/dataset/cod-ps-bra",
    "providerId": "hdx",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://data.humdata.org/dataset/e06a9206-767e-4ee5-b50b-96e0402aade5/resource/4d55f99a-6276-4d4b-b2fc-801e74d7c4bd/download/bra_admpop_adm0_2022.csv",
+     "format": "CSV",
+     "kind": "download",
+     "label": "bra_admpop_adm0_2022.csv"
+    },
+    {
+     "url": "https://data.humdata.org/dataset/e06a9206-767e-4ee5-b50b-96e0402aade5/resource/72d3367c-a9f0-4a5f-b723-1d88da8fba6a/download/bra_admpop_adm1_2022.csv",
+     "format": "CSV",
+     "kind": "download",
+     "label": "bra_admpop_adm1_2022.csv"
+    }
+   ],
    "coverageKind": "tagged-countries"
   },
   {
@@ -1462,7 +1630,20 @@
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.humdata.org/dataset/cod-ps-mex",
    "providerId": "hdx",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://data.humdata.org/dataset/05d82fd1-c2a8-402a-86f5-745837553eed/resource/2f1c1960-20d6-4c63-be5f-2eb4955f3ec5/download/mex_admpop_adm0_2024.csv",
+     "format": "CSV",
+     "kind": "download",
+     "label": "mex_admpop_adm0_2024.csv"
+    },
+    {
+     "url": "https://data.humdata.org/dataset/05d82fd1-c2a8-402a-86f5-745837553eed/resource/3a744d04-464a-4567-b127-759742cfff72/download/mex_admpop_adm1_2024.csv",
+     "format": "CSV",
+     "kind": "download",
+     "label": "mex_admpop_adm1_2024.csv"
+    }
+   ],
    "coverageKind": "tagged-countries"
   },
   {
@@ -1787,7 +1968,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/nama_10_gdp",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/nama_10_gdp?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat nama_10_gdp TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -1813,7 +2001,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/prc_hicp_minr",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_minr?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat prc_hicp_minr TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -1846,7 +2041,40 @@
      "label": "OWID grapher CSV"
     }
    ],
-   "coverageKind": "global-country-series"
+   "coverageKind": "global-country-series",
+   "sample": {
+    "columns": [
+     "Entity",
+     "Code",
+     "Year",
+     "GDP per capita",
+     "World region according to OWID"
+    ],
+    "rows": [
+     [
+      "Afghanistan",
+      "AFG",
+      "2000",
+      "1617.8264",
+      "Asia"
+     ],
+     [
+      "Afghanistan",
+      "AFG",
+      "2001",
+      "1454.1108",
+      "Asia"
+     ],
+     [
+      "Afghanistan",
+      "AFG",
+      "2002",
+      "1774.3087",
+      "Asia"
+     ]
+    ],
+    "source": "https://ourworldindata.org/grapher/gdp-per-capita-worldbank.csv"
+   }
   },
   {
    "title": "Global Inflation Dataset",
@@ -2072,7 +2300,36 @@
      "label": "World Bank API (paginated)"
     }
    ],
-   "coverageKind": "regional"
+   "coverageKind": "regional",
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "6.81077669324554",
+      "2024"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "1.87319280045979",
+      "2024"
+     ],
+     [
+      "Angola",
+      "AO",
+      "3.13353542450008",
+      "2025"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.KD.ZG?downloadformat=csv"
+   }
   },
   {
    "title": "Canada: Monthly GDP at Basic Prices by Industry (Table 36-10-0434-01)",
@@ -2223,7 +2480,36 @@
      "label": "World Bank API (paginated)"
     }
    ],
-   "coverageKind": "regional"
+   "coverageKind": "regional",
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "107.716996929947",
+      "2024"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "112.230903625488",
+      "2023"
+     ],
+     [
+      "Angola",
+      "AO",
+      "86.7353918783767",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/SE.PRM.ENRR?downloadformat=csv"
+   }
   },
   {
    "title": "South Africa School Masterlist (EMIS)",
@@ -2359,7 +2645,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/educ_uoe_enra02",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/educ_uoe_enra02?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat educ_uoe_enra02 TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -2392,7 +2685,36 @@
      "label": "OWID grapher CSV"
     }
    ],
-   "coverageKind": "global-country-series"
+   "coverageKind": "global-country-series",
+   "sample": {
+    "columns": [
+     "Entity",
+     "Code",
+     "Year",
+     "Literacy rate"
+    ],
+    "rows": [
+     [
+      "Afghanistan",
+      "AFG",
+      "1950",
+      "3"
+     ],
+     [
+      "Afghanistan",
+      "AFG",
+      "1979",
+      "18.16"
+     ],
+     [
+      "Afghanistan",
+      "AFG",
+      "2011",
+      "31.45"
+     ]
+    ],
+    "source": "https://ourworldindata.org/grapher/cross-country-literacy-rates.csv"
+   }
   },
   {
    "title": "Education Statistics (EdStats)",
@@ -2459,7 +2781,36 @@
      "label": "World Bank API (paginated)"
     }
    ],
-   "coverageKind": "global-country-series"
+   "coverageKind": "global-country-series",
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "3.61855755636695",
+      "2021"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "4.34319019317627",
+      "2017"
+     ],
+     [
+      "Angola",
+      "AO",
+      "2.51273663315785",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/SE.XPD.TOTL.GD.ZS?downloadformat=csv"
+   }
   },
   {
    "title": "OECD PISA 2022 Database",
@@ -2866,7 +3217,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/nrg_bal_c",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/nrg_bal_c?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat nrg_bal_c TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -2960,7 +3318,36 @@
      "label": "World Bank API (paginated)"
     }
    ],
-   "coverageKind": "global-country-series"
+   "coverageKind": "global-country-series",
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "100",
+      "2024"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "87.8",
+      "2024"
+     ],
+     [
+      "Angola",
+      "AO",
+      "55.5",
+      "2024"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/EG.ELC.ACCS.ZS?downloadformat=csv"
+   }
   },
   {
    "title": "Global Power Plant Database (WRI)",
@@ -3318,7 +3705,20 @@
    "sourceModifiedYear": 2025,
    "landingPage": "https://data.humdata.org/dataset/health-facilities-in-sub-saharan-africa",
    "providerId": "hdx",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://data.humdata.org/dataset/eb1ba830-9464-43c8-9370-28cee0c99f5d/resource/758d5c17-88f4-42b2-9d4b-4bfe32d4acf7/download/sub-saharan_health_facilities.xlsx",
+     "format": "XLSX",
+     "kind": "download",
+     "label": "Sub-Saharan_health_facilities.xlsx"
+    },
+    {
+     "url": "https://data.humdata.org/dataset/eb1ba830-9464-43c8-9370-28cee0c99f5d/resource/341668a3-7066-46e4-aca0-fe09c57f9314/download/suhsharan_health_facilities.zip",
+     "format": "SHP",
+     "kind": "download",
+     "label": "Sub-Saharan_health_facilities.zip"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -3426,7 +3826,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/hlth_cd_asdr2",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/hlth_cd_asdr2?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat hlth_cd_asdr2 TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -3947,7 +4354,14 @@
    "verified": "2026-09-28",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/rail_pa_total",
    "providerId": "eurostat",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/rail_pa_total?format=TSV&compressed=true",
+     "format": "TSV",
+     "kind": "download",
+     "label": "Eurostat rail_pa_total TSV"
+    }
+   ],
    "coverageKind": "regional"
   },
   {
@@ -4016,7 +4430,36 @@
      "label": "World Bank API (paginated)"
     }
    ],
-   "coverageKind": "global-country-series"
+   "coverageKind": "global-country-series",
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "274280",
+      "2018"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "1031379",
+      "2023"
+     ],
+     [
+      "Angola",
+      "AO",
+      "1321412",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/IS.AIR.PSGR?downloadformat=csv"
+   }
   },
   {
    "title": "Death Rate from Road Traffic Injuries",
@@ -4049,7 +4492,36 @@
      "label": "OWID grapher CSV"
     }
    ],
-   "coverageKind": "global-country-series"
+   "coverageKind": "global-country-series",
+   "sample": {
+    "columns": [
+     "Entity",
+     "Code",
+     "Year",
+     "3.6.1 - Death rate due to road traffic injuries, by sex (per 100,000 population) - SH_STA_TRAF - Both sexes"
+    ],
+    "rows": [
+     [
+      "Afghanistan",
+      "AFG",
+      "2000",
+      "14.7"
+     ],
+     [
+      "Afghanistan",
+      "AFG",
+      "2005",
+      "15.2"
+     ],
+     [
+      "Afghanistan",
+      "AFG",
+      "2010",
+      "14.4"
+     ]
+    ],
+    "source": "https://ourworldindata.org/grapher/death-rate-road-traffic-injuries.csv"
+   }
   },
   {
    "title": "Estimated Road Traffic Death Rate (WHO GHO)",
@@ -4369,7 +4841,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Afghanistan",
+      "AF",
+      "37.9483109911724",
+      "2023"
+     ],
+     [
+      "Angola",
+      "AO",
+      "19.9075690536367",
+      "2023"
+     ],
+     [
+      "Albania",
+      "AL",
+      "15.5141032036885",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/EN.ATM.PM25.MC.M3?downloadformat=csv"
+   }
   },
   {
    "title": "Carbon dioxide (CO2) emissions excluding LULUCF per capita (t CO2e/capita) — World Bank",
@@ -4409,7 +4910,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "5.14838649937497",
+      "2024"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "0.2829802981146",
+      "2024"
+     ],
+     [
+      "Angola",
+      "AO",
+      "0.741712294740973",
+      "2024"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/EN.GHG.CO2.PC.CE.AR5?downloadformat=csv"
+   }
   },
   {
    "title": "Mortality rate, under-5 (per 1,000 live births) — World Bank",
@@ -4449,7 +4979,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Afghanistan",
+      "AF",
+      "53",
+      "2024"
+     ],
+     [
+      "Angola",
+      "AO",
+      "49",
+      "2024"
+     ],
+     [
+      "Albania",
+      "AL",
+      "9.2",
+      "2024"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/SH.DYN.MORT?downloadformat=csv"
+   }
   },
   {
    "title": "Maternal mortality ratio (modeled estimate, per 100,000 live births) — World Bank",
@@ -4489,7 +5048,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Afghanistan",
+      "AF",
+      "521",
+      "2023"
+     ],
+     [
+      "Angola",
+      "AO",
+      "183",
+      "2023"
+     ],
+     [
+      "Albania",
+      "AL",
+      "7",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/SH.STA.MMRT?downloadformat=csv"
+   }
   },
   {
    "title": "GDP per capita (current US$) — World Bank",
@@ -4529,7 +5117,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "38590.5650288641",
+      "2024"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "416.871146273728",
+      "2024"
+     ],
+     [
+      "Angola",
+      "AO",
+      "3129.47662331063",
+      "2025"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv"
+   }
   },
   {
    "title": "Inflation, consumer prices (annual %) — World Bank",
@@ -4569,7 +5186,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "4.25746204335427",
+      "2019"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "-6.60118564073726",
+      "2024"
+     ],
+     [
+      "Angola",
+      "AO",
+      "20.1620197572331",
+      "2025"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/FP.CPI.TOTL.ZG?downloadformat=csv"
+   }
   },
   {
    "title": "Cereal yield (kg per hectare) — World Bank",
@@ -4609,7 +5255,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Afghanistan",
+      "AF",
+      "2358.6",
+      "2024"
+     ],
+     [
+      "Angola",
+      "AO",
+      "1061.8",
+      "2023"
+     ],
+     [
+      "Albania",
+      "AL",
+      "5169.9",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/AG.YLD.CREL.KG?downloadformat=csv"
+   }
   },
   {
    "title": "Food production index (2014-2016 = 100) — World Bank",
@@ -4649,7 +5324,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Afghanistan",
+      "AF",
+      "111.43",
+      "2022"
+     ],
+     [
+      "Angola",
+      "AO",
+      "124.09",
+      "2022"
+     ],
+     [
+      "Albania",
+      "AL",
+      "105.4",
+      "2022"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/AG.PRD.FOOD.XD?downloadformat=csv"
+   }
   },
   {
    "title": "Literacy rate, adult total (% of people ages 15 and above) — World Bank",
@@ -4689,7 +5393,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "96.8199996948242",
+      "2010"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "37.2700004577637",
+      "2021"
+     ],
+     [
+      "Angola",
+      "AO",
+      "68.1800003051758",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/SE.ADT.LITR.ZS?downloadformat=csv"
+   }
   },
   {
    "title": "Primary completion rate, total (% of relevant age group) — World Bank",
@@ -4729,7 +5462,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "93.8329391479492",
+      "2022"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "90.3076095581055",
+      "2023"
+     ],
+     [
+      "Angola",
+      "AO",
+      "47.8556786596463",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/SE.PRM.CMPT.ZS?downloadformat=csv"
+   }
   },
   {
    "title": "Air transport, freight (million ton-km) — World Bank",
@@ -4769,7 +5531,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Afghanistan",
+      "AF",
+      "0.794172",
+      "2023"
+     ],
+     [
+      "Angola",
+      "AO",
+      "70.707651",
+      "2023"
+     ],
+     [
+      "Albania",
+      "AL",
+      "0",
+      "2019"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/IS.AIR.GOOD.MT.K1?downloadformat=csv"
+   }
   },
   {
    "title": "Container port traffic (TEU: 20 foot equivalent units) — World Bank",
@@ -4809,7 +5600,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "64800",
+      "2024"
+     ],
+     [
+      "Angola",
+      "AO",
+      "709221",
+      "2024"
+     ],
+     [
+      "Albania",
+      "AL",
+      "184017",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/IS.SHP.GOOD.TU?downloadformat=csv"
+   }
   },
   {
    "title": "Renewable energy consumption (% of total final energy consumption) — World Bank",
@@ -4849,7 +5669,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "8.8",
+      "2022"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "20",
+      "2022"
+     ],
+     [
+      "Angola",
+      "AO",
+      "52.9",
+      "2021"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/EG.FEC.RNEW.ZS?downloadformat=csv"
+   }
   },
   {
    "title": "Energy use (kg of oil equivalent per capita) — World Bank",
@@ -4889,7 +5738,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Angola",
+      "AO",
+      "448.870903352713",
+      "2023"
+     ],
+     [
+      "Albania",
+      "AL",
+      "889.361655638963",
+      "2023"
+     ],
+     [
+      "United Arab Emirates",
+      "AE",
+      "9139.5423044996",
+      "2023"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/EG.USE.PCAP.KG.OE?downloadformat=csv"
+   }
   },
   {
    "title": "Urban population (% of total population) — World Bank",
@@ -4929,7 +5807,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "61.7485249229588",
+      "2025"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "25.9401644699898",
+      "2025"
+     ],
+     [
+      "Angola",
+      "AO",
+      "71.4615915176085",
+      "2025"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/SP.URB.TOTL.IN.ZS?downloadformat=csv"
+   }
   },
   {
    "title": "Fertility rate, total (births per woman) — World Bank",
@@ -4969,7 +5876,36 @@
    ],
    "coverageKind": "global-country-series",
    "verified": "2026-09-28",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "1.606",
+      "2024"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "4.761",
+      "2024"
+     ],
+     [
+      "Angola",
+      "AO",
+      "5.048",
+      "2024"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/SP.DYN.TFRT.IN?downloadformat=csv"
+   }
   },
   {
    "title": "OpenAQ Global Air Quality Measurements",
@@ -5032,7 +5968,20 @@
    "verified": "2026-09-27",
    "landingPage": "https://data.humdata.org/dataset/cod-ab-nga",
    "providerId": "hdx",
-   "resources": [],
+   "resources": [
+    {
+     "url": "https://data.humdata.org/dataset/81ac1d38-f603-4a98-804d-325c658599a3/resource/f1865f35-a07e-4de3-9183-e4222e475527/download/nga_admin_boundaries.xlsx",
+     "format": "XLSX",
+     "kind": "download",
+     "label": "nga_admin_boundaries.xlsx"
+    },
+    {
+     "url": "https://data.humdata.org/dataset/81ac1d38-f603-4a98-804d-325c658599a3/resource/7e30ec96-7f29-4ee8-9f4c-77633b353cbb/download/nga_admin_boundaries.geojson.zip",
+     "format": "GeoJSON",
+     "kind": "download",
+     "label": "nga_admin_boundaries.geojson.zip"
+    }
+   ],
    "coverageKind": "tagged-countries",
    "sourceModifiedYear": 2026
   },
@@ -5075,7 +6024,36 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "sourceModifiedYear": 2026
+   "sourceModifiedYear": 2026,
+   "sample": {
+    "columns": [
+     "Country",
+     "ISO2",
+     "Value",
+     "Year"
+    ],
+    "rows": [
+     [
+      "Aruba",
+      "AW",
+      "4167588070.29217",
+      "2024"
+     ],
+     [
+      "Afghanistan",
+      "AF",
+      "17778508875.7396",
+      "2024"
+     ],
+     [
+      "Angola",
+      "AO",
+      "122174889423.635",
+      "2025"
+     ]
+    ],
+    "source": "https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.CD?downloadformat=csv"
+   }
   },
   {
    "title": "CHIRPS global rainfall (Climate Hazards Center)",

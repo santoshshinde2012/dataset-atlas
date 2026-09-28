@@ -9,5 +9,8 @@ test('broader catalog links keep searches on official HTTPS hosts', () => {
   assert.equal(new URL(sources[0].url).searchParams.get('q'), 'crop yield & rainfall');
   assert.equal(new URL(sources[1].url).searchParams.get('q'), 'crop yield & rainfall');
   assert.equal(new URL(sources[2].url).searchParams.get('query'), 'crop yield & rainfall');
-  assert.equal(sources[3].searchesQuery, false);
+  assert.equal(sources[3].searchesQuery, true);
+  assert.equal(new URL(sources[3].url).searchParams.get('q'), 'crop yield & rainfall');
+  assert.equal(sources[4].searchesQuery, false);
+  assert.equal(new URL(sources[5].url).searchParams.get('keyword'), 'crop yield & rainfall');
 });

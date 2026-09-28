@@ -3,9 +3,9 @@ const PROVIDERS = [
   { name: 'Data.gov', scope: 'United States public data', home: 'https://catalog.data.gov/', search: 'https://catalog.data.gov/?q=' },
   { name: 'Humanitarian Data Exchange', scope: 'Humanitarian and crisis data', home: 'https://data.humdata.org/dataset/', search: 'https://data.humdata.org/dataset/?q=' },
   { name: 'Google Dataset Search', scope: 'Datasets across publishers', home: 'https://datasetsearch.research.google.com/', search: 'https://datasetsearch.research.google.com/search?query=' },
-  { name: 'World Bank Data Catalog', scope: 'Development data worldwide', home: 'https://datacatalog.worldbank.org/' },
+  { name: 'World Bank Data Catalog', scope: 'Development data worldwide', home: 'https://datacatalog.worldbank.org/', search: 'https://datacatalog.worldbank.org/search?q=' },
   { name: 'India Open Government Data', scope: 'Indian government data', home: 'https://data.gov.in/catalogs/' },
-  { name: 'Eurostat Database', scope: 'European official statistics', home: 'https://ec.europa.eu/eurostat/web/main/data/database' },
+  { name: 'Eurostat Database', scope: 'European official statistics', home: 'https://ec.europa.eu/eurostat/web/main/data/database', search: 'https://ec.europa.eu/eurostat/databrowser/search?lang=en&keyword=' },
 ];
 
 export function externalCatalogs(query = '') {

@@ -71,8 +71,8 @@ export function datasetPageHtml(d, { pageUrl, appUrl, jsonLd }) {
 <p>${esc(d.description)}</p>
 <p class="meta">
   Source: ${esc(d.source)} · Domain: ${esc(d.domain)} · Region: ${esc(d.region)}<br>
-  Coverage: ${d.coverageStart}–${d.coverageEnd} · Grain: ${esc(d.granularity || 'country')}<br>
-  License: ${esc(d.license)} · ${esc(licenseUseSummary(use))}<br>
+  Coverage: ${d.coverageStart}–${d.coverageEnd} · Grain: ${esc(d.granularity || 'country')}${d.freshnessYear && d.freshnessYear !== d.coverageEnd ? ` · Reviewed ${d.freshnessYear} (editorial year, not the link check)` : ''}<br>
+  License: ${d.licenseUrl ? `<a href="${esc(d.licenseUrl)}">${esc(d.license)}</a>` : esc(d.license)} · ${esc(licenseUseSummary(use))}<br>
   ${d.verified ? `Link checked ${esc(d.verified)} (URL reachability, not content quality).` : 'Link check not recorded.'}
 </p>
 <p><a href="${esc(source)}">Source page</a>${resource ? ` · <a href="${esc(resource.url)}">${resource.kind === 'api' ? 'API' : 'File'}</a>` : ''} · <a href="${esc(appUrl)}#p=${esc(d.id)}">Open in the atlas</a></p>

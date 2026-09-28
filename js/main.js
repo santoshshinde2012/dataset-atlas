@@ -56,7 +56,7 @@ function hydrateIcons() {
 
 async function boot() {
   hydrateIcons(); // static chrome icons appear while data loads
-  const { world, countryRegion, countryCodes, catalog, generated, pilot } = await loadAtlasData();
+  const { world, countryRegion, countryCodes, catalog, generated, pilot, coverage } = await loadAtlasData();
   const countryNames = Object.fromEntries(
     Object.values(countryCodes).map((c) => [c.cca2, c.name])
   );
@@ -72,6 +72,7 @@ async function boot() {
     pinStorage: localPinStorage,
     initialTheme: THEMES[storedTheme] ? storedTheme : DEFAULT_THEME,
     changes: computeVisitChanges(catalog),
+    coverageIndex: coverage,
   });
 
   // ---- shareable URL state: restore before first render ----
@@ -113,10 +114,16 @@ async function boot() {
   initPassport({ store, toast, copyText });
   initTopbar({ store, onPassportToggle: store.actions.togglePassport });
   initDomainDock({ store });
-  initFilterRail({ store, generated, toast });
+  const workbench = initWorkbench({ catalog, pilot, toast });
+  initFilterRail({
+    store,
+    generated,
+    toast,
+    tasks: pilot.tasks || [],
+    onQuestion: (id) => workbench.open(id),
+  });
   initCardRail({ store, toast, copyText, countryNames, generated });
   initCompare({ store, toast });
-  initWorkbench({ catalog, pilot, toast });
   initWelcome({ store });
 
   // pins arriving via a shared link are merged once, with feedback
@@ -236,19 +243,23 @@ function showAboutPanel(generated) {
         </header>
         <div class="about-body">
           <p><b>This is a curated starting set, not every dataset worldwide.</b> Entries link
-          to provider pages. New World Bank indicators were checked against the official
-          indicator and observations APIs; their year ranges describe the whole series and
-          may be shorter for a given country. Use “Search beyond the atlas” to explore
-          larger provider catalogs directly.</p>
+          to provider pages. Where a file or API was checked, the card says Download or Open API.
+          A landing page is never labeled as a file. World Bank and OWID series can show the years
+          actually present for the country you click. “Reviewed” is the editorial year, not the
+          last year of data and not the link check.</p>
+          <p><b>Checked questions</b> open the workbench on a reviewed join or an explicit refusal.
+          The map still browses by region. Color it by curated entries or by verified files — the
+          clicks stay the same. Use “Search beyond the atlas” for catalogs this index does not review.</p>
           <p><b>The catalog is checked daily.</b> An automated job checks links and records
           source metadata dates from supported APIs. Those dates do not change the data's
           editorially reviewed freshness year or coverage. Broken links are flagged for
           review while successful checks can still be published
           ${generated ? `— last check <b>${esc(generated)}</b>.` : '.'}</p>
           <p><b>Shield badges</b> on cards show when a dataset's link was last verified.
-          <b>DNA bars</b> compare freshness, coverage span, granularity, size and license
-          openness — tap any bar for the exact value. <b>Lock badges</b> warn about
-          account or sign-up requirements before you leave the atlas.</p>
+          <b>DNA bars</b> compare editorial freshness, coverage span, granularity, size and license
+          openness — tap any bar for the exact value. <b>Sample rows</b> are copied from the provider
+          file, not a live query. Agents can run <code>node scripts/atlas-mcp.js</code> against this
+          same catalog. GitHub Pages serves the atlas; it does not host that local MCP process.</p>
           <p>Source and pipeline: <a href="https://github.com/santoshshinde2012/dataset-atlas" target="_blank" rel="noopener">github.com/santoshshinde2012/dataset-atlas</a></p>
           <p class="about-author"><span>Built by <b>${esc(AUTHOR.name)}</b></span><span class="author-links">${AUTHOR.links.map((link) =>
             `<a href="${esc(link.href)}" target="_blank" rel="me noopener noreferrer" title="${esc(link.label)}" aria-label="${esc(AUTHOR.name)} on ${esc(link.label)}">${icon(link.id)}</a>`
