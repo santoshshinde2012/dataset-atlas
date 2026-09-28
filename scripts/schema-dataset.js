@@ -75,7 +75,7 @@ export function datasetPageHtml(d, { pageUrl, appUrl, jsonLd }) {
   License: ${d.licenseUrl ? `<a href="${esc(d.licenseUrl)}">${esc(d.license)}</a>` : esc(d.license)} · ${esc(licenseUseSummary(use))}<br>
   ${d.verified ? `Link checked ${esc(d.verified)} (URL reachability, not content quality).` : 'Link check not recorded.'}
 </p>
-<p><a href="${esc(source)}">Source page</a>${resource ? ` · <a href="${esc(resource.url)}">${resource.kind === 'api' ? 'API' : 'File'}</a>` : ''} · <a href="${esc(appUrl)}#p=${esc(d.id)}">Open in the atlas</a></p>
+<p><a href="${esc(source)}">Source page</a>${resource ? ` · <a href="${esc(resource.url)}">${resource.kind === 'api' ? 'API' : 'File'}</a>` : ''} · <a href="${esc(appUrl)}#ds=${esc(d.id)}">Open in the atlas</a></p>
 <p class="note">${esc(use.note)} A successful link check is not a guarantee that the file matches this description.</p>
 </body>
 </html>

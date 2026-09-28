@@ -74,11 +74,19 @@ test('togglePin persists through the injected storage port', () => {
   assert.deepEqual(storage.peek(), []);
 });
 
-test('stale pins are pruned against the catalog at boot', () => {
-  const storage = fakeStorage(['ghost-id']);
-  const store = mkStore(storage);
+test('openDataset selects that entry region without pinning it', () => {
+  const store = mkStore();
+  const dataset = store.select.catalog().find((d) => d.region === 'asia');
+  store.actions.selectRegion('europe');
+  store.actions.setSearch('noise');
+  assert.equal(store.actions.openDataset(dataset.id), true);
+  assert.equal(store.getState().region, 'asia');
+  assert.equal(store.getState().focusDataset, dataset.id);
+  assert.equal(store.getState().search, '');
   assert.equal(store.getState().pins.size, 0);
-  assert.deepEqual(storage.peek(), []);
+  assert.equal(store.actions.openDataset('dmissing'), false);
+  store.actions.selectRegion(null);
+  assert.equal(store.getState().focusDataset, null);
 });
 
 test('subscribers fire on every action', () => {

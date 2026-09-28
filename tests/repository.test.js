@@ -5,7 +5,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AUTHOR } from '../js/config.js';
 import { icon } from '../js/icons.js';
-import { catalogJsonLd, personJsonLd } from '../scripts/schema-dataset.js';
+import { catalogJsonLd, datasetPageHtml, personJsonLd } from '../scripts/schema-dataset.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFileSync(resolve(root, path), 'utf8');
@@ -77,4 +77,25 @@ test('author marketing links are https and published in the shell', () => {
   assert.deepEqual(personJsonLd().sameAs, hrefs);
   assert.equal(personJsonLd().url, 'https://github.com/santoshshinde2012');
   assert.deepEqual(catalogJsonLd('https://example.test/', 1).creator, personJsonLd());
+});
+
+test('a crawlable dataset page opens the map card instead of importing a pin', () => {
+  const html = datasetPageHtml({
+    id: 'dabc123',
+    title: 'Example',
+    description: 'A checked entry',
+    source: 'Example source',
+    domain: 'climate',
+    region: 'asia',
+    coverageStart: 2000,
+    coverageEnd: 2020,
+    license: 'CC0',
+    url: 'https://example.test/data',
+  }, {
+    pageUrl: 'https://example.test/dataset/dabc123.html',
+    appUrl: 'https://example.test/index.html',
+    jsonLd: { '@type': 'Dataset' },
+  });
+  assert.match(html, /href="https:\/\/example\.test\/index\.html#ds=dabc123"/);
+  assert.doesNotMatch(html, /#p=dabc123/);
 });

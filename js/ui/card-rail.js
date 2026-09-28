@@ -56,7 +56,7 @@ export function initCardRail({ store, toast, copyText, countryNames = {}, genera
       : store.select.searchResults();
 
     const key = JSON.stringify([
-      mode, region, state.domain, state.focusCountry, state.theme, state.sort,
+      mode, region, state.domain, state.focusCountry, state.focusDataset, state.theme, state.sort,
       state.onlyChanged, [...state.sourceTypes].sort(), [...state.formats].sort(),
       state.minOpenness, state.search, datasets.map((d) => d.id),
     ]);
@@ -76,10 +76,14 @@ export function initCardRail({ store, toast, copyText, countryNames = {}, genera
 
     renderList(state, mode, region, datasets);
 
+    const opened = state.focusDataset
+      && list.querySelector(`.card[data-id="${state.focusDataset}"]`);
+    if (opened) opened.scrollIntoView({ block: 'nearest' });
+
     // keyboard/screen-reader users land where the content starts — but never
     // steal focus while the user is typing the search that opened this rail
     if (!wasOpen && document.activeElement !== $('#search-input')) {
-      $('#rail-region-name').focus({ preventScroll: true });
+      (opened || $('#rail-region-name')).focus({ preventScroll: true });
     }
     wasOpen = true;
   }
@@ -259,6 +263,11 @@ export function initCardRail({ store, toast, copyText, countryNames = {}, genera
     const card = el('article', 'card');
     card.dataset.id = d.id;
     const state = store.getState();
+    if (state.focusDataset === d.id) {
+      card.classList.add('card-target');
+      card.tabIndex = -1;
+      card.setAttribute('aria-current', 'true');
+    }
     const theme = state.theme;
     const dm = DOMAIN_META[d.domain] || {};
     const dmColor = domainColor(d.domain, theme);

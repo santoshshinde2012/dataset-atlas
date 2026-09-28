@@ -922,6 +922,10 @@ button {
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(23, 36, 52, 0.1);
 }
+.card-target {
+  border-color: rgba(var(--accent-rgb), 0.7);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
 
 .card-top { display: flex; align-items: flex-start; gap: 4px; }
 .card-title { font-size: 13px; font-weight: 600; line-height: 1.35; flex: 1; margin-right: 4px; }
