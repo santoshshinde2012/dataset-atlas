@@ -5,6 +5,7 @@
  * and normalized here before anything else sees it, so the rest of the app
  * can trust entry shapes (single choke point for input hardening).
  */
+import { withProfiles } from './dataset.js';
 import { DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION } from './config.js';
 import { hashId } from './utils/text.js';
 import { sanitizeResources, sanitizeLandingPage } from './resource.js';
@@ -73,6 +74,8 @@ export function sanitizeEntry(d) {
   e.license = clean(d.license || 'Unknown');
   e.licenseOpenness = Math.max(0, Math.min(1, +d.licenseOpenness || 0));
   e.freshnessYear = +d.freshnessYear || 2015;
+  if (!Number.isInteger(d.publicationYear) || d.publicationYear < 1800 || d.publicationYear > new Date().getUTCFullYear()) delete e.publicationYear;
+  if (typeof d.isAccessibleForFree !== 'boolean') delete e.isAccessibleForFree;
   if (Number.isInteger(d.sourceModifiedYear) && d.sourceModifiedYear >= 1990 && d.sourceModifiedYear <= new Date().getUTCFullYear()) {
     e.sourceModifiedYear = d.sourceModifiedYear;
   } else delete e.sourceModifiedYear;
@@ -127,7 +130,7 @@ export async function loadAtlasData(base = '') {
     world,
     countryRegion,
     countryCodes, // ISO-numeric id -> { cca2, name }
-    catalog: buildCatalog(rawCatalog),
+    catalog: withProfiles(buildCatalog(rawCatalog), pilot.profiles),
     rawCatalog,
     pilot,
     coverage,

@@ -3,7 +3,6 @@
  * Node-only (used by build-site). Not a browser module.
  */
 import { licenseUse, licenseUseSummary } from '../js/license-use.js';
-import { primaryResource } from '../js/resource.js';
 import { AUTHOR } from '../js/config.js';
 
 export function personJsonLd() {
@@ -17,7 +16,6 @@ export function personJsonLd() {
 }
 
 export function datasetJsonLd(d, pageUrl) {
-  const resource = primaryResource(d);
   const graph = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
@@ -25,20 +23,21 @@ export function datasetJsonLd(d, pageUrl) {
     description: d.description,
     url: pageUrl,
     identifier: d.id,
-    license: d.license,
     creator: { '@type': 'Organization', name: d.source },
     temporalCoverage: `${d.coverageStart}/${d.coverageEnd}`,
-    isAccessibleForFree: (d.licenseOpenness || 0) >= 0.6,
     sameAs: d.landingPage || d.url,
   };
+  if (d.licenseUrl) graph.license = d.licenseUrl;
+  if (typeof d.isAccessibleForFree === 'boolean') graph.isAccessibleForFree = d.isAccessibleForFree;
   if (d.keywords) graph.keywords = d.keywords;
   else graph.keywords = [d.domain, d.region, d.sourceType].filter(Boolean);
-  if (resource) {
-    graph.distribution = {
+  const downloads = (d.resources || []).filter((r) => r.kind === 'download');
+  if (downloads.length) {
+    graph.distribution = downloads.map((r) => ({
       '@type': 'DataDownload',
-      encodingFormat: resource.format,
-      contentUrl: resource.url,
-    };
+      encodingFormat: r.format,
+      contentUrl: r.url,
+    }));
   }
   return graph;
 }
@@ -48,7 +47,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
 
 export function datasetPageHtml(d, { pageUrl, appUrl, jsonLd }) {
   const use = licenseUse(d);
-  const resource = primaryResource(d);
+  const resources = (d.resources || []).filter((r) => r.kind === 'download' || r.kind === 'api');
   const source = d.landingPage || d.url;
   return `<!DOCTYPE html>
 <html lang="en">
@@ -56,9 +55,9 @@ export function datasetPageHtml(d, { pageUrl, appUrl, jsonLd }) {
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${esc(d.title)} — Dataset Atlas</title>
-<meta name="description" content="${esc(d.description).slice(0, 240)}" />
+<meta name="description" content="${esc(String(d.description ?? '').slice(0, 240))}" />
 <link rel="canonical" href="${esc(pageUrl)}" />
-<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
 <style>
   body { font-family: Georgia, serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #122; }
   a { color: #0e7490; } .meta { color: #445; font-size: 0.95rem; }
@@ -72,10 +71,11 @@ export function datasetPageHtml(d, { pageUrl, appUrl, jsonLd }) {
 <p class="meta">
   Source: ${esc(d.source)} · Domain: ${esc(d.domain)} · Region: ${esc(d.region)}<br>
   Coverage: ${d.coverageStart}–${d.coverageEnd} · Grain: ${esc(d.granularity || 'country')}${d.freshnessYear && d.freshnessYear !== d.coverageEnd ? ` · Reviewed ${d.freshnessYear} (editorial year, not the link check)` : ''}<br>
+  ${typeof d.isAccessibleForFree === 'boolean' ? `Access cost: ${d.isAccessibleForFree ? 'Free' : 'Paid'}<br>` : ''}
   License: ${d.licenseUrl ? `<a href="${esc(d.licenseUrl)}">${esc(d.license)}</a>` : esc(d.license)} · ${esc(licenseUseSummary(use))}<br>
   ${d.verified ? `Link checked ${esc(d.verified)} (URL reachability, not content quality).` : 'Link check not recorded.'}
 </p>
-<p><a href="${esc(source)}">Source page</a>${resource ? ` · <a href="${esc(resource.url)}">${resource.kind === 'api' ? 'API' : 'File'}</a>` : ''} · <a href="${esc(appUrl)}#ds=${esc(d.id)}">Open in the atlas</a></p>
+<p><a href="${esc(source)}">Source page</a>${resources.map((r) => ` · <a href="${esc(r.url)}">${r.kind === 'api' ? 'API' : 'File'}: ${esc(r.label || r.format)}</a>`).join('')} · <a href="${esc(appUrl)}#ds=${esc(d.id)}">Open in the atlas</a></p>
 <p class="note">${esc(use.note)} A successful link check is not a guarantee that the file matches this description.</p>
 </body>
 </html>

@@ -6,7 +6,7 @@ const DAY = 24 * 60 * 60 * 1000;
 function parseDay(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return null;
   const t = Date.parse(`${value}T00:00:00Z`);
-  return Number.isFinite(t) ? t : null;
+  return Number.isFinite(t) && new Date(t).toISOString().slice(0, 10) === value ? t : null;
 }
 
 /**
@@ -16,7 +16,7 @@ function parseDay(value) {
  */
 export function linkHealth(d, generated = null, now = Date.now()) {
   const verifiedAt = parseDay(d?.verified);
-  if (!verifiedAt) {
+  if (verifiedAt === null || verifiedAt > now) {
     return {
       status: 'unknown',
       label: 'Link not recently verified',
@@ -30,9 +30,9 @@ export function linkHealth(d, generated = null, now = Date.now()) {
   if (failedLatestCheck || stale) {
     return {
       status: 'stale',
-      label: failedLatestCheck ? `Unreachable as of ${generated}` : `Last verified ${d.verified}`,
+      label: failedLatestCheck ? `Not reverified as of ${generated}` : `Last verified ${d.verified}`,
       title: failedLatestCheck
-        ? `The ${generated} catalog check did not refresh this URL. Replace or confirm the source.`
+        ? `The ${generated} catalog check did not refresh this URL. The check may have been blocked or failed temporarily; confirm at the source.`
         : `Last successful response ${d.verified} (${ageDays} days ago).`,
       lastVerified: d.verified,
     };

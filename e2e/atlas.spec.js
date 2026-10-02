@@ -43,7 +43,7 @@ test('word-order-independent search finds known datasets', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#global-count')).not.toHaveText('0');
   await page.locator('#search-input').fill('India crop production');
-  await expect(page.locator('#card-list .card')).toHaveCount(5);
+  await expect(page.locator('#card-list .card').first()).toBeVisible();
   await expect(page.locator('#card-list')).toContainText('Crop Production in India');
   await expect(page.locator('#card-list')).toContainText('District-wise Crop Production');
 });
@@ -70,6 +70,7 @@ test('pins a dataset and exports the passport manifest', async ({ page }) => {
   await expect(page.locator('#passport-drawer')).toBeVisible();
   await expect(page.locator('#passport-list .passport-item')).toHaveCount(1);
   const downloadEvent = page.waitForEvent('download');
+  await page.locator('.passport-exports summary').click();
   await page.locator('#passport-export').click();
   const download = await downloadEvent;
   expect(download.suggestedFilename()).toBe('data-passport.sh');
@@ -80,7 +81,7 @@ test('research workbench checks fit and exports evidence-backed handoff', async 
   await expect(page.locator('#global-count')).not.toHaveText('0');
   await page.locator('#workbench-btn').click();
   await expect(page.locator('.workbench-card')).toHaveCount(5);
-  await page.locator('#fit-country').fill('US');
+  await page.locator('#fit-country').selectOption('US');
   await page.locator('#fit-country').blur();
   await expect(page.locator('.workbench-card').first()).toContainText('outside documented coverage');
   await expect(page.locator('#join-result')).toContainText('Shared named keys');

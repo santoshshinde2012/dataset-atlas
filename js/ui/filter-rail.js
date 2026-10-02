@@ -1,4 +1,7 @@
 /** Left rail: search, use-case presets, facet checkboxes, license slider. */
+import { COUNTRY_OPTIONS } from '../search.js';
+import { setFieldError } from './form-controls.js';
+import { LEVELS, yearRangeErrors } from '../requirements.js';
 import { SOURCE_TYPE_META, PRESETS, LICENSE_LABELS, REGION_META } from '../config.js';
 import { $, el } from '../utils/dom.js';
 import { esc, normFormat } from '../utils/text.js';
@@ -9,6 +12,19 @@ export function initFilterRail({ store, generated = null, toast = () => {}, task
     $('#catalog-stamp').textContent = `Catalog checked ${generated}`;
     $('#catalog-stamp').hidden = false;
   }
+  const countrySelect = $('#filter-country');
+  countrySelect.innerHTML += Object.entries(COUNTRY_OPTIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([iso, name]) => `<option value="${iso}">${esc(name)}</option>`).join('');
+  $('#filter-level').innerHTML += LEVELS.map((level) => `<option value="${level}">${level}</option>`).join('');
+  const practical = { country: '#filter-country', startYear: '#filter-start', endYear: '#filter-end', level: '#filter-level', resourceKind: '#filter-resource', coverageMode: '#filter-coverage', reuse: '#filter-reuse' };
+  for (const selector of Object.values(practical)) $(selector).onchange = () => {
+    const values = Object.fromEntries(Object.entries(practical).map(([key, sel]) => [key, $(sel).value]));
+    const errors = yearRangeErrors(values.startYear, values.endYear);
+    if ($('#filter-start').validity.badInput) errors.startYear = 'Enter a whole year from 1800 to 2100.';
+    if ($('#filter-end').validity.badInput) errors.endYear = 'Enter a whole year from 1800 to 2100.';
+    setFieldError($('#filter-start'), errors.startYear); setFieldError($('#filter-end'), errors.endYear);
+    if (Object.keys(errors).length) return;
+    store.actions.setPracticalFilters(values);
+  };
   buildPresets(store, toast);
   buildQuestions(tasks, onQuestion);
   buildFacet(
@@ -27,6 +43,7 @@ export function initFilterRail({ store, generated = null, toast = () => {}, task
   $('#reset-filters').onclick = () => {
     $('#search-input').value = '';
     $('#license-slider').value = 0;
+    setFieldError($('#filter-start')); setFieldError($('#filter-end'));
     store.actions.resetFilters();
   };
 
@@ -38,6 +55,8 @@ export function initFilterRail({ store, generated = null, toast = () => {}, task
 
   function render() {
     const state = store.getState();
+
+    for (const [key, sel] of Object.entries(practical)) if ($(sel).value !== String(state[key] ?? '')) $(sel).value = state[key] ?? '';
 
     // inputs mirror store state so URL-restored or programmatic changes show
     if ($('#search-input').value !== state.search) $('#search-input').value = state.search;
@@ -68,6 +87,7 @@ export function initFilterRail({ store, generated = null, toast = () => {}, task
 
     $('#license-label').textContent =
       LICENSE_LABELS[String(state.minOpenness)] || `≥ ${state.minOpenness}`;
+    $('#license-slider').setAttribute('aria-valuetext', $('#license-label').textContent);
 
     const counts = store.select.regionCounts();
     const covered = Object.keys(REGION_META).filter((k) => counts[k] > 0).length;
@@ -85,7 +105,25 @@ export function initFilterRail({ store, generated = null, toast = () => {}, task
       (state.sourceTypes.size < Object.keys(SOURCE_TYPE_META).length ? 1 : 0) +
       (state.formats.size < store.select.allFormats().length ? 1 : 0) +
       (state.minOpenness > 0 ? 1 : 0) +
-      (state.search ? 1 : 0);
+      (state.search ? 1 : 0) + [state.country, state.startYear || state.endYear, state.level, state.resourceKind, state.reuse, state.coverageMode !== 'candidate'].filter(Boolean).length;
+    const count = $('#active-filter-count');
+    count.textContent = active; count.hidden = active === 0;
+    const chips = $('#active-filter-chips'); chips.replaceChildren();
+    const requirements = [
+      ['country', COUNTRY_OPTIONS[state.country]],
+      ['years', state.startYear || state.endYear ? `${state.startYear || 'Any'}–${state.endYear || 'Any'}` : null],
+      ['level', state.level], ['resourceKind', state.resourceKind === 'api' ? 'API' : state.resourceKind ? 'Download' : null],
+      ['coverageMode', state.coverageMode !== 'candidate' ? state.coverageMode : null], ['reuse', state.reuse],
+    ];
+    for (const [key, value] of requirements) if (value) {
+      const chip = el('button', 'active-requirement'); chip.type = 'button';
+      chip.setAttribute('aria-label', `Remove ${value} filter`);
+      const text = document.createElement('span'); text.textContent = value;
+      chip.append(text, document.createTextNode(' ×'));
+      chip.onclick = () => store.actions.setPracticalFilters(key === 'years' ? { startYear: null, endYear: null } : { [key]: key === 'coverageMode' ? 'candidate' : '' });
+      chips.append(chip);
+    }
+    if (state.resourceKind || state.reuse || state.coverageMode !== 'candidate') $('#advanced-filters').open = true;
     const badge = $('#filter-badge');
     badge.textContent = active;
     badge.hidden = active === 0;
@@ -96,8 +134,12 @@ export function initFilterRail({ store, generated = null, toast = () => {}, task
 }
 
 export function setCollapsed(collapsed) {
+  const focusInPanel = document.activeElement?.closest('#left-rail');
+  const focusOnExpand = document.activeElement === $('#rail-expand');
   $('#left-rail').classList.toggle('collapsed', collapsed);
   $('#rail-expand').hidden = !collapsed;
+  if (collapsed && focusInPanel) $('#rail-expand').focus({ preventScroll: true });
+  else if (!collapsed && focusOnExpand) $('#search-input').focus({ preventScroll: true });
 }
 
 function buildQuestions(tasks, onQuestion) {

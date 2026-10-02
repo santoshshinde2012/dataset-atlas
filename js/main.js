@@ -6,7 +6,12 @@
 import { loadAtlasData } from './catalog.js';
 import { createStore } from './store.js';
 import { THEMES, DEFAULT_THEME, AUTHOR } from './config.js';
-import { localPinStorage } from './services/storage.js';
+import { trapModalFocus } from './ui/focus-trap.js';
+import { initFormControls } from './ui/form-controls.js';
+import { initDropdowns } from './ui/dropdown.js';
+import { initDatasetDetail } from './ui/dataset-detail.js';
+import { initDataExplorer } from './ui/data-explorer.js';
+import { localPinStorage, projectStorage } from './services/storage.js';
 import { createToast } from './services/toast.js';
 import { createClipboard } from './services/clipboard.js';
 import { createTooltip } from './ui/tooltip.js';
@@ -93,6 +98,7 @@ async function boot() {
       if (!wanted.has(f)) store.actions.toggleFormat(f, false);
     }
   }
+  store.actions.setPracticalFilters(fromUrl);
   if (fromUrl.search) store.actions.setSearch(fromUrl.search);
   if (fromUrl.region) store.actions.selectRegion(fromUrl.region, fromUrl.focusCountry || null);
   // ds= opens that dataset's region. It is not a pin — p= remains the share-import.
@@ -113,10 +119,12 @@ async function boot() {
 
   new MapView({ svgElement: $('#map'), world, countryRegion, countryCodes, store, tooltip });
 
-  initPassport({ store, toast, copyText });
   initTopbar({ store, onPassportToggle: store.actions.togglePassport });
   initDomainDock({ store });
-  const workbench = initWorkbench({ catalog, pilot, toast });
+  const explorer = initDataExplorer();
+  const workbench = initWorkbench({ catalog, pilot, toast, store, storage: projectStorage, copyText, sharedProject: new URLSearchParams(location.hash.slice(1)).get('project') });
+  const detail = initDatasetDetail({ store, pilot, generated, copyText, onProject: (id) => workbench.add(id), onExplore: explorer.open });
+  initPassport({ store, toast, copyText, onDetails: detail.open, onProject: (ids) => workbench.addMany(ids) });
   initFilterRail({
     store,
     generated,
@@ -124,9 +132,11 @@ async function boot() {
     tasks: pilot.tasks || [],
     onQuestion: (id) => workbench.open(id),
   });
-  initCardRail({ store, toast, copyText, countryNames, generated });
-  initCompare({ store, toast });
+  initCardRail({ store, toast, copyText, countryNames, generated, onDetails: detail.open });
+  initCompare({ store, toast, pilot, onProject: (ids) => ids.forEach((id) => workbench.add(id)) });
   initWelcome({ store });
+  initFormControls();
+  initDropdowns();
 
   // pins arriving via a shared link are merged once, with feedback
   if (fromUrl.pins && fromUrl.pins.length) {
@@ -194,8 +204,7 @@ async function boot() {
     headerEl.addEventListener('touchend', () => { startY = null; });
   };
   sheetDismiss($('#card-rail .rail-header'), () => {
-    if (store.select.railMode() === 'search') store.actions.setSearch('');
-    else store.actions.selectRegion(null);
+    store.actions.closeResults();
   });
   sheetDismiss($('#passport-drawer .rail-header'), () => store.actions.closePassport());
 
@@ -208,18 +217,12 @@ async function boot() {
   syncRailOpen();
 
   document.addEventListener('keydown', (e) => {
+    if (document.querySelector('dialog[open]')) return;
     if (e.key === 'Escape') {
-      const about = $('#about-panel');
-      if (about && !about.hidden) {
-        about.hidden = true;
-        $('#about-link').focus();
-        return;
-      }
-      const { region, passportOpen, compareOpen, search } = store.getState();
+      const { passportOpen, compareOpen } = store.getState();
       if (compareOpen) store.actions.setCompareOpen(false);
       else if (passportOpen) store.actions.closePassport();
-      else if (region) store.actions.selectRegion(null);
-      else if (search) store.actions.setSearch('');
+      else if (store.select.railMode()) store.actions.closeResults();
     }
     if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
       e.preventDefault();
@@ -233,7 +236,7 @@ async function boot() {
 function showAboutPanel(generated) {
   let panel = $('#about-panel');
   if (!panel) {
-    panel = document.createElement('div');
+    panel = document.createElement('dialog');
     panel.id = 'about-panel';
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-label', 'About this data');
@@ -270,13 +273,14 @@ function showAboutPanel(generated) {
       </div>`;
     document.body.appendChild(panel);
     const close = () => {
-      panel.hidden = true;
-      $('#about-link').focus(); // return focus to the opener
+      panel.close();
     };
     panel.onclick = (e) => { if (e.target === panel) close(); };
     panel.querySelector('#about-close').onclick = close;
+    panel.addEventListener('close', () => $('#about-link').focus());
+    panel.addEventListener('keydown', (event) => trapModalFocus(panel, event));
   }
-  panel.hidden = false;
+  if (!panel.open) panel.showModal();
   panel.querySelector('h2').focus({ preventScroll: true });
 }
 

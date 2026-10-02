@@ -1,11 +1,12 @@
+import { seriesObservation } from './coverage.js';
 /** Small, deterministic search engine shared by the browser and MCP server. */
-const STOP_WORDS = new Set(['a', 'an', 'and', 'data', 'dataset', 'datasets', 'for', 'in', 'of', 'the', 'to', 'with']);
+const STOP_WORDS = new Set(['a', 'an', 'and', 'data', 'dataset', 'datasets', 'for', 'in', 'of', 'the', 'to', 'with', 'from', 'between', 'through', 'during']);
 
 /** Query words that mean the same topic. Matching any member counts. */
 const SYNONYMS = {
-  pm25: ['pm25', 'particulate', 'aqi'],
-  particulate: ['pm25', 'particulate', 'aqi'],
-  aqi: ['pm25', 'particulate', 'aqi'],
+  pm25: ['pm25', 'particulate'],
+  particulate: ['pm25', 'particulate'],
+  aqi: ['aqi'],
   pm2: ['pm25', 'particulate', 'pm2'],
   rainfall: ['rainfall', 'precipitation', 'rain', 'chirps'],
   rain: ['rainfall', 'precipitation', 'rain', 'chirps'],
@@ -17,13 +18,7 @@ const SYNONYMS = {
   carbon: ['co2', 'carbon'],
 };
 
-const GENERIC_PLACE = new Set([
-  'united', 'state', 'republic', 'island', 'islands', 'south', 'north', 'new', 'saint',
-  'democratic', 'people', 'kingdom', 'arab', 'federal', 'islamic', 'land', 'lands',
-  'part', 'coast', 'central',
-]);
-
-/** Display names for tagged countries. Tokens shorter than 4 and generic words are ignored. */
+/** Display names used to interpret country requirements. */
 const COUNTRY_NAMES = {
   AF: 'Afghanistan', AL: 'Albania', DZ: 'Algeria', AD: 'Andorra', AO: 'Angola', AG: 'Antigua and Barbuda',
   AR: 'Argentina', AM: 'Armenia', AU: 'Australia', AT: 'Austria', AZ: 'Azerbaijan', BS: 'Bahamas',
@@ -61,6 +56,8 @@ const COUNTRY_NAMES = {
 
 const ALIASES = { US: ['usa', 'america'], GB: ['uk', 'britain', 'british'], AE: ['uae'], KR: ['korea'], KP: ['korea'] };
 
+export const COUNTRY_OPTIONS = { ...COUNTRY_NAMES, KR: 'South Korea', KP: 'North Korea' };
+
 function normalizeText(value) {
   return String(value || '')
     .replace(/pm\s*2\s*\.?\s*5/gi, ' pm25 ')
@@ -88,30 +85,8 @@ function alts(term) {
   return SYNONYMS[term] || [term];
 }
 
-let placeIndex;
-function places() {
-  if (placeIndex) return placeIndex;
-  const tokenToIso = new Map();
-  const isoToTokens = new Map();
-  const add = (iso, token) => {
-    if (!token || token.length < 4 || GENERIC_PLACE.has(token) || STOP_WORDS.has(token)) return;
-    if (!isoToTokens.has(iso)) isoToTokens.set(iso, new Set());
-    isoToTokens.get(iso).add(token);
-    if (!tokenToIso.has(token)) tokenToIso.set(token, new Set());
-    tokenToIso.get(token).add(iso);
-  };
-  for (const [iso, name] of Object.entries(COUNTRY_NAMES)) {
-    for (const token of words(name).map(canonical)) add(iso, token);
-  }
-  for (const [iso, aliases] of Object.entries(ALIASES)) {
-    for (const alias of aliases) add(iso, canonical(alias));
-  }
-  placeIndex = { tokenToIso, isoToTokens };
-  return placeIndex;
-}
-
 export function queryTerms(query) {
-  return [...new Set(words(String(query).slice(0, 80)).map(canonical).filter((word) => !STOP_WORDS.has(word)))];
+  return [...new Set(words(parseQuery(query).text).map(canonical).filter((word) => !STOP_WORDS.has(word)))];
 }
 
 function contains(set, term, prefix) {
@@ -123,39 +98,90 @@ function contains(set, term, prefix) {
 }
 
 /** Zero means no match. Positive scores reward titles over descriptive text. */
-export function searchScore(dataset, query, { includeFacets = true } = {}) {
+export function searchScore(dataset, query, { includeFacets = true, coverageIndex = null } = {}) {
+  const parsed = parseQuery(query);
+  if (parsed.startYear && (dataset.coverageEnd < parsed.startYear || dataset.coverageStart > parsed.endYear)) return 0;
+  if (parsed.country) {
+    const span = seriesObservation(coverageIndex, dataset, parsed.country);
+    if (span === 'absent') return 0;
+    if (span && parsed.startYear && (span.end < parsed.startYear || span.start > parsed.endYear)) return 0;
+  }
   const terms = queryTerms(query);
-  if (!terms.length) return 0;
-  const { tokenToIso, isoToTokens } = places();
+  if (!terms.length) return parsed.level ? (dataset.granularity === parsed.level || (dataset.reviewedProfiles || []).some((p) => p.level === parsed.level) || words(`${dataset.title} ${dataset.description}`).includes(parsed.level) ? 1 : 0) : parsed.startYear ? 1 : 0;
   const title = new Set(words(dataset.title).map(canonical));
   const description = new Set(words(dataset.description).map(canonical));
   const source = new Set(words(dataset.source).map(canonical));
   const facets = includeFacets ? new Set(words(`${dataset.domain} ${dataset.region}`).map(canonical)) : new Set();
   const tagged = new Set(dataset.countries || []);
-  const countryTerms = [];
-  const otherTerms = [];
-  for (const term of terms) (tokenToIso.has(term) ? countryTerms : otherTerms).push(term);
+  const metadata = new Set(words(dataset.searchMetadata || '').map(canonical));
+  const otherTerms = terms.filter((term) => term !== parsed.country?.toLowerCase());
 
   let score = 0;
   for (const [index, term] of otherTerms.entries()) {
     const prefix = index === otherTerms.length - 1;
     if (contains(title, term, prefix)) score += 5;
     else if (contains(description, term, prefix)) score += 2;
+    else if (contains(metadata, term, prefix)) score += 3;
     else if (contains(source, term, prefix)) score += 1;
     else if (contains(facets, term, prefix)) score += 1;
     else return 0;
   }
 
-  if (!countryTerms.length) return score;
-  let countryScore = 0;
-  for (const term of countryTerms) {
-    const isos = tokenToIso.get(term) || new Set();
-    const taggedHit = [...isos].some((iso) => tagged.has(iso));
-    if (contains(title, term, false)) countryScore += 5;
-    else if (taggedHit) countryScore += 4;
-    else if (contains(description, term, false) || contains(source, term, false)) countryScore += 2;
-    else if (dataset.coverageKind === 'global-country-series' && otherTerms.length && score > 0) countryScore += 1;
-    else return 0;
+  if (!parsed.country) return score || (parsed.level ? 1 : 0);
+  const isoTerm = parsed.country.toLowerCase();
+  const nameTerms = words(COUNTRY_OPTIONS[parsed.country]).map(canonical).filter((w) => !STOP_WORDS.has(w));
+  const mentionsCountry = (tokens) => contains(tokens, isoTerm, false)
+    || nameTerms.every((term) => tokens.has(term))
+    || (ALIASES[parsed.country] || []).some((alias) => tokens.has(canonical(alias)));
+  if (mentionsCountry(title)) return score + 5;
+  if (tagged.has(parsed.country)) return score + 4;
+  if (mentionsCountry(description) || mentionsCountry(source)) return score + 2;
+  if (dataset.coverageKind === 'global-country-series') return score + 1;
+  return 0;
+}
+
+/** Interpret country phrases and year ranges without guessing unknown columns. */
+const queryCache = new Map();
+export function parseQuery(query) {
+  const key = String(query || '').slice(0, 200);
+  if (queryCache.has(key)) return queryCache.get(key);
+  let text = String(query || '').slice(0, 200).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+  const years = [...text.matchAll(/\b(18\d{2}|19\d{2}|20\d{2}|2100)\b/g)].map((m) => Number(m[1]));
+  text = text.replace(/\b(18\d{2}|19\d{2}|20\d{2}|2100)\b/g, ' ');
+  let country = null;
+  const names = Object.entries(COUNTRY_OPTIONS).flatMap(([iso, name]) => [
+    [iso, name.toLowerCase()], ...((ALIASES[iso] || []).map((a) => [iso, a])), ...(new RegExp(`\\b${iso}\\b`).test(String(query)) ? [[iso, iso.toLowerCase()]] : []),
+  ]).sort((a, b) => b[1].length - a[1].length);
+  for (const [iso, name] of names) {
+    const normalized = name.normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+    const re = new RegExp(`\\b${normalized}\\b`, 'i');
+    if (re.test(text)) { country = iso; text = text.replace(re, ' '); break; }
   }
-  return score + countryScore;
+  const level = /\b(country|state|district|county|subdivision|admin1|city|point|grid)\b/.exec(text)?.[1] || null;
+  if (level) text = text.replace(new RegExp(`\\b${level}\\b`, 'g'), ' ');
+  if (country) text += ` ${country.toLowerCase()}`;
+  const parsed = Object.freeze({ text, country, level, startYear: years.length ? Math.min(...years) : null, endYear: years.length ? Math.max(...years) : null });
+  if (queryCache.size >= 32) queryCache.delete(queryCache.keys().next().value);
+  queryCache.set(key, parsed);
+  return parsed;
+}
+
+export function searchExplanation(dataset, query, coverageIndex = null) {
+  const parsed = parseQuery(query);
+  const reasons = [];
+  if (parsed.country) {
+    const span = seriesObservation(coverageIndex, dataset, parsed.country);
+    reasons.push(span && span !== 'absent' ? `${parsed.country}: observed rows ${span.start}–${span.end}`
+      : (dataset.countries || []).includes(parsed.country) ? `${parsed.country}: documented country tag`
+      : dataset.coverageKind === 'global-country-series' ? `${parsed.country}: global series candidate; confirm coverage` : 'Country named in source text');
+  }
+  if (parsed.level) {
+    const levels = [dataset.granularity, ...(dataset.reviewedProfiles || []).map((p) => p.level)].filter(Boolean);
+    reasons.push(levels.includes(parsed.level) ? `Requested geography: ${parsed.level}` : `Requested ${parsed.level}; source ${[...new Set(levels)].join('/') || 'unknown'} — review alignment`);
+  }
+  if (parsed.startYear) reasons.push(`Overlaps requested ${parsed.startYear}–${parsed.endYear}; gaps may exist`);
+  const meta = new Set(words(dataset.searchMetadata || '').map(canonical));
+  if (queryTerms(query).some((t) => contains(meta, t, false))) reasons.push('Matches reviewed variables or columns');
+  if (!reasons.length) reasons.push('Matches title or descriptive metadata');
+  return reasons;
 }

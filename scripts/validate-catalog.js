@@ -39,6 +39,9 @@ entries.forEach((d, i) => {
   if (e.kaggleRef && !e.url.includes(e.kaggleRef)) warnings.push(`${label}: kaggleRef not found in url`);
   if (e.coverageStart > e.coverageEnd) errors.push(`${label}: coverageStart > coverageEnd`);
   if (d.sourceModifiedYear !== undefined && e.sourceModifiedYear !== d.sourceModifiedYear) errors.push(`${label}: invalid sourceModifiedYear`);
+  for (const field of ['publicationYear', 'isAccessibleForFree']) {
+    if (d[field] !== undefined && e[field] !== d[field]) errors.push(`${label}: invalid ${field}`);
+  }
   if (e.description.length > 320) warnings.push(`${label}: description over 320 chars`);
 });
 

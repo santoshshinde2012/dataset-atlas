@@ -1,6 +1,6 @@
 # Architecture and repository conventions
 
-This document describes the current implementation and is the reference for new files and structural changes. The dated [research audit](research-audit-2026-09-20.md) records product findings at its stated revision. Product rules for joins: [join kits](join-kits.md). Agent contract: [MCP](mcp.md). How to change the catalog or add a kit: [CONTRIBUTING.md](../CONTRIBUTING.md).
+This document describes the current implementation and is the reference for new files and structural changes. Product rules for joins: [join kits](join-kits.md). Agent contract: [MCP](mcp.md). How to change the catalog or add a kit: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Dependency direction
 
@@ -56,4 +56,24 @@ The deployed app has no runtime API secret. Provider APIs requiring a key must b
 4. Run `npm run validate` for catalog or pilot changes. Review claims about coverage, access, freshness and license against the provider.
 5. Deploy only after CI passes. Confirm the published Pages subpath and key assets load.
 
-The CSS remains one token-driven file at this size. Split it by stable component boundaries when a change materially reduces coupling; a partial folder rewrite would add requests and maintenance work without improving the present user flow. For modals, use native `<dialog>` plus keyboard verification in line with the [WAI dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/).
+Component layouts use the root token-driven stylesheet; shared form controls are isolated in `styles/forms.css`. Split further by stable component boundaries when it reduces coupling. For modals, use native `<dialog>` plus keyboard verification in line with the [WAI dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/).
+
+Dataset pages serialize JSON-LD with escaped less-than characters so catalog text cannot terminate the script element. License markup uses a known license URL; access cost requires an explicit boolean `isAccessibleForFree`. Only download resources become `DataDownload` distributions; APIs remain visible API links. An optional integer `publicationYear` supplies the BibTeX year. Coverage and editorial years never stand in for publication dates.
+
+## Research tools
+
+`dataset.js` attaches reviewed pilot variables and schemas without changing catalog metadata. `search.js` interprets country phrases and year ranges; explicit filters use `requirements.js`. Filters and project links preserve candidate versus observed evidence. `project.js` validates project snapshots against the current catalog before restoring them; browser storage is an injected port. Exports in `exports.js` are shared by Passport, Workbench, and MCP, with `services/download.js` handling browser downloads.
+
+The detail dialog, comparison dialog, and Workbench use native modal dialogs with focus containment. UI modules communicate through callbacks wired in `main.js`. `data-table.js` handles bounded CSV parsing/profiling; `services/data-worker.js` is a worker entry point reachable through the explicit URL in `data-reader.js`. Repository checks traverse worker URLs as well as static imports. `data-explorer.js` displays local rows, filters, and charts. CSV needs no external engine; Parquet lazily imports pinned DuckDB-Wasm from jsDelivr and never uploads selected files. Keep its version consistent across the ESM module, worker, and Wasm URLs.
+
+Dropdowns use `js/ui/dropdown.js` throughout the sidebar, results, and dialogs. The module progressively enhances single-value selects and keeps their existing values/change events as the state interface. It discovers dynamically rendered controls, supports searchable long lists, keyboard navigation and focus return, and uses the Popover API to avoid clipping inside scrolling panels. Older browsers retain native selects. Style controls through shared theme tokens; do not add feature-specific dropdown implementations.
+
+Form styling is centralized in `styles/forms.css` through control height, radius, font, and focus tokens. `js/ui/form-controls.js` supplies presentation classes, helper associations, and accessible inline feedback; it does not validate catalog or research rules. Pure year-range rules live in `js/requirements.js`, while each feature decides when to apply them. Invalid fields retain user input, are associated with their error text, and block exports of stale research requirements. Native file controls keep keyboard behavior, and custom dropdowns mirror validation attributes from the underlying select. Feature layouts stay in `styles.css`; reuse the shared control layer for new fields.
+
+## Passport collection workflow
+
+`js/passport.js` contains pure collection summaries, display filtering/sorting, and versioned inventory import validation. `js/ui/passport.js` owns the nonmodal drawer, local display state, single-operation undo, and export presentation. Pins and right-panel visibility belong to the store; collection search never changes membership. Imports merge deduplicated catalog IDs through `store.actions.importPins`, never trust imported metadata or URLs, and reject unsupported versions and malformed records. The UI applies a 2 MB file limit; the pure validator caps inventories at 1,000 entries. Resource summary categories can overlap (one dataset may have both files and APIs).
+
+`main.js` injects details and Workbench callbacks into Passport. Workbench `addMany` batches the collection into the current draft, preserves existing requirements and sources, and persists once. All collection actions use every pin regardless of search. Passport closes before the Workbench modal opens; details open above the drawer and return focus to their source button. Removal and clearing move focus to Undo, preventing focus from falling onto a removed control. Export controls live in a disclosure within the scrolling body; only Workbench, sharing, and collection management occupy the fixed footer. Empty collections expose discovery and inventory import rather than disabled export controls.
+
+Inventory import is a membership restore, not project restore: imported requirements and selected resources are intentionally ignored. Export scope follows current Atlas filters and existing shared export rules. JSON backup is the durability path when browser storage is unavailable. Regression tests cover import boundaries, source summaries, search, undo, detail focus return, bulk handoff, downloads, and narrow screens.

@@ -111,7 +111,7 @@ export const PRESETS = [
 ];
 
 export const LICENSE_LABELS = {
-  '0': 'any', '0.2': 'terms ok', '0.4': 'free w/ signup',
+  '0': 'any', '0.2': 'terms ok', '0.4': 'review terms',
   '0.6': 'share-alike+', '0.8': 'CC BY+', '1': 'CC0 / PD',
 };
 
