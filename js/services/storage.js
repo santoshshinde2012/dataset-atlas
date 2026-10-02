@@ -24,3 +24,13 @@ export const localPinStorage = {
     }
   },
 };
+
+/** Project writes report failures so users can fall back to JSON export. */
+export const projectStorage = {
+  load() {
+    try { const raw = JSON.parse(localStorage.getItem('atlas-projects') || '{}'); return raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {}; } catch { return {}; }
+  },
+  save(value) {
+    try { localStorage.setItem('atlas-projects', JSON.stringify(value)); return true; } catch { return false; }
+  },
+};

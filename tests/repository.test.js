@@ -24,6 +24,10 @@ test('every published browser module is reachable from the app entry point', () 
     assert.ok(publishedModules.has(file), `${file} is imported but not published`);
     visited.add(file);
     const source = read(file);
+    for (const match of source.matchAll(/new URL\(['"](\.[^'"]+)['"],\s*import\.meta\.url\)/g)) {
+      const imported = resolve(dirname(resolve(root, file)), match[1]);
+      visit(imported.slice(root.length + 1));
+    }
     for (const match of source.matchAll(/(?:import|export)\s+(?:[^;]*?\s+from\s+)?['"](\.[^'"]+)['"]/g)) {
       const imported = resolve(dirname(resolve(root, file)), match[1]);
       visit(imported.slice(root.length + 1));

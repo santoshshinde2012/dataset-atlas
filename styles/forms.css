@@ -1,0 +1,50 @@
+/* Shared controls; feature-specific layout stays in styles.css. */
+/* Shared field primitives, independent of feature layout. */
+:root { --control-height: 40px; --control-radius: 10px; --control-font-size: 13px; --control-focus: 0 0 0 3px rgba(var(--accent-rgb), .12); }
+input.form-control:not([type="checkbox"]):not([type="range"]):not([type="file"]), textarea.form-control, select.form-control:not(.dropdown-native) {
+  min-height: var(--control-height); border: 1px solid var(--panel-border); border-radius: var(--control-radius); background: var(--input-bg); color: var(--text); font: inherit; font-size: var(--control-font-size); font-weight: 400; padding: 9px 12px; max-width: 100%;
+}
+#search-input.form-control { padding-left: 34px; padding-right: 30px; }
+.form-control::placeholder { color: var(--muted); opacity: .85; }
+.form-control:focus-visible, .dropdown-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: var(--control-focus); }
+:is(input.form-control, textarea.form-control, .dropdown-trigger)[aria-invalid="true"] { border-color: var(--danger) !important; }
+:is(input.form-control, textarea.form-control, .dropdown-trigger)[aria-invalid="true"]:focus-visible { outline-color: var(--danger); }
+:is(input.form-control, textarea.form-control, .dropdown-trigger):disabled { opacity: .55; cursor: not-allowed; }
+.form-control[readonly] { background: var(--hover-wash); }
+.field-error { display: block; font-size: 11px; font-weight: 400; line-height: 1.5; color: var(--danger); margin: 4px 0 10px; overflow-wrap: anywhere; }
+:is(.year-inputs, .workbench-inputs) > .field-error { grid-column: 1 / -1; margin: 0; }
+.field-help { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 6px 0 14px; }
+input.form-control[type="file"]:not(.visually-hidden) { width: 100%; min-width: 0; font: inherit; font-size: 12px; font-weight: 400; color: var(--muted); border: 1px solid var(--panel-border); padding: 6px; background: var(--input-bg); border-radius: var(--control-radius); }
+input.form-control[type="file"]::file-selector-button { min-height: 34px; padding: 7px 12px; margin-right: 10px; border: 1px solid var(--panel-border); border-radius: 7px; background: var(--panel-solid); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
+input.form-control[type="file"]::file-selector-button:hover { border-color: var(--accent); }
+input.form-control[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0; }
+input.form-control[type="range"] { accent-color: var(--accent); min-height: 32px; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+@media (pointer: coarse) { :root { --control-height: 44px; } .filter-row { min-height: 36px; } }
+@media (forced-colors: active) {
+  .form-control, .dropdown-trigger, .dropdown-popup { border: 1px solid ButtonText; }
+  .dropdown-option.highlighted { outline: 1px solid Highlight; outline-offset: -1px; }
+  .dropdown-option[aria-selected="true"] { color: HighlightText; background: Highlight; }
+}
+
+
+/* Shared dropdown controls: the original select remains the form/state adapter. */
+.dropdown { display: block; position: relative; width: 100%; min-width: 0; }
+select.dropdown-native { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: 0 !important; opacity: 0; pointer-events: none; overflow: hidden; }
+.dropdown-trigger { width: 100%; min-height: var(--control-height); display: flex; align-items: center; gap: 10px; text-align: left; padding: 9px 12px; border: 1px solid var(--panel-border); border-radius: var(--control-radius); background: var(--input-bg); color: var(--text); font: inherit; font-size: var(--control-font-size); font-weight: 400; transition: border-color .15s, background .15s; }
+.dropdown-trigger::after { content: ''; width: 7px; height: 7px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg) translateY(-2px); margin-left: auto; flex-shrink: 0; }
+.dropdown-trigger:hover { background: var(--hover-wash); border-color: rgba(var(--accent-rgb), .4); }
+.dropdown-trigger[aria-expanded="true"] { border-color: var(--accent); background: var(--panel-solid); box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .1); }
+.dropdown-trigger[aria-expanded="true"]::after { transform: rotate(225deg); }
+.dropdown-trigger:disabled { opacity: .5; cursor: default; }
+.dropdown-caption { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.dropdown-popup { position: fixed; margin: 0; padding: 6px; border: 1px solid var(--panel-border); border-radius: 12px; background: var(--panel-solid); color: var(--text); box-shadow: 0 12px 36px rgba(0,0,0,.2); overflow: hidden; font: inherit; }
+.dropdown-popup:popover-open { display: flex; flex-direction: column; }
+.dropdown-popup input.dropdown-search { width: 100%; flex-shrink: 0; min-height: var(--control-height); margin: 0 0 6px; padding: 9px 11px; border: 1px solid var(--panel-border); border-radius: 8px; background: var(--input-bg); color: var(--text); font: inherit; font-size: var(--control-font-size); }
+.dropdown-options { position: relative; overflow-y: auto; overscroll-behavior: contain; min-height: 0; scrollbar-width: thin; outline-offset: -2px; }
+.dropdown-option { min-height: 38px; padding: 9px 30px 9px 10px; position: relative; border-radius: 7px; cursor: pointer; font-size: var(--control-font-size); line-height: 1.4; overflow-wrap: anywhere; }
+.dropdown-option.highlighted { background: var(--hover-wash); }
+.dropdown-option[aria-selected="true"] { color: var(--accent); background: rgba(var(--accent-rgb), .09); font-weight: 600; }
+.dropdown-option[aria-selected="true"]::after { content: '✓'; position: absolute; right: 10px; top: 10px; }
+.dropdown-empty { padding: 14px 10px; font-size: var(--control-font-size); color: var(--muted); }
+

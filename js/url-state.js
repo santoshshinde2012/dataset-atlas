@@ -8,6 +8,7 @@
  *         st=sourceTypes f=formats srt=sort v=projection p=pin ids (share only)
  *         ds=dataset id to open once (not written back into the hash)
  */
+import { practicalFilters } from './requirements.js';
 import { DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION } from './config.js';
 
 export const SORTS = ['freshness', 'coverage', 'openness', 'size', 'title'];
@@ -28,6 +29,8 @@ export function serializeState(state, allFormats) {
   }
   if (state.sort && state.sort !== 'freshness') p.set('srt', state.sort);
   if (state.projection !== 'globe') p.set('v', state.projection);
+  for (const key of ['startYear', 'endYear', 'level', 'resourceKind', 'country', 'reuse']) if (state[key]) p.set(key, state[key]);
+  if (state.coverageMode && state.coverageMode !== 'candidate') p.set('coverageMode', state.coverageMode);
   return p.toString();
 }
 
@@ -42,7 +45,7 @@ export function parseState(hash) {
   const c = p.get('c');
   if (c && /^[A-Z]{2}$/.test(c)) out.focusCountry = c;
   const q = p.get('q');
-  if (q) out.search = q.slice(0, 80);
+  if (q) out.search = q.slice(0, 200);
   const o = parseFloat(p.get('o'));
   if (!Number.isNaN(o) && o > 0 && o <= 1) out.minOpenness = o;
   const st = p.get('st');
@@ -65,5 +68,8 @@ export function parseState(hash) {
   }
   const dataset = p.get('ds');
   if (dataset && /^d[a-z0-9]+$/.test(dataset)) out.dataset = dataset;
+  const practical = practicalFilters(Object.fromEntries(p));
+  for (const key of Object.keys(practical)) if (p.has(key)) out[key] = practical[key];
+  if (out.startYear && out.endYear && out.startYear > out.endYear) { delete out.startYear; delete out.endYear; }
   return out;
 }

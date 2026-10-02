@@ -105,7 +105,10 @@ test('passport drawer and region rail are mutually exclusive', () => {
   store.actions.selectRegion('asia');
   store.actions.openPassport();
   assert.equal(store.getState().passportOpen, true);
-  assert.equal(store.getState().region, null);
+  assert.equal(store.getState().region, 'asia');
+  assert.equal(store.select.railMode(), null);
+  store.actions.closePassport();
+  assert.equal(store.select.railMode(), 'region');
   store.actions.selectRegion('asia');
   assert.equal(store.getState().passportOpen, false);
   assert.equal(store.getState().region, 'asia');

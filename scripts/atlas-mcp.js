@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import { withProfiles } from '../js/dataset.js';
+import { practicalFilters, LEVELS } from '../js/requirements.js';
+import { inventory, inventoryCsv, pythonRecipe } from '../js/exports.js';
 /**
  * Atlas MCP server — the agent interface to the Dataset Atlas.
  *
@@ -75,7 +78,11 @@ export async function loadCatalog() {
     if (!res.ok) throw new Error(`catalog fetch failed: HTTP ${res.status}`);
     return buildCatalog(await res.json());
   }
-  return buildCatalog(JSON.parse(raw)); // parse/shape errors on a present file must fail loudly
+  return withProfiles(buildCatalog(JSON.parse(raw)), optionalProfiles()); // parse/shape errors on a present file must fail loudly
+}
+
+function optionalProfiles() {
+  try { return loadPilot().profiles; } catch (error) { if (error.code === 'ENOENT') return []; throw error; }
 }
 
 export function loadPilot() {
@@ -153,6 +160,11 @@ export function searchCatalog(catalog, args = {}) {
   // query is applied as a narrow post-filter below (not via the FACETS.search
   // predicate, which also matches domain/region slugs) so the tool honors its
   // documented title/description/source scope.
+  const practical = practicalFilters({ ...args, country: String(args.country || '').toUpperCase() });
+  for (const key of ['startYear', 'endYear', 'level', 'resourceKind', 'reuse', 'coverageMode']) {
+    if (args[key] !== undefined && practical[key] !== args[key]) throw new Error(`invalid ${key}`);
+  }
+  if (practical.startYear && practical.endYear && practical.startYear > practical.endYear) throw new Error('startYear must not exceed endYear');
   const state = {
     domain: domain || 'all',
     sourceTypes: new Set(Array.isArray(sourceTypes) && sourceTypes.length ? sourceTypes : Object.keys(SOURCE_TYPE_META)),
@@ -160,10 +172,12 @@ export function searchCatalog(catalog, args = {}) {
     minOpenness: Math.max(0, Math.min(1, +minOpenness || 0)),
     search: '',
     onlyChanged: false,
+    ...practical, country: args.coverageMode ? practical.country : '',
+    coverageIndex: readCoverage(),
   };
   let list = filterCatalog(catalog, state);
-  const q = String(query).slice(0, 80);
-  if (queryTerms(q).length) list = list.filter((d) => searchScore(d, q, { includeFacets: false }) > 0);
+  const q = String(query).slice(0, 200);
+  if (q.trim()) list = list.filter((d) => searchScore(d, q, { includeFacets: false, coverageIndex: state.coverageIndex }) > 0);
   if (region) list = list.filter((d) => d.region === region || (includeGlobal && d.region === GLOBAL_REGION));
   if (maxSizeMB) list = list.filter((d) => d.approxSizeMB <= +maxSizeMB);
 
@@ -172,7 +186,7 @@ export function searchCatalog(catalog, args = {}) {
   const isMatch = (d) => coverageOf(d) === 'tagged';
   const dnaMean = (d) => dnaMetrics(d).reduce((s, m) => s + m.value, 0) / 5;
   const score = (d) => (isMatch(d) ? 2 : coverageOf(d) === 'series' ? 1 : 0)
-    + (q ? searchScore(d, q, { includeFacets: false }) / 5 : 0)
+    + (q ? searchScore(d, q, { includeFacets: false, coverageIndex: state.coverageIndex }) / 5 : 0)
     + dnaMean(d);
   const cmp = {
     relevance: (a, b) => score(b) - score(a),
@@ -419,6 +433,9 @@ export function buildPassport(catalog, args = {}, accessedDate = null) {
     ...(unknown.size ? { unknown_ids: [...unknown] } : {}),
     manifest_sh: manifestText(entries),
     references_bib: bibliographyFor(entries, accessedDate),
+    inventory_json: inventory(entries, args.requirements || {}),
+    inventory_csv: inventoryCsv(entries, args.requirements || {}),
+    download_py: pythonRecipe(entries, args.requirements || {}),
     share_url: shareUrl(entries.map((d) => d.id)),
   };
 }
@@ -433,7 +450,7 @@ export function toolDefinitions() {
       inputSchema: {
         type: 'object',
         properties: {
-          query: { type: 'string', description: 'word-order-independent match over title/description/source' },
+          query: { type: 'string', description: 'country/year-aware match over title/description/source and reviewed variables' },
           domain: { type: 'string', enum: DOMAINS },
           region: { type: 'string', enum: REGIONS },
           includeGlobal: { type: 'boolean', description: 'when region is set, also include global datasets (default true)' },
@@ -441,6 +458,12 @@ export function toolDefinitions() {
           sourceTypes: { type: 'array', items: { type: 'string', enum: Object.keys(SOURCE_TYPE_META) } },
           formats: { type: 'array', items: { type: 'string', enum: FORMAT_ORDER } },
           minOpenness: { type: 'number', minimum: 0, maximum: 1, description: 'minimum license openness (1 = public domain)' },
+          startYear: { type: 'integer', minimum: 1800, maximum: 2100 },
+          endYear: { type: 'integer', minimum: 1800, maximum: 2100 },
+          level: { type: 'string', enum: LEVELS },
+          resourceKind: { type: 'string', enum: ['download', 'api'] },
+          coverageMode: { type: 'string', enum: ['candidate', 'documented', 'observed'] },
+          reuse: { type: 'string', enum: ['analysis', 'redistribute'] },
           maxSizeMB: { type: 'number', description: 'drop datasets larger than this' },
           sort: { type: 'string', enum: SORTS, description: 'default relevance (country match + query match + DNA composite)' },
           limit: { type: 'number', minimum: 1, maximum: 50, description: 'default 10' },
@@ -568,10 +591,11 @@ export function toolDefinitions() {
     },
     {
       name: 'build_passport',
-      description: 'Turn a list of dataset ids into data-passport.sh (source URLs and executable Kaggle commands), references.bib (BibTeX with license and coverage), and a share link that opens the atlas with the collection pre-pinned. Non-Kaggle downloads require manual action.',
+      description: 'Turn a list of dataset ids into data-passport.sh (source URLs and executable Kaggle commands), references.bib (BibTeX with license and coverage), and a share link that opens the atlas with the collection pre-pinned. Also returns CSV/JSON inventories and a Python recipe for checked resources, with scoped World Bank and OWID support.',
       inputSchema: {
         type: 'object',
         properties: {
+          requirements: { type: 'object', properties: { country: { type: 'string' }, startYear: { type: 'integer', minimum: 1800, maximum: 2100 }, endYear: { type: 'integer', minimum: 1800, maximum: 2100 }, level: { type: 'string', enum: LEVELS } } },
           ids: { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 100 },
         },
         required: ['ids'],

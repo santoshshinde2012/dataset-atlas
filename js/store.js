@@ -6,6 +6,7 @@
  * plain {load, save} pins-storage port, so the store stays pure enough to
  * unit-test with a fake (dependency inversion).
  */
+import { practicalFilters } from './requirements.js';
 import { SOURCE_TYPE_META, PRESETS, FORMAT_ORDER, THEMES, DEFAULT_THEME } from './config.js';
 import { filterCatalog, regionCounts, domainCounts, matchesFacets } from './filters.js';
 import { normFormat } from './utils/text.js';
@@ -51,6 +52,8 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     formats: new Set(allFormats),
     minOpenness: 0,
     search: '',
+    resultsDismissed: false,
+    startYear: null, endYear: null, level: '', resourceKind: '', country: '', coverageMode: 'candidate', reuse: '', coverageIndex,
     region: null,
     focusCountry: null, // cca2 of the clicked country, when region was entered via a country
     preset: null,
@@ -60,6 +63,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     pins: new Set(storedPins),
     sort: 'freshness',
     mapMetric: 'curated',
+    resourceSelections: {},
     focusDataset: null,            // card opened from a crawlable dataset page
     compare: new Set(),            // dataset ids in the compare tray (session-only)
     compareOpen: false,
@@ -99,14 +103,14 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
           return seriesObservation(coverageIndex, d, focus) !== 'absent';
         })
         .sort((a, b) => coverageRank(b, focus) - coverageRank(a, focus)
-          || (state.search ? searchScore(b, state.search) - searchScore(a, state.search) : 0)
+          || (state.search ? searchScore(b, state.search, { coverageIndex }) - searchScore(a, state.search, { coverageIndex }) : 0)
           || by(a, b));
     },
     /** All filtered datasets grouped for the search-anywhere rail. */
     searchResults: () => {
       const by = SORTERS[state.sort] || SORTERS.freshness;
       return filterCatalog(catalog, state).sort((a, b) =>
-        (state.search ? searchScore(b, state.search) - searchScore(a, state.search) : 0) || by(a, b));
+        (state.search ? searchScore(b, state.search, { coverageIndex }) - searchScore(a, state.search, { coverageIndex }) : 0) || by(a, b));
     },
     compareDatasets: () => catalog.filter((d) => state.compare.has(d.id)),
     changeCount: () => state.changes.newIds.size + state.changes.updatedIds.size,
@@ -116,10 +120,10 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     /** Filtered datasets tagged as covering a specific country (cca2). */
     countryDatasets: (cca2) =>
       filterCatalog(catalog, state).filter((d) => countryCoverage(d, cca2) === 'tagged'),
-    pinnedDatasets: () => catalog.filter((d) => state.pins.has(d.id)),
+    pinnedDatasets: () => [...state.pins].map((id) => catalog.find((d) => d.id === id)).filter(Boolean),
     isPinned: (id) => state.pins.has(id),
     /** Which right-rail view applies: 'region' | 'search' | null. */
-    railMode: () => (state.region ? 'region' : state.search ? 'search' : null),
+    railMode: () => (state.passportOpen || state.resultsDismissed ? null : state.region ? 'region' : state.search || state.startYear || state.endYear || state.level || state.country || state.resourceKind || state.reuse ? 'search' : null),
     /** Resolve a preset's starter-bundle URLs to catalog ids (unknown URLs drop). */
     presetBundleIds: (index) => {
       const urls = PRESETS[index]?.bundle || [];
@@ -130,12 +134,25 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
   };
 
   const actions = {
+    selectResource(id, url) {
+      if (catalog.find((d) => d.id === id)?.resources.some((r) => r.url === url)) {
+        state.resourceSelections[id] = url; notify();
+      }
+    },
+    closeResults() { state.resultsDismissed = true; state.region = null; state.focusCountry = null; state.focusDataset = null; notify(); },
+    setPracticalFilters(values) {
+      state.resultsDismissed = false;
+      Object.assign(state, practicalFilters({ ...state, ...values }));
+      notify();
+    },
     setDomain(key) {
+      state.resultsDismissed = false;
       state.domain = key;
       if (state.preset !== null && PRESETS[state.preset].domain !== key) state.preset = null;
       notify();
     },
     togglePreset(index) {
+      state.resultsDismissed = false;
       if (state.preset === index) {
         state.preset = null;
         state.domain = 'all';
@@ -146,20 +163,24 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
       notify();
     },
     toggleSourceType(key, on) {
+      state.resultsDismissed = false;
       on ? state.sourceTypes.add(key) : state.sourceTypes.delete(key);
       notify();
     },
     toggleFormat(key, on) {
+      state.resultsDismissed = false;
       on ? state.formats.add(key) : state.formats.delete(key);
       notify();
     },
-    setMinOpenness(v) { state.minOpenness = +v; notify(); },
+    setMinOpenness(v) { state.resultsDismissed = false; state.minOpenness = +v; notify(); },
     setSearch(q) {
-      state.search = q.trim().toLowerCase();
+      state.resultsDismissed = false;
+      state.search = q.trim().slice(0, 200);
       state.focusDataset = null;
       notify();
     },
     selectRegion(key, focusCountry = null) {
+      state.resultsDismissed = false;
       state.region = key;
       state.focusCountry = key ? focusCountry : null;
       state.focusDataset = null;
@@ -186,7 +207,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     toggleTheme() {
       actions.setTheme(state.theme === 'light' ? 'dark' : 'light');
     },
-    openPassport() { state.passportOpen = true; state.region = null; notify(); },
+    openPassport() { state.passportOpen = true; notify(); },
     closePassport() { state.passportOpen = false; notify(); },
     togglePassport() {
       state.passportOpen ? actions.closePassport() : actions.openPassport();
@@ -246,6 +267,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
       state.formats = new Set(allFormats);
       state.minOpenness = 0;
       state.search = '';
+      Object.assign(state, { startYear: null, endYear: null, level: '', resourceKind: '', country: '', coverageMode: 'candidate', reuse: '' });
       state.preset = null;
       state.onlyChanged = false;
       notify();

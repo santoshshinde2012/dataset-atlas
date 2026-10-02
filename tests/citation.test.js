@@ -15,7 +15,7 @@ const ds = {
 
 test('bibtexFor emits a parseable @misc entry with escaped fields', () => {
   const bib = bibtexFor(ds, '2026-07-10');
-  assert.ok(bib.startsWith('@misc{atlas_worldbank_2025_'));
+  assert.ok(bib.startsWith('@misc{atlas_worldbank_nd_'));
   assert.ok(bib.includes('title        = {World Development Indicators 2024 \\& more}'));
   assert.ok(bib.includes('author       = {{World Bank}}'));
   assert.ok(bib.includes('\\url{https://data.worldbank.org/wdi}'));
@@ -27,4 +27,12 @@ test('bibliographyFor joins entries with blank lines', () => {
   const two = bibliographyFor([ds, { ...ds, id: 'dxyz9999', title: 'Other' }], '2026-07-10');
   assert.equal(two.split('@misc').length - 1, 2);
   assert.ok(two.endsWith('\n'));
+});
+
+test('coverage and editorial years never imply publication year', () => {
+  const bib = bibtexFor(ds);
+  assert.doesNotMatch(bib, /year\s*=/);
+  assert.match(bib, /coverage 1960--2025/);
+  assert.match(bib, /editorial content year 2026/);
+  assert.match(bibtexFor({ ...ds, publicationYear: 2024 }), /year\s*= \{2024\}/);
 });

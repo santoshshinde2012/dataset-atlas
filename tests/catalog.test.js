@@ -119,3 +119,13 @@ test('sanitizeEntry keeps a safe licenseUrl and drops a bad one', () => {
   const bad = sanitizeEntry({ ...valid, licenseUrl: 'javascript:alert(1)' });
   assert.equal(bad.licenseUrl, undefined);
 });
+
+test('publication year and free access require explicit valid metadata', () => {
+  const e = sanitizeEntry({ ...valid, publicationYear: 2024, isAccessibleForFree: false });
+  assert.equal(e.publicationYear, 2024);
+  assert.equal(e.isAccessibleForFree, false);
+  for (const publicationYear of ['2024', 1700, 9999, null]) {
+    assert.equal(sanitizeEntry({ ...valid, publicationYear }).publicationYear, undefined);
+  }
+  assert.equal(sanitizeEntry({ ...valid, isAccessibleForFree: 'true' }).isAccessibleForFree, undefined);
+});

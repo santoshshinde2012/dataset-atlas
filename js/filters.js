@@ -8,7 +8,9 @@
  */
 import { REGION_META, GLOBAL_REGION } from './config.js';
 import { normFormat } from './utils/text.js';
-import { queryTerms, searchScore } from './search.js';
+import { seriesObservation, countryCoverage } from './coverage.js';
+import { licenseUse } from './license-use.js';
+import { queryTerms, searchScore, parseQuery } from './search.js';
 
 /** @type {Record<string, (d: object, s: object) => boolean>} */
 export const FACETS = {
@@ -16,7 +18,20 @@ export const FACETS = {
   source: (d, s) => s.sourceTypes.has(d.sourceType),
   format: (d, s) => (d.formats || []).some((f) => s.formats.has(normFormat(f))),
   license: (d, s) => (d.licenseOpenness ?? 0) >= s.minOpenness,
-  search: (d, s) => !s.search || !queryTerms(s.search).length || searchScore(d, s.search) > 0,
+  search: (d, s) => !s.search || (!queryTerms(s.search).length && !parseQuery(s.search).startYear && !parseQuery(s.search).level) || searchScore(d, s.search, { coverageIndex: s.coverageIndex }) > 0,
+  years: (d, s) => {
+    const span = s.country ? seriesObservation(s.coverageIndex, d, s.country) : null;
+    const start = span && span !== 'absent' ? span.start : d.coverageStart;
+    const end = span && span !== 'absent' ? span.end : d.coverageEnd;
+    return (!s.startYear || end >= s.startYear) && (!s.endYear || start <= s.endYear);
+  },
+  level: (d, s) => !s.level || d.granularity === s.level || (d.reviewedProfiles || []).some((p) => p.level === s.level),
+  resource: (d, s) => !s.resourceKind || (d.resources || []).some((r) => r.kind === s.resourceKind),
+  country: (d, s) => !s.country || (s.coverageMode === 'observed'
+    ? !!seriesObservation(s.coverageIndex, d, s.country) && seriesObservation(s.coverageIndex, d, s.country) !== 'absent'
+    : (s.coverageMode === 'documented' ? (d.countries || []).includes(s.country)
+      : countryCoverage(d, s.country) && seriesObservation(s.coverageIndex, d, s.country) !== 'absent')),
+  reuse: (d, s) => !s.reuse || ['yes', 'share-alike', 'with-terms'].includes(licenseUse(d)[s.reuse]),
   changed: (d, s) => !s.onlyChanged ||
     !s.changes || s.changes.newIds.has(d.id) || s.changes.updatedIds.has(d.id),
 };
