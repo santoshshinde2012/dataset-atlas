@@ -10,6 +10,12 @@ The core browser app is a static site with no runtime package install, account, 
 
 **Required reading:** [join kits](docs/join-kits.md) · [MCP](docs/mcp.md) · [contributing](CONTRIBUTING.md) · [architecture](docs/architecture-and-conventions.md)
 
+## Live project preview
+
+[![The live Dataset Atlas showing geographic discovery, research filters, and Global datasets](docs/images/live-atlas.png)](https://santoshshinde2012.github.io/dataset-atlas/#r=global)
+
+Captured from the [live project](https://santoshshinde2012.github.io/dataset-atlas/) on October 3, 2026. Click the snapshot to explore the atlas.
+
 ## Features
 
 - Browse availability on a globe or flat map; focusing a country also surfaces **global country-year series** as candidates (World Bank, OWID), labelled as such — never as proven rows.
