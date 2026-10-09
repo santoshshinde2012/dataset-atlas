@@ -18,7 +18,7 @@
    "coverageEnd": 2013,
    "granularity": "point",
    "approxSizeMB": 2000,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://registry.opendata.aws/afsis/",
    "providerId": "aws-roda",
    "resources": [],
@@ -46,7 +46,7 @@
    "countries": [
     "ET"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://microdata.worldbank.org/index.php/catalog/6161",
    "providerId": "worldbank",
    "resources": [],
@@ -74,7 +74,7 @@
    "countries": [
     "IN"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/abhinand05/crop-production-in-india",
    "providerId": "kaggle",
    "resources": [],
@@ -102,7 +102,7 @@
    "countries": [
     "IN"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset",
    "providerId": "kaggle",
    "resources": [],
@@ -157,7 +157,7 @@
    "countries": [
     "SG"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.gov.sg/datasets/d_c02f75e7dd48f2e24f61e007033c28ca/view",
    "providerId": "data-gov",
    "resources": [],
@@ -184,7 +184,7 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/apro_cpsh1",
    "providerId": "eurostat",
    "resources": [
@@ -217,7 +217,7 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 20,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/databrowser/view/apro_cpsh1/default/table?lang=en",
    "providerId": "eurostat",
    "resources": [
@@ -251,7 +251,7 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 1,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.worldbank.org/indicator/AG.LND.AGRI.ZS",
    "providerId": "worldbank",
@@ -318,7 +318,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ourworldindata.org/crop-yields",
    "providerId": "owid",
    "resources": [
@@ -379,7 +379,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 40,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.fao.org/faostat/en/#data/QCL",
    "providerId": "fao",
    "resources": [
@@ -411,7 +411,7 @@
    "coverageEnd": 2013,
    "granularity": "country",
    "approxSizeMB": 1500,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/unitednations/global-food-agriculture-statistics",
    "providerId": "kaggle",
    "resources": [],
@@ -440,7 +440,7 @@
    "countries": [
     "BR"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://sidra.ibge.gov.br/tabela/5457",
    "providerId": "sidra",
    "resources": [],
@@ -470,7 +470,7 @@
    "countries": [
     "CO"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.datos.gov.co/Agricultura-y-Desarrollo-Rural/Evaluaciones-Agropecuarias-Municipales-EVA-2019-20/uejq-wxrr",
    "providerId": "datos",
    "resources": [],
@@ -499,7 +499,7 @@
    "countries": [
     "BH"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.data.gov.bh/explore/dataset/03-agriculture-production/",
    "providerId": "data-gov",
    "resources": [],
@@ -528,7 +528,7 @@
    "countries": [
     "QA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.data.gov.qa/explore/dataset/production-area-and-average-yield-of-crops/",
    "providerId": "data-gov",
    "resources": [],
@@ -555,7 +555,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.nass.usda.gov/Research_and_Science/Cropland/SARS1a.php",
    "providerId": "nass",
    "resources": [],
@@ -583,7 +583,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://catalog.data.gov/dataset/quick-stats-agricultural-database",
    "providerId": "data-gov",
    "resources": [],
@@ -610,7 +610,7 @@
    "countries": [
     "AU"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.abs.gov.au/statistics/industry/agriculture/agricultural-commodities-australia/latest-release",
    "providerId": "abs",
    "resources": [],
@@ -637,7 +637,7 @@
    "countries": [
     "NZ"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.stats.govt.nz/information-releases/agricultural-production-statistics-year-to-june-2025/",
    "providerId": "stats",
    "resources": [],
@@ -661,7 +661,7 @@
    "coverageEnd": 2026,
    "granularity": "grid",
    "approxSizeMB": 1200,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://registry.opendata.aws/deafrica-chirps/",
    "providerId": "aws-roda",
    "resources": [],
@@ -730,7 +730,7 @@
    "countries": [
     "SG"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.gov.sg/datasets/d_755290a24afe70c8f9e8bcbf9f251573/view",
    "providerId": "data-gov",
    "resources": [],
@@ -783,7 +783,7 @@
    "coverageEnd": 2026,
    "granularity": "grid",
    "approxSizeMB": 5000,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://cds.climate.copernicus.eu/datasets/insitu-gridded-observations-europe?tab=overview",
    "providerId": "cds",
    "resources": [],
@@ -809,7 +809,7 @@
    "coverageEnd": 2026,
    "granularity": "grid",
    "approxSizeMB": 100000,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels",
    "providerId": "cds",
    "resources": [],
@@ -835,7 +835,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/databrowser/view/env_air_gge/default/table?lang=en",
    "providerId": "eurostat",
    "resources": [
@@ -867,7 +867,7 @@
    "coverageEnd": 2013,
    "granularity": "city",
    "approxSizeMB": 88,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data",
    "providerId": "kaggle",
    "resources": [],
@@ -893,7 +893,7 @@
    "coverageEnd": 2026,
    "granularity": "grid",
    "approxSizeMB": 2000,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=overview",
    "providerId": "cds",
    "resources": [],
@@ -918,7 +918,7 @@
    "coverageEnd": 2100,
    "granularity": "grid",
    "approxSizeMB": 30000000,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://registry.opendata.aws/nex-gddp-cmip6/",
    "providerId": "aws-roda",
    "resources": [],
@@ -944,7 +944,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 20,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://github.com/owid/co2-data",
    "providerId": "owid",
@@ -977,7 +977,7 @@
    "coverageEnd": 2016,
    "granularity": "point",
    "approxSizeMB": 3,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/usgs/earthquake-database",
    "providerId": "kaggle",
    "resources": [],
@@ -1005,7 +1005,7 @@
    "countries": [
     "BR"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/gustavomodelli/forest-fires-in-brazil",
    "providerId": "kaggle",
    "resources": [],
@@ -1032,7 +1032,7 @@
    "countries": [
     "BR"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://terrabrasilis.dpi.inpe.br/en/download-files/",
    "providerId": "terrabrasilis",
    "resources": [],
@@ -1061,7 +1061,7 @@
    "countries": [
     "QA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.data.gov.qa/explore/dataset/annual-relative-humidity-and-rainfall-qatar/",
    "providerId": "data-gov",
    "resources": [],
@@ -1091,7 +1091,7 @@
    "countries": [
     "SA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://datasource.kapsarc.org/explore/dataset/saudi-hourly-weather-data/",
    "providerId": "datasource",
    "resources": [],
@@ -1119,7 +1119,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires",
    "providerId": "kaggle",
    "resources": [],
@@ -1320,7 +1320,7 @@
    "countries": [
     "SG"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.gov.sg/datasets/d_3cf667d761b4bdc6d4d3d3aeec37dea5/view",
    "providerId": "data-gov",
    "resources": [],
@@ -1346,7 +1346,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 15,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table?lang=en",
    "providerId": "eurostat",
    "resources": [
@@ -1380,7 +1380,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 6,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/demo_pjan",
    "providerId": "eurostat",
    "resources": [
@@ -1411,7 +1411,7 @@
    "coverageEnd": 2100,
    "granularity": "country",
    "approxSizeMB": 10,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ourworldindata.org/explorers/population-and-demography",
    "providerId": "owid",
    "resources": [],
@@ -1436,7 +1436,7 @@
    "coverageEnd": 2100,
    "granularity": "country",
    "approxSizeMB": 150,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://population.un.org/wpp/",
    "providerId": "population",
    "resources": [],
@@ -1463,7 +1463,7 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.worldbank.org/indicator/SP.POP.TOTL",
    "providerId": "worldbank",
@@ -1531,7 +1531,7 @@
    "coverageEnd": 2022,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/iamsouravbanerjee/world-population-dataset",
    "providerId": "kaggle",
    "resources": [],
@@ -1598,7 +1598,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 60,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://statistics.cepal.org/portal/cepalstat/index.html?lang=en",
    "providerId": "statistics",
    "resources": [],
@@ -1669,7 +1669,7 @@
    "countries": [
     "QA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.data.gov.qa/explore/dataset/population-by-municipality-and-age-groups/",
    "providerId": "data-gov",
    "resources": [],
@@ -1698,7 +1698,7 @@
    "countries": [
     "SA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://opendata.rcrc.gov.sa/explore/dataset/population-by-age-citizenship-gender-and-governorate-2022/",
    "providerId": "opendata",
    "resources": [],
@@ -1726,7 +1726,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/muonneutrino/us-census-demographic-data",
    "providerId": "kaggle",
    "resources": [],
@@ -1754,7 +1754,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-counties-total.html",
    "providerId": "census",
    "resources": [],
@@ -1782,7 +1782,7 @@
    "countries": [
     "AU"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.abs.gov.au/statistics/people/population/regional-population/latest-release",
    "providerId": "abs",
    "resources": [],
@@ -1808,7 +1808,7 @@
    "coverageEnd": 2050,
    "granularity": "country",
    "approxSizeMB": 6,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://sdd.spc.int/dataset/df_pop_proj",
    "providerId": "sdd",
    "resources": [],
@@ -1833,7 +1833,7 @@
    "coverageEnd": 2012,
    "granularity": "country",
    "approxSizeMB": 50,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://datacatalog.worldbank.org/search/dataset/0023402/africa-development-indicators",
    "providerId": "worldbank",
    "resources": [],
@@ -1858,7 +1858,7 @@
    "coverageEnd": 2014,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/chirin/africa-economic-banking-and-systemic-crisis-data",
    "providerId": "kaggle",
    "resources": [],
@@ -1883,7 +1883,7 @@
    "coverageEnd": 2017,
    "granularity": "admin",
    "approxSizeMB": 205,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/kiva/data-science-for-good-kiva-crowdfunding",
    "providerId": "kaggle",
    "resources": [],
@@ -1911,7 +1911,7 @@
    "countries": [
     "IN"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/sudalairajkumar/indian-startup-funding",
    "providerId": "kaggle",
    "resources": [],
@@ -1939,7 +1939,7 @@
    "countries": [
     "SG"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.gov.sg/datasets/d_bdaff844e3ef89d39fceb962ff8f0791/view",
    "providerId": "data-gov",
    "resources": [],
@@ -1965,7 +1965,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 20,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/nama_10_gdp",
    "providerId": "eurostat",
    "resources": [
@@ -1998,7 +1998,7 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 34,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/prc_hicp_minr",
    "providerId": "eurostat",
    "resources": [
@@ -2030,7 +2030,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 2,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ourworldindata.org/grapher/gdp-per-capita-worldbank",
    "providerId": "owid",
    "resources": [
@@ -2095,7 +2095,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/sazidthe1/global-inflation-data",
    "providerId": "kaggle",
    "resources": [],
@@ -2120,7 +2120,7 @@
    "coverageEnd": 2022,
    "granularity": "country",
    "approxSizeMB": 3,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2023",
    "providerId": "rug",
    "resources": [],
@@ -2172,7 +2172,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 270,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://datacatalog.worldbank.org/search/dataset/0037712",
    "providerId": "worldbank",
    "resources": [],
@@ -2199,7 +2199,7 @@
    "countries": [
     "AR"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://datos.gob.ar/dataset/sspm-producto-interno-bruto-precios-mercado-precios-constantes-base-2004",
    "providerId": "datos",
    "resources": [],
@@ -2227,7 +2227,7 @@
    "countries": [
     "BR"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
    "providerId": "kaggle",
    "resources": [],
@@ -2256,7 +2256,7 @@
    "countries": [
     "BH"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.data.gov.bh/explore/dataset/8-qaurterly-growth-kp/",
    "providerId": "data-gov",
    "resources": [],
@@ -2282,7 +2282,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 0.3,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG?locations=ZQ",
    "providerId": "worldbank",
@@ -2353,7 +2353,7 @@
    "countries": [
     "CA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610043401",
    "providerId": "www150",
    "resources": [],
@@ -2382,7 +2382,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.bea.gov/data/gdp/gdp-by-county",
    "providerId": "bea",
    "resources": [],
@@ -2410,7 +2410,7 @@
    "countries": [
     "AU"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product/latest-release",
    "providerId": "abs",
    "resources": [],
@@ -2436,7 +2436,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 1,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://sdd.spc.int/dataset/df_national_accounts",
    "providerId": "sdd",
    "resources": [],
@@ -2462,7 +2462,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 3,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.worldbank.org/indicator/SE.PRM.ENRR?locations=ZG",
    "providerId": "worldbank",
@@ -2532,7 +2532,7 @@
    "countries": [
     "ZA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.education.gov.za/Programmes/EMIS/EMISDownloads.aspx",
    "providerId": "education",
    "resources": [],
@@ -2560,7 +2560,7 @@
    "countries": [
     "IN"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/rajanand/education-in-india",
    "providerId": "kaggle",
    "resources": [],
@@ -2588,7 +2588,7 @@
    "countries": [
     "SG"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.gov.sg/datasets/d_fa81cdad2b8e8d0d5ac6d97b992ea8e1/view",
    "providerId": "data-gov",
    "resources": [],
@@ -2616,7 +2616,7 @@
    "countries": [
     "GB"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://archive.ics.uci.edu/dataset/349/open+university+learning+analytics+dataset",
    "providerId": "archive",
    "resources": [],
@@ -2642,7 +2642,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 10,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/educ_uoe_enra02",
    "providerId": "eurostat",
    "resources": [
@@ -2674,7 +2674,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ourworldindata.org/grapher/cross-country-literacy-rates",
    "providerId": "owid",
    "resources": [
@@ -2736,7 +2736,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 40,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://datacatalog.worldbank.org/search/dataset/0038480",
    "providerId": "worldbank",
    "resources": [],
@@ -2763,7 +2763,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.worldbank.org/indicator/SE.XPD.TOTL.GD.ZS",
    "providerId": "worldbank",
@@ -2832,7 +2832,7 @@
    "coverageEnd": 2022,
    "granularity": "point",
    "approxSizeMB": 2000,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://webfs.oecd.org/pisa2022/index.html",
    "providerId": "webfs",
    "resources": [],
@@ -2857,7 +2857,7 @@
    "coverageEnd": 2016,
    "granularity": "point",
    "approxSizeMB": 3,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/mylesoneill/world-university-rankings",
    "providerId": "kaggle",
    "resources": [],
@@ -2885,7 +2885,7 @@
    "countries": [
     "BR"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar",
    "providerId": "gov",
    "resources": [],
@@ -2915,7 +2915,7 @@
    "countries": [
     "CO"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.datos.gov.co/Educaci-n/MEN_ESTADISTICAS_EN_EDUCACION_EN_PREESCOLAR-B-SICA/nudc-7mev",
    "providerId": "datos",
    "resources": [],
@@ -2973,7 +2973,7 @@
    "countries": [
     "QA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.data.gov.qa/explore/dataset/students-schools-grades-and-teachers-by-level-of-education/",
    "providerId": "data-gov",
    "resources": [],
@@ -3025,7 +3025,7 @@
    "coverageEnd": 2013,
    "granularity": "point",
    "approxSizeMB": 40,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/26147",
    "providerId": "dataverse",
    "resources": [],
@@ -3052,7 +3052,7 @@
    "countries": [
     "AU"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2025,
    "landingPage": "https://data.gov.au/data/dataset/school-locations-2025",
    "providerId": "data-gov",
@@ -3080,7 +3080,7 @@
    "countries": [
     "AU"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.abs.gov.au/statistics/people/education/schools/latest-release",
    "providerId": "abs",
    "resources": [],
@@ -3130,7 +3130,7 @@
    "coverageEnd": 2022,
    "granularity": "point",
    "approxSizeMB": 0.9,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2023,
    "landingPage": "https://springernature.figshare.com/articles/dataset/RePP_Africa/20122733",
    "providerId": "springernature",
@@ -3159,7 +3159,7 @@
    "countries": [
     "SG"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.gov.sg/datasets/d_3745e3aa98ff3c4bcfcb8e1f6dffef42/view",
    "providerId": "data-gov",
    "resources": [],
@@ -3187,7 +3187,7 @@
    "countries": [
     "IN"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/anikannal/solar-power-generation-data",
    "providerId": "kaggle",
    "resources": [],
@@ -3214,7 +3214,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 40,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/nrg_bal_c",
    "providerId": "eurostat",
    "resources": [
@@ -3247,7 +3247,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 120,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/web/energy/database",
    "providerId": "eurostat",
    "resources": [],
@@ -3273,7 +3273,7 @@
    "coverageEnd": 2020,
    "granularity": "country",
    "approxSizeMB": 250,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.open-power-system-data.org/time_series/",
    "providerId": "data",
    "resources": [],
@@ -3300,7 +3300,7 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.worldbank.org/indicator/EG.ELC.ACCS.ZS",
    "providerId": "worldbank",
@@ -3367,7 +3367,7 @@
    "coverageEnd": 2019,
    "granularity": "point",
    "approxSizeMB": 10,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://datasets.wri.org/dataset/globalpowerplantdatabase",
    "providerId": "datasets",
    "resources": [],
@@ -3392,7 +3392,7 @@
    "coverageEnd": 2014,
    "granularity": "country",
    "approxSizeMB": 8,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/unitednations/international-energy-statistics",
    "providerId": "kaggle",
    "resources": [],
@@ -3418,7 +3418,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 15,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://github.com/owid/energy-data",
    "providerId": "owid",
@@ -3455,7 +3455,7 @@
    "countries": [
     "BR"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://dados.ons.org.br/dataset/carga-energia",
    "providerId": "dados",
    "resources": [],
@@ -3479,7 +3479,7 @@
    "coverageEnd": 2026,
    "granularity": "point",
    "approxSizeMB": 20,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://globalenergymonitor.org/projects/latin-america-energy-tracker/",
    "providerId": "globalenergymonitor",
    "resources": [],
@@ -3538,7 +3538,7 @@
    "countries": [
     "SA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://datasource.kapsarc.org/explore/dataset/electricity-consumption-by-sectors/",
    "providerId": "datasource",
    "resources": [],
@@ -3565,7 +3565,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.eia.gov/electricity/data/eia923/",
    "providerId": "eia",
    "resources": [],
@@ -3593,7 +3593,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/robikscube/hourly-energy-consumption",
    "providerId": "kaggle",
    "resources": [],
@@ -3622,7 +3622,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://registry.opendata.aws/oedi-data-lake/",
    "providerId": "aws-roda",
    "resources": [],
@@ -3649,7 +3649,7 @@
    "countries": [
     "AU"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.gov.au/data/dataset/australian-petroleum-statistics",
    "providerId": "data-gov",
@@ -3677,7 +3677,7 @@
    "countries": [
     "NZ"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-statistics-and-modelling/energy-statistics/electricity-statistics",
    "providerId": "mbie",
    "resources": [],
@@ -3740,7 +3740,7 @@
    "coverageEnd": 2017,
    "granularity": "country",
    "approxSizeMB": 0.2,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/lydia70/malaria-in-africa",
    "providerId": "kaggle",
    "resources": [],
@@ -3768,7 +3768,7 @@
    "countries": [
     "IN"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/sudalairajkumar/covid19-in-india",
    "providerId": "kaggle",
    "resources": [],
@@ -3796,7 +3796,7 @@
    "countries": [
     "SG"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.gov.sg/datasets/d_ca168b2cb763640d72c4600a68f9909e/view",
    "providerId": "data-gov",
    "resources": [],
@@ -3823,7 +3823,7 @@
    "coverageEnd": 2023,
    "granularity": "admin",
    "approxSizeMB": 35,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/hlth_cd_asdr2",
    "providerId": "eurostat",
    "resources": [
@@ -3857,7 +3857,7 @@
    "countries": [
     "GB"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/nationallifetablesunitedkingdomreferencetables",
    "providerId": "ons",
    "resources": [],
@@ -3882,7 +3882,7 @@
    "coverageEnd": 2015,
    "granularity": "country",
    "approxSizeMB": 0.3,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/kumarajarshi/life-expectancy-who",
    "providerId": "kaggle",
    "resources": [],
@@ -3908,7 +3908,7 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 75,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://github.com/owid/covid-19-data/tree/master/public/data",
    "providerId": "owid",
@@ -3941,7 +3941,7 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 50,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.who.int/data/gho",
    "providerId": "who",
    "resources": [],
@@ -3966,7 +3966,7 @@
    "coverageEnd": 2021,
    "granularity": "country",
    "approxSizeMB": 1,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.who.int/data/gho/data/indicators/indicator-details/GHO/life-expectancy-at-birth-(years)",
    "providerId": "who",
    "resources": [],
@@ -3992,7 +3992,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 30,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://datacatalog.worldbank.org/search/dataset/0037652/health-nutrition-and-population-statistics",
    "providerId": "worldbank",
    "resources": [],
@@ -4020,7 +4020,7 @@
    "countries": [
     "MX"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/tanmoyx/covid19-patient-precondition-dataset",
    "providerId": "kaggle",
    "resources": [],
@@ -4048,7 +4048,7 @@
    "countries": [
     "BR"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://registry.opendata.aws/inlab-covid-19-images-dataset/",
    "providerId": "aws-roda",
    "resources": [],
@@ -4077,7 +4077,7 @@
    "countries": [
     "QA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.data.gov.qa/explore/dataset/crude-birth-and-death-rates-natural-increase-rate-and-maternal-mortality-rate/",
    "providerId": "data-gov",
    "resources": [],
@@ -4105,7 +4105,7 @@
    "countries": [
     "IL"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.gov.il/datasets/ministry-health/covid-19",
    "providerId": "data-gov",
    "resources": [],
@@ -4134,7 +4134,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://catalog.data.gov/dataset/places-local-data-for-better-health-county-data-2024-release",
    "providerId": "data-gov",
    "resources": [],
@@ -4163,7 +4163,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://catalog.data.gov/dataset/u-s-chronic-disease-indicators",
    "providerId": "data-gov",
    "resources": [],
@@ -4191,7 +4191,7 @@
    "countries": [
     "AU"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.abs.gov.au/statistics/health/causes-death/causes-death-australia/latest-release",
    "providerId": "abs",
    "resources": [],
@@ -4218,7 +4218,7 @@
    "countries": [
     "AU"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://www.data.qld.gov.au/dataset/queensland-covid-19-case-line-list-age-groups",
    "providerId": "data",
@@ -4273,7 +4273,7 @@
    "countries": [
     "ET"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/saurabhshahane/road-traffic-accidents",
    "providerId": "kaggle",
    "resources": [],
@@ -4301,7 +4301,7 @@
    "countries": [
     "SG"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.gov.sg/datasets/d_2873f3b1b2a836103f51f696350b98fa/view",
    "providerId": "data-gov",
    "resources": [],
@@ -4325,7 +4325,7 @@
    "coverageEnd": 2024,
    "granularity": "country",
    "approxSizeMB": 6.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://asiantransportobservatory.org/snd/",
    "providerId": "asiantransportobservatory",
    "resources": [],
@@ -4351,7 +4351,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 1,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ec.europa.eu/eurostat/web/products-datasets/-/rail_pa_total",
    "providerId": "eurostat",
    "resources": [
@@ -4386,7 +4386,7 @@
    "countries": [
     "GB"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.gov.uk/government/statistical-data-sets/road-safety-open-data",
    "providerId": "gov",
    "resources": [],
@@ -4412,7 +4412,7 @@
    "coverageEnd": 2026,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.worldbank.org/indicator/IS.AIR.PSGR",
    "providerId": "worldbank",
@@ -4481,7 +4481,7 @@
    "coverageEnd": 2019,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://ourworldindata.org/grapher/death-rate-road-traffic-injuries",
    "providerId": "owid",
    "resources": [
@@ -4543,7 +4543,7 @@
    "coverageEnd": 2021,
    "granularity": "country",
    "approxSizeMB": 1,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.who.int/data/gho/data/indicators/indicator-details/GHO/estimated-road-traffic-death-rate-(per-100-000-population)",
    "providerId": "who",
    "resources": [],
@@ -4568,7 +4568,7 @@
    "coverageEnd": 2012,
    "granularity": "point",
    "approxSizeMB": 2.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/open-flights/flight-route-database",
    "providerId": "kaggle",
    "resources": [],
@@ -4597,7 +4597,7 @@
    "countries": [
     "AR"
    ],
-   "verified": "2026-10-07",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://data.buenosaires.gob.ar/dataset/bicicletas-publicas",
    "providerId": "data",
@@ -4626,7 +4626,7 @@
    "countries": [
     "BR"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/rdewes/voo-regular-ativo-vra-anac",
    "providerId": "kaggle",
    "resources": [],
@@ -4655,7 +4655,7 @@
    "countries": [
     "BH"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.data.gov.bh/explore/dataset/01-vehicle-registered-in-use/information/",
    "providerId": "data-gov",
    "resources": [],
@@ -4684,7 +4684,7 @@
    "countries": [
     "QA"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.data.gov.qa/explore/dataset/air-traffic-data/",
    "providerId": "data-gov",
    "resources": [],
@@ -4712,7 +4712,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.kaggle.com/datasets/usdot/flight-delays",
    "providerId": "kaggle",
    "resources": [],
@@ -4739,7 +4739,7 @@
    "countries": [
     "US"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://registry.opendata.aws/nyc-tlc-trip-records-pds/",
    "providerId": "aws-roda",
    "resources": [],
@@ -4769,7 +4769,7 @@
    "countries": [
     "NZ"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://opendata-nzta.opendata.arcgis.com/datasets/NZTA::crash-analysis-system-cas-data-1/about",
    "providerId": "opendata-nzta",
    "resources": [],
@@ -4796,7 +4796,7 @@
    "countries": [
     "AU"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "landingPage": "https://www.data.qld.gov.au/dataset/crash-data-from-queensland-roads",
    "providerId": "data",
@@ -4840,7 +4840,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -4909,7 +4909,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -4978,7 +4978,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5047,7 +5047,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5116,7 +5116,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5185,7 +5185,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5254,7 +5254,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5392,7 +5392,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5461,7 +5461,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5530,7 +5530,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5599,7 +5599,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5668,7 +5668,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5737,7 +5737,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5806,7 +5806,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5875,7 +5875,7 @@
     }
    ],
    "coverageKind": "global-country-series",
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "sourceModifiedYear": 2026,
    "sample": {
     "columns": [
@@ -5928,7 +5928,7 @@
    "coverageEnd": 2026,
    "granularity": "point",
    "approxSizeMB": 500,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://explore.openaq.org",
    "providerId": "openaq",
    "resources": [
@@ -6006,7 +6006,7 @@
    "coverageEnd": 2025,
    "granularity": "country",
    "approxSizeMB": 0.5,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://data.worldbank.org/indicator/NY.GDP.MKTP.CD",
    "providerId": "worldbank",
    "resources": [
@@ -6075,7 +6075,7 @@
    "coverageEnd": 2026,
    "granularity": "grid",
    "approxSizeMB": 8000,
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://www.chc.ucsb.edu/data/chirps",
    "providerId": "chc-ucsb",
    "resources": [],
@@ -6103,12 +6103,12 @@
    "countries": [
     "IN"
    ],
-   "verified": "2026-10-08",
+   "verified": "2026-10-09",
    "landingPage": "https://lgdirectory.gov.in/",
    "providerId": "lgd-india",
    "resources": [],
    "coverageKind": "tagged-countries"
   }
  ],
- "generated": "2026-10-08"
+ "generated": "2026-10-09"
 }
