@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync, unlinkSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { iso2For, isAggregate } from '../js/identifiers.js';
+import { parseWideBank, parseLongCsv, retainedSeries, reconcileSeries } from './coverage-parser.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const catalogPath = join(root, 'data/catalog.json');
@@ -68,103 +68,6 @@ except Exception:
   }
 }
 
-function spanFor(rowsByIso) {
-  const out = {};
-  for (const [iso, years] of rowsByIso) {
-    if (!years.size) continue;
-    const sorted = [...years].sort((a, b) => a - b);
-    out[iso] = [sorted[0], sorted[sorted.length - 1]];
-  }
-  return out;
-}
-
-function remember(map, code, year) {
-  const iso3 = String(code || '').trim().toUpperCase();
-  if (!/^[A-Z]{3}$/.test(iso3) || isAggregate(iso3)) return;
-  const iso2 = iso2For(iso3);
-  if (!iso2) return;
-  const y = Number(year);
-  if (!Number.isInteger(y) || y < 1800 || y > 2100) return;
-  if (!map.has(iso2)) map.set(iso2, new Set());
-  map.get(iso2).add(y);
-}
-
-function parseWideBank(text) {
-  const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/);
-  const headerIdx = lines.findIndex((line) => line.startsWith('"Country Name"') || line.startsWith('Country Name'));
-  if (headerIdx < 0) return { spans: {}, sample: null };
-  const header = splitCsv(lines[headerIdx]);
-  const codeAt = header.indexOf('Country Code');
-  const nameAt = header.indexOf('Country Name');
-  const years = header.map((h, i) => (/^\d{4}$/.test(h) ? [i, Number(h)] : null)).filter(Boolean);
-  const map = new Map();
-  const sampleRows = [];
-  for (const line of lines.slice(headerIdx + 1)) {
-    if (!line.trim()) continue;
-    const cells = splitCsv(line);
-    const code = cells[codeAt];
-    const iso3 = String(code || '').toUpperCase();
-    if (!/^[A-Z]{3}$/.test(iso3) || isAggregate(iso3) || !iso2For(iso3)) continue;
-    for (const [idx, year] of years) {
-      const value = cells[idx];
-      if (value !== undefined && value !== '') remember(map, iso3, year);
-    }
-    if (sampleRows.length < 3) {
-      const latest = [...years].reverse().find(([idx]) => cells[idx]);
-      if (latest) sampleRows.push([cells[nameAt] || iso3, iso2For(iso3), cells[latest[0]], String(latest[1])]);
-    }
-  }
-  const sample = sampleRows.length
-    ? { columns: ['Country', 'ISO2', 'Value', 'Year'], rows: sampleRows, source: 'World Bank CSV (3 non-aggregate rows)' }
-    : null;
-  return { spans: spanFor(map), sample };
-}
-
-function parseLongCsv(text) {
-  const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/).filter((line) => line.trim());
-  if (lines.length < 2) return { spans: {}, sample: null };
-  const header = splitCsv(lines[0]);
-  const codeAt = ['Code', 'iso_code', 'ISO3', 'Country Code'].map((name) => header.indexOf(name)).find((i) => i >= 0);
-  const yearAt = ['Year', 'year'].map((name) => header.indexOf(name)).find((i) => i >= 0);
-  const entityAt = header.indexOf('Entity');
-  if (codeAt === undefined || yearAt === undefined) return { spans: {}, sample: null };
-  const map = new Map();
-  const sampleRows = [];
-  const keep = header.slice(0, 6);
-  for (const line of lines.slice(1)) {
-    const cells = splitCsv(line);
-    const code = cells[codeAt];
-    if (!code) continue;
-    remember(map, code, cells[yearAt]);
-    if (sampleRows.length < 3 && iso2For(String(code).toUpperCase()) && !isAggregate(String(code).toUpperCase())) {
-      sampleRows.push(keep.map((_, i) => cells[i] ?? ''));
-    }
-  }
-  const sample = sampleRows.length
-    ? { columns: keep, rows: sampleRows, source: 'First country rows of the provider CSV' }
-    : null;
-  return { spans: spanFor(map), sample: entityAt >= 0 ? sample : null };
-}
-
-function splitCsv(line) {
-  const out = [];
-  let cur = '';
-  let quoted = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (quoted) {
-      if (ch === '"') {
-        if (line[i + 1] === '"') { cur += '"'; i++; }
-        else quoted = false;
-      } else cur += ch;
-    } else if (ch === '"') quoted = true;
-    else if (ch === ',') { out.push(cur); cur = ''; }
-    else cur += ch;
-  }
-  out.push(cur);
-  return out;
-}
-
 function zipCsv(bytes) {
   const tmp = join(root, 'data/.coverage-tmp.zip');
   writeFileSync(tmp, bytes);
@@ -177,13 +80,16 @@ sys.stdout.write(z.read(names[0]).decode('utf-8', 'replace'))
   return text;
 }
 
-const series = {};
+let previousCoverage = null;
+try {
+  previousCoverage = JSON.parse(readFileSync(join(root, 'data/country-coverage.json'), 'utf8'));
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+}
+const previousSeries = retainedSeries(previousCoverage, catalog.datasets);
+const attempts = [];
 let addedResources = 0;
 let addedSamples = 0;
-
-function setSeries(url, spans) {
-  if (spans && Object.keys(spans).length) series[url] = spans;
-}
 
 for (const dataset of catalog.datasets) {
   const download = (dataset.resources || []).find((r) => r.kind === 'download' && /worldbank\.org/.test(r.url));
@@ -191,12 +97,13 @@ for (const dataset of catalog.datasets) {
   process.stdout.write(`WB ${download.url.slice(-40)}\n`);
   try {
     const { spans, sample } = parseWideBank(zipCsv(fetchBytes(download.url, 2_000_000)));
-    setSeries(dataset.url, spans);
+    attempts.push({ url: dataset.url, spans });
     if (sample && !dataset.sample) {
       dataset.sample = { ...sample, source: download.url };
       addedSamples++;
     }
   } catch (err) {
+    attempts.push({ url: dataset.url, spans: null });
     console.warn('  skip', err.message);
   }
 }
@@ -210,14 +117,15 @@ for (const { dataset, url } of longDownloads) {
   process.stdout.write(`CSV ${url.slice(0, 90)}\n`);
   try {
     const bytes = fetchBytes(url, 16_000_000);
-    if (bytes.length >= 16_000_000) { console.warn('  too large'); continue; }
+    if (bytes.length >= 16_000_000) { attempts.push({ url: dataset.url, spans: null }); console.warn('  too large'); continue; }
     const { spans, sample } = parseLongCsv(bytes.toString('utf8'));
-    setSeries(dataset.url, spans);
+    attempts.push({ url: dataset.url, spans });
     if (sample && bytes.length < 1_500_000 && !dataset.sample) {
       dataset.sample = { ...sample, source: url };
       addedSamples++;
     }
   } catch (err) {
+    attempts.push({ url: dataset.url, spans: null });
     console.warn('  skip', err.message);
   }
 }
@@ -278,9 +186,10 @@ for (const dataset of catalog.datasets) {
   addedResources++;
 }
 
+const series = reconcileSeries(previousSeries, attempts);
 const coverage = {
   generated: new Date().toISOString().slice(0, 10),
-  note: 'Non-null country-year or wide-year observations. World Bank and OWID aggregates are excluded. A listed dataset with no entry for a country was checked and had no value. Datasets absent from series were not checked.',
+  note: 'Non-null country-year or wide-year observations. World Bank and OWID aggregates are excluded. A listed dataset with no entry for a country was checked and had no value. Datasets absent from series were not checked. If any resource refresh fails, previous dataset spans are retained; new datasets stay unchecked.',
   series,
 };
 writeFileSync(join(root, 'data/country-coverage.json'), `${JSON.stringify(coverage)}\n`);

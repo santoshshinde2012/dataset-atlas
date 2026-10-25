@@ -60,6 +60,7 @@ const files = [
   'js/ui/form-controls.js',
   'js/ui/data-explorer.js',
   'js/services/download.js',
+  'js/services/atlas-data.js',
   'js/services/data-reader.js',
   'js/services/data-worker.js',
   'js/access.js',

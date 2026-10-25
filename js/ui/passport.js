@@ -1,7 +1,6 @@
 import { setFieldError } from './form-controls.js';
 import { passportSummary, passportList, importPassport } from '../passport.js';
 import { inventory, inventoryCsv, pythonRecipe } from '../exports.js';
-import { downloadText } from '../services/download.js';
 /** Data Passport drawer: pinned datasets and manifest export. Open/closed
  * state lives in the store (state.passportOpen) so there is a single owner
  * for right-edge layout decisions. */
@@ -13,7 +12,7 @@ import { bibliographyFor } from '../citation.js';
 import { serializeState } from '../url-state.js';
 import { icon } from '../icons.js';
 
-export function initPassport({ store, toast, copyText, onDetails, onProject }) {
+export function initPassport({ store, toast, copyText, downloadText, onDetails, onProject }) {
   const drawer = $('#passport-drawer');
   let query = '', sort = 'saved', undoIds = [];
   const feedback = (message) => { $('#passport-feedback').textContent = message; };

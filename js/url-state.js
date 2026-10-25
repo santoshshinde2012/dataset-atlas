@@ -9,7 +9,7 @@
  *         ds=dataset id to open once (not written back into the hash)
  */
 import { practicalFilters } from './requirements.js';
-import { DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION } from './config.js';
+import { DOMAIN_META, REGION_META, SOURCE_TYPE_META, GLOBAL_REGION, FORMAT_ORDER } from './config.js';
 
 export const SORTS = ['freshness', 'coverage', 'openness', 'size', 'title'];
 
@@ -39,9 +39,9 @@ export function parseState(hash) {
   const p = new URLSearchParams(String(hash || '').replace(/^#/, ''));
   const out = {};
   const d = p.get('d');
-  if (d && DOMAIN_META[d]) out.domain = d;
+  if (d && Object.hasOwn(DOMAIN_META, d)) out.domain = d;
   const r = p.get('r');
-  if (r && (REGION_META[r] || r === GLOBAL_REGION)) out.region = r;
+  if (r && (Object.hasOwn(REGION_META, r) || r === GLOBAL_REGION)) out.region = r;
   const c = p.get('c');
   if (c && /^[A-Z]{2}$/.test(c)) out.focusCountry = c;
   const q = p.get('q');
@@ -49,14 +49,14 @@ export function parseState(hash) {
   const o = parseFloat(p.get('o'));
   if (!Number.isNaN(o) && o > 0 && o <= 1) out.minOpenness = o;
   const st = p.get('st');
-  if (st) {
-    const keys = st.split('.').filter((k) => SOURCE_TYPE_META[k]);
-    if (keys.length) out.sourceTypes = keys;
+  if (st !== null) {
+    const keys = [...new Set(st.split('.').filter((k) => Object.hasOwn(SOURCE_TYPE_META, k)))];
+    if (keys.length || st === '') out.sourceTypes = keys;
   }
   const f = p.get('f');
-  if (f) {
-    const list = f.split('.').filter((x) => /^[A-Za-z]{1,10}$/.test(x));
-    if (list.length) out.formats = list; // an empty list would clear every format
+  if (f !== null) {
+    const list = [...new Set(f.split('.').filter((x) => FORMAT_ORDER.includes(x)))];
+    if (list.length || f === '') out.formats = list;
   }
   const srt = p.get('srt');
   if (srt && SORTS.includes(srt)) out.sort = srt;

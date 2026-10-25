@@ -1,8 +1,9 @@
 /** Shared validation for browser filters, project links, and agent requests. */
 export const LEVELS = ['country', 'state', 'district', 'lgd-district', 'county', 'subdivision', 'admin1', 'admin', 'city', 'point', 'grid'];
 export function validYear(value) {
+  if (typeof value !== 'number' && (typeof value !== 'string' || !/^\d{4}$/.test(value))) return null;
   const n = Number(value);
-  return value !== null && value !== '' && Number.isInteger(n) && n >= 1800 && n <= 2100 ? n : null;
+  return Number.isInteger(n) && n >= 1800 && n <= 2100 ? n : null;
 }
 export function practicalFilters(values = {}) {
   return {

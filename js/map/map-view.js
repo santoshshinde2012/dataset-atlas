@@ -132,6 +132,7 @@ export class MapView {
       .attr('tabindex', 0)
       .attr('role', 'button')
       .attr('aria-label', ([, meta]) => `Browse ${meta.name} datasets`)
+      .on('focus', () => this.stopAutoRotate())
       .on('click', (event, [key]) => {
         event.stopPropagation();
         this.store.actions.selectRegion(key);

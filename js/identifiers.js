@@ -193,14 +193,12 @@ export function classifyIdentifiers(values) {
   return (Array.isArray(values) ? values : [values]).map(classifyIdentifier);
 }
 
-/** Keep rows whose iso field is a country. Aggregates and blanks are dropped. */
+/** Keep only documented country identifiers; unknown, aggregate and blank rows are dropped. */
 export function dropAggregateRows(rows, isoField = 'iso_code', nameField = 'country') {
   if (!Array.isArray(rows)) return [];
   return rows.filter((row) => {
     const classified = classifyIdentifier(row?.[isoField] || '');
-    if (classified.status === 'country') return true;
-    if (classified.status === 'aggregate') return false;
-    return !isNameAggregate(row?.[nameField]);
+    return classified.status === 'country' && !isNameAggregate(row?.[nameField]);
   });
 }
 

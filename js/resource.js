@@ -6,7 +6,19 @@
  */
 const URL_OK = /^https?:\/\/[^\s\x00-\x1f\x7f"'<>\\`]+$/i;
 const KINDS = new Set(['download', 'api', 'page']);
-const clean = (s, max) => String(s || '').replace(/[\x00-\x1f\x7f]/g, ' ').trim().slice(0, max);
+const clean = (value, max) => (['string', 'number', 'boolean'].includes(typeof value) ? String(value) : '').replace(/[\x00-\x1f\x7f]/g, ' ').trim().slice(0, max);
+
+/** Preserve safe source URLs verbatim while rejecting malformed HTTP locations. */
+export function sanitizeHttpUrl(value) {
+  const url = typeof value === 'string' ? value.trim() : '';
+  if (!URL_OK.test(url)) return null;
+  try {
+    const parsed = new URL(url);
+    return ['http:', 'https:'].includes(parsed.protocol) && parsed.hostname ? url : null;
+  } catch {
+    return null;
+  }
+}
 
 export function sanitizeResources(raw) {
   if (!Array.isArray(raw)) return [];
@@ -14,8 +26,8 @@ export function sanitizeResources(raw) {
   const seen = new Set();
   for (const item of raw.slice(0, 8)) {
     if (!item || typeof item !== 'object') continue;
-    const url = typeof item.url === 'string' ? item.url.trim() : '';
-    if (!URL_OK.test(url) || seen.has(url)) continue;
+    const url = sanitizeHttpUrl(item.url);
+    if (!url || seen.has(url)) continue;
     seen.add(url);
     const kind = KINDS.has(item.kind) ? item.kind : 'page';
     out.push({
@@ -29,9 +41,7 @@ export function sanitizeResources(raw) {
 }
 
 export function sanitizeLandingPage(value, fallbackUrl) {
-  const url = typeof value === 'string' ? value.trim() : '';
-  if (URL_OK.test(url)) return url;
-  return fallbackUrl;
+  return sanitizeHttpUrl(value) || fallbackUrl;
 }
 
 /** First verified file or API distribution, else null. Never guesses. */

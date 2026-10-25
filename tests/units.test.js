@@ -20,3 +20,16 @@ test('longer labels win: per capita is a rate, not people', () => {
   assert.equal(compareUnits('per capita', 'population').status, 'conflict');
   assert.equal(classifyUnit('bushels').status, 'unknown');
 });
+
+test('rates retain their denominator even when the numerator has a longer label', () => {
+  assert.equal(classifyUnit('million tonnes per capita').family, 'rate');
+  assert.equal(classifyUnit('percent of population').family, 'rate');
+  assert.equal(compareUnits('million tonnes per capita', 'million tonnes').status, 'conflict');
+});
+
+test('short unit symbols match tokens instead of unrelated word fragments', () => {
+  assert.equal(classifyUnit('length (m)').status, 'unknown');
+  assert.equal(classifyUnit('rejected samples').status, 'unknown');
+  assert.equal(classifyUnit('Gt CO2').family, 'mass');
+  assert.equal(classifyUnit('EJ/year').family, 'energy');
+});

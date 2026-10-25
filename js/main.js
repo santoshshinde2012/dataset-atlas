@@ -3,7 +3,7 @@
  * the data, builds the store and services, and injects them into the map
  * and UI components. Components never import each other.
  */
-import { loadAtlasData } from './catalog.js';
+import { loadAtlasData } from './services/atlas-data.js';
 import { createStore } from './store.js';
 import { THEMES, DEFAULT_THEME, AUTHOR } from './config.js';
 import { trapModalFocus } from './ui/focus-trap.js';
@@ -14,6 +14,8 @@ import { initDataExplorer } from './ui/data-explorer.js';
 import { localPinStorage, projectStorage } from './services/storage.js';
 import { createToast } from './services/toast.js';
 import { createClipboard } from './services/clipboard.js';
+import { downloadText } from './services/download.js';
+import { readCsv, readParquet } from './services/data-reader.js';
 import { createTooltip } from './ui/tooltip.js';
 import { MapView } from './map/map-view.js';
 import { initTopbar } from './ui/topbar.js';
@@ -75,7 +77,7 @@ async function boot() {
   const store = createStore({
     catalog,
     pinStorage: localPinStorage,
-    initialTheme: THEMES[storedTheme] ? storedTheme : DEFAULT_THEME,
+    initialTheme: Object.hasOwn(THEMES, storedTheme) ? storedTheme : DEFAULT_THEME,
     changes: computeVisitChanges(catalog),
     coverageIndex: coverage,
   });
@@ -121,10 +123,10 @@ async function boot() {
 
   initTopbar({ store, onPassportToggle: store.actions.togglePassport });
   initDomainDock({ store });
-  const explorer = initDataExplorer();
-  const workbench = initWorkbench({ catalog, pilot, toast, store, storage: projectStorage, copyText, sharedProject: new URLSearchParams(location.hash.slice(1)).get('project') });
+  const explorer = initDataExplorer({ readCsv, readParquet, downloadText });
+  const workbench = initWorkbench({ catalog, pilot, toast, store, storage: projectStorage, copyText, downloadText, sharedProject: new URLSearchParams(location.hash.slice(1)).get('project') });
   const detail = initDatasetDetail({ store, pilot, generated, copyText, onProject: (id) => workbench.add(id), onExplore: explorer.open });
-  initPassport({ store, toast, copyText, onDetails: detail.open, onProject: (ids) => workbench.addMany(ids) });
+  initPassport({ store, toast, copyText, downloadText, onDetails: detail.open, onProject: (ids) => workbench.addMany(ids) });
   initFilterRail({
     store,
     generated,
@@ -133,7 +135,7 @@ async function boot() {
     onQuestion: (id) => workbench.open(id),
   });
   initCardRail({ store, toast, copyText, countryNames, generated, onDetails: detail.open });
-  initCompare({ store, toast, pilot, onProject: (ids) => ids.forEach((id) => workbench.add(id)) });
+  initCompare({ store, toast, pilot, onProject: (ids) => workbench.addMany(ids) });
   initWelcome({ store });
   initFormControls();
   initDropdowns();

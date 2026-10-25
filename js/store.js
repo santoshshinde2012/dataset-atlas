@@ -7,7 +7,7 @@
  * unit-test with a fake (dependency inversion).
  */
 import { practicalFilters } from './requirements.js';
-import { SOURCE_TYPE_META, PRESETS, FORMAT_ORDER, THEMES, DEFAULT_THEME } from './config.js';
+import { SOURCE_TYPE_META, DOMAIN_META, REGION_META, GLOBAL_REGION, PRESETS, FORMAT_ORDER, THEMES, DEFAULT_THEME } from './config.js';
 import { filterCatalog, regionCounts, domainCounts, matchesFacets } from './filters.js';
 import { normFormat } from './utils/text.js';
 import { searchScore } from './search.js';
@@ -42,8 +42,9 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
   const allFormats = [...new Set(catalog.flatMap((d) => (d.formats || []).map(normFormat)))]
     .sort((a, b) => FORMAT_ORDER.indexOf(a) - FORMAT_ORDER.indexOf(b));
 
-  const catalogIds = new Set(catalog.map((d) => d.id));
-  const storedPins = pinStorage.load().filter((id) => catalogIds.has(id));
+  const catalogById = new Map(catalog.map((d) => [d.id, d]));
+  const catalogIds = new Set(catalogById.keys());
+  const storedPins = [...new Set(pinStorage.load().filter((id) => catalogIds.has(id)))];
   pinStorage.save(storedPins); // prune ids that no longer resolve to an entry
 
   const state = {
@@ -52,6 +53,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     formats: new Set(allFormats),
     minOpenness: 0,
     search: '',
+    filterResetRevision: 0, // Explicit resets also discard rejected browser-only drafts.
     resultsDismissed: false,
     startYear: null, endYear: null, level: '', resourceKind: '', country: '', coverageMode: 'candidate', reuse: '', coverageIndex,
     region: null,
@@ -59,7 +61,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     preset: null,
     projection: 'globe',
     passportOpen: false,
-    theme: THEMES[initialTheme] ? initialTheme : DEFAULT_THEME,
+    theme: Object.hasOwn(THEMES, initialTheme) ? initialTheme : DEFAULT_THEME,
     pins: new Set(storedPins),
     sort: 'freshness',
     mapMetric: 'curated',
@@ -120,7 +122,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     /** Filtered datasets tagged as covering a specific country (cca2). */
     countryDatasets: (cca2) =>
       filterCatalog(catalog, state).filter((d) => countryCoverage(d, cca2) === 'tagged'),
-    pinnedDatasets: () => [...state.pins].map((id) => catalog.find((d) => d.id === id)).filter(Boolean),
+    pinnedDatasets: () => [...state.pins].map((id) => catalogById.get(id)).filter(Boolean),
     isPinned: (id) => state.pins.has(id),
     /** Which right-rail view applies: 'region' | 'search' | null. */
     railMode: () => (state.passportOpen || state.resultsDismissed ? null : state.region ? 'region' : state.search || state.startYear || state.endYear || state.level || state.country || state.resourceKind || state.reuse ? 'search' : null),
@@ -135,7 +137,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
 
   const actions = {
     selectResource(id, url) {
-      if (catalog.find((d) => d.id === id)?.resources.some((r) => r.url === url)) {
+      if (catalogById.get(id)?.resources?.some((r) => r.url === url)) {
         state.resourceSelections[id] = url; notify();
       }
     },
@@ -146,12 +148,14 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
       notify();
     },
     setDomain(key) {
+      if (key !== 'all' && !Object.hasOwn(DOMAIN_META, key)) return;
       state.resultsDismissed = false;
       state.domain = key;
       if (state.preset !== null && PRESETS[state.preset].domain !== key) state.preset = null;
       notify();
     },
     togglePreset(index) {
+      if (!Number.isInteger(index) || !PRESETS[index]) return;
       state.resultsDismissed = false;
       if (state.preset === index) {
         state.preset = null;
@@ -163,16 +167,22 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
       notify();
     },
     toggleSourceType(key, on) {
+      if (!Object.hasOwn(SOURCE_TYPE_META, key)) return;
       state.resultsDismissed = false;
       on ? state.sourceTypes.add(key) : state.sourceTypes.delete(key);
       notify();
     },
     toggleFormat(key, on) {
+      if (!allFormats.includes(key)) return;
       state.resultsDismissed = false;
       on ? state.formats.add(key) : state.formats.delete(key);
       notify();
     },
-    setMinOpenness(v) { state.resultsDismissed = false; state.minOpenness = +v; notify(); },
+    setMinOpenness(v) {
+      const value = Number(v);
+      if (!Number.isFinite(value) || value < 0 || value > 1) return;
+      state.resultsDismissed = false; state.minOpenness = value; notify();
+    },
     setSearch(q) {
       state.resultsDismissed = false;
       state.search = q.trim().slice(0, 200);
@@ -180,9 +190,10 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
       notify();
     },
     selectRegion(key, focusCountry = null) {
+      if (key !== null && key !== GLOBAL_REGION && !Object.hasOwn(REGION_META, key)) return;
       state.resultsDismissed = false;
       state.region = key;
-      state.focusCountry = key ? focusCountry : null;
+      state.focusCountry = key && typeof focusCountry === 'string' && /^[A-Z]{2}$/.test(focusCountry) ? focusCountry : null;
       state.focusDataset = null;
       // the card rail and the passport drawer share the right edge
       if (key) state.passportOpen = false;
@@ -190,8 +201,9 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     },
     /** Open one catalog entry on the map. Does not pin it. Unknown ids are ignored. */
     openDataset(id) {
-      const dataset = catalog.find((d) => d.id === id);
+      const dataset = catalogById.get(id);
       if (!dataset) return false;
+      state.resultsDismissed = false;
       state.region = dataset.region;
       state.focusCountry = null;
       state.search = '';
@@ -202,7 +214,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     },
     setProjection(mode) { state.projection = mode; notify(); },
     setTheme(theme) {
-      if (THEMES[theme]) { state.theme = theme; notify(); }
+      if (Object.hasOwn(THEMES, theme)) { state.theme = theme; notify(); }
     },
     toggleTheme() {
       actions.setTheme(state.theme === 'light' ? 'dark' : 'light');
@@ -214,6 +226,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
     },
     /** @returns {boolean} whether the dataset is pinned after the toggle */
     togglePin(id) {
+      if (!catalogIds.has(id)) return false;
       const pinned = !state.pins.has(id);
       pinned ? state.pins.add(id) : state.pins.delete(id);
       pinStorage.save([...state.pins]);
@@ -236,12 +249,13 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
       return valid.length;
     },
     setSort(key) {
-      if (SORTERS[key]) { state.sort = key; notify(); }
+      if (Object.hasOwn(SORTERS, key)) { state.sort = key; notify(); }
     },
     setMapMetric(metric) {
       if (metric === 'curated' || metric === 'files') { state.mapMetric = metric; notify(); }
     },
     toggleCompare(id) {
+      if (!catalogIds.has(id)) return false;
       if (state.compare.has(id)) {
         state.compare.delete(id);
         if (state.compare.size === 0) state.compareOpen = false; // no ghost open state
@@ -262,6 +276,7 @@ export function createStore({ catalog, pinStorage, initialTheme = DEFAULT_THEME,
       notify();
     },
     resetFilters() {
+      state.filterResetRevision++;
       state.domain = 'all';
       state.sourceTypes = new Set(Object.keys(SOURCE_TYPE_META));
       state.formats = new Set(allFormats);

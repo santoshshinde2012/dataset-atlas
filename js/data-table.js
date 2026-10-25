@@ -1,25 +1,45 @@
-/** Bounded CSV/TSV parsing and profiling, independent of the browser. */
-import { csvText } from './exports.js';
+/** Bounded CSV/TSV parsing, serialization and profiling, independent of the browser. */
 export const MAX_ROWS = 100000;
 export const MAX_COLUMNS = 80;
+
+export function csvText(columns, rows, { spreadsheetSafe = false } = {}) {
+  const cell = (value) => {
+    let text = String(value ?? '');
+    if (spreadsheetSafe && /^[=+\-@\t\r]/.test(text)) text = "'" + text;
+    return `"${text.replace(/"/g, '""')}"`;
+  };
+  return [columns, ...rows].map((row) => row.map(cell).join(',')).join('\r\n') + '\r\n';
+}
+
 export function parseDelimited(text, delimiter = ',') {
   if (text.length > 25 * 1024 * 1024) throw new Error('File exceeds 25 MB limit');
-  const records = []; let row = [], cell = '', quoted = false, closed = false;
-  const pushRow = () => { row.push(cell); cell = ''; closed = false; if (row.some((c) => c !== '')) records.push(row); row = []; if (records.length > MAX_ROWS + 1) throw new Error('File exceeds 100,000 rows'); };
+  const records = [];
+  let row = [], cell = '', quoted = false, closed = false, started = false;
+  const pushRow = () => {
+    row.push(cell);
+    if (row.length > MAX_COLUMNS) throw new Error('File exceeds 80 columns');
+    // Ignore empty physical lines, but preserve explicit missing-value records (,"" etc.).
+    if (started) records.push(row);
+    row = []; cell = ''; closed = false; started = false;
+    if (records.length > MAX_ROWS + 1) throw new Error('File exceeds 100,000 rows');
+  };
   text = text.replace(/^\uFEFF/, '');
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
     if (quoted) {
       if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else { quoted = false; closed = true; } }
       else cell += c;
-    } else if (c === '"' && !cell && !closed) quoted = true;
-    else if (c === delimiter) { row.push(cell); cell = ''; closed = false; if (row.length > MAX_COLUMNS) throw new Error('File exceeds 80 columns'); }
+    } else if (c === '"') {
+      if (cell || closed) throw new Error('Unexpected quote in an unquoted CSV field');
+      quoted = true; started = true;
+    }
+    else if (c === delimiter) { row.push(cell); cell = ''; closed = false; started = true; if (row.length >= MAX_COLUMNS) throw new Error('File exceeds 80 columns'); }
     else if (c === '\r' || c === '\n') { if (c === '\r' && text[i + 1] === '\n') i++; pushRow(); }
     else if (closed && !/\s/.test(c)) throw new Error('Unexpected text after a quoted CSV field');
-    else cell += c;
+    else { cell += c; started = true; }
   }
   if (quoted) throw new Error('Unclosed quoted CSV field');
-  if (cell || row.length) pushRow();
+  if (started) pushRow();
   if (!records.length) throw new Error('File is empty');
   const columns = records.shift();
   if (columns.length > MAX_COLUMNS || columns.some((c) => !c.trim()) || new Set(columns).size !== columns.length) throw new Error('Use unique, nonempty column headings (up to 80)');

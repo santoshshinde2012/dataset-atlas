@@ -10,6 +10,21 @@ import { catalogJsonLd, datasetPageHtml, personJsonLd } from '../scripts/schema-
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFileSync(resolve(root, path), 'utf8');
 
+test('domain modules stay independent of browser adapters and components receive services', () => {
+  const pure = readdirSync(resolve(root, 'js')).filter((file) => file.endsWith('.js') && !['main.js', 'vendor-globals.js'].includes(file));
+  for (const file of pure) {
+    for (const match of read(`js/${file}`).matchAll(/(?:import|export)\s+(?:[^;]*?\s+from\s+)?['"](\.[^'"]+)['"]/g)) {
+      const dependency = resolve(root, 'js', match[1]).slice(root.length + 1);
+      assert.doesNotMatch(dependency, /^js\/(?:services\/|ui\/|map\/|vendor-globals\.js)/, `${file} imports browser adapter ${dependency}`);
+    }
+  }
+  for (const directory of ['js/ui', 'js/map']) {
+    for (const file of readdirSync(resolve(root, directory)).filter((file) => file.endsWith('.js'))) {
+      assert.doesNotMatch(read(`${directory}/${file}`), /from\s+['"]\.\.\/services\//, `${directory}/${file} must receive services from main.js`);
+    }
+  }
+});
+
 test('every published browser module is reachable from the app entry point', () => {
   const build = read('scripts/build-site.js');
   const manifest = build.match(/const files = \[([\s\S]*?)\];/)?.[1];
