@@ -250,3 +250,36 @@ test('country focus sorts covering datasets first and clears with the region', (
   store.actions.selectRegion('asia');
   assert.deepEqual(store.select.regionDatasets('asia').map((d) => d.title), ['Fresh Regional', 'Older India']);
 });
+
+test('opening a dataset after dismissing results restores its card', () => {
+  const store = mkStore();
+  store.actions.closeResults();
+  assert.equal(store.select.railMode(), null);
+  store.actions.openDataset(store.select.catalog()[0].id);
+  assert.equal(store.select.railMode(), 'region');
+});
+
+test('unknown dataset IDs cannot enter pins or comparison state', () => {
+  const store = mkStore();
+  assert.equal(store.actions.togglePin('dmissing'), false);
+  assert.equal(store.actions.toggleCompare('dmissing'), false);
+  assert.equal(store.getState().pins.size, 0);
+  assert.equal(store.getState().compare.size, 0);
+});
+
+test('store actions reject invalid registry keys without changing state', () => {
+  const store = mkStore();
+  store.actions.setDomain('constructor');
+  store.actions.selectRegion('toString');
+  store.actions.toggleSourceType('__proto__', true);
+  store.actions.toggleFormat('Unknown', true);
+  store.actions.setTheme('constructor');
+  store.actions.setSort('constructor');
+  assert.equal(store.getState().domain, 'all');
+  assert.equal(store.getState().region, null);
+  assert.equal(store.getState().theme, 'light');
+  assert.equal(store.getState().sort, 'freshness');
+  assert.equal(store.getState().sourceTypes.has('__proto__'), false);
+  assert.equal(store.getState().formats.has('Unknown'), false);
+  assert.doesNotThrow(() => store.actions.togglePreset(999));
+});

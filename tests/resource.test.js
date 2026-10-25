@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { sanitizeResources, primaryResource, accessAction } from '../js/resource.js';
+import { sanitizeResources, sanitizeHttpUrl, primaryResource, accessAction } from '../js/resource.js';
 
 test('sanitizeResources drops unsafe URLs and unknown kinds become page', () => {
   const out = sanitizeResources([
@@ -31,4 +31,13 @@ test('Kaggle stays a page plus CLI, never a fake file URL', () => {
   const action = accessAction({ url: 'https://www.kaggle.com/datasets/a/b', kaggleRef: 'a/b' });
   assert.equal(action.primary.kind, 'page');
   assert.equal(action.copy.text, 'kaggle datasets download -d a/b');
+});
+
+test('HTTP URL validation preserves safe query strings and rejects invalid hosts and ports', () => {
+  const url = 'https://example.org/data?format=csv&country=IN#series';
+  assert.equal(sanitizeHttpUrl(`  ${url} `), url);
+  for (const value of ['https://?', 'https://#fragment', 'https://example.org:invalid/data', 'https://[broken]/', null]) {
+    assert.equal(sanitizeHttpUrl(value), null);
+    assert.deepEqual(sanitizeResources([{ url: value, kind: 'download' }]), []);
+  }
 });

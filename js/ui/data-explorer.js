@@ -1,11 +1,10 @@
 import { filterRows, profileTable, tableCsv, numericValue } from '../data-table.js';
-import { readCsv, readParquet } from '../services/data-reader.js';
-import { downloadText } from '../services/download.js';
 import { esc } from '../utils/text.js';
 import { setFieldError } from './form-controls.js';
 import { trapModalFocus } from './focus-trap.js';
 
-export function initDataExplorer() {
+/** Readers and downloads are browser ports supplied by the composition root. */
+export function initDataExplorer({ readCsv, readParquet, downloadText }) {
   const dialog = document.getElementById('data-explorer');
   const find = (id) => dialog.querySelector(`#${id}`);
   let table, filtered = [], opener, generation = 0;

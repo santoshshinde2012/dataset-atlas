@@ -657,7 +657,7 @@ export function coverageForCountry(args = {}) {
   }
   return {
     iso2: iso,
-    checked: true,
+    checked: withRows.length + checkedWithoutRows > 0,
     generated: index.generated || null,
     withRows,
     checkedWithoutRows,
@@ -703,7 +703,10 @@ export function searchVariables(catalog, args = {}) {
   };
 }
 
-export async function callTool(catalog, name, args) {
+export async function callTool(catalog, name, args = {}) {
+  const definition = toolDefinitions().find((tool) => tool.name === name);
+  if (!definition) throw new Error(`unknown tool "${name}"`);
+  validateArguments(args, definition.inputSchema);
   const today = new Date().toISOString().slice(0, 10);
   switch (name) {
     case 'search_catalog': return searchCatalog(catalog, args);
@@ -722,6 +725,32 @@ export async function callTool(catalog, name, args) {
     case 'coverage_for_country': return coverageForCountry(args);
     case 'search_variables': return searchVariables(catalog, args);
     default: throw new Error(`unknown tool "${name}"`);
+  }
+}
+
+/** Enforce the published subset of JSON Schema at the untrusted MCP boundary. */
+function validateArguments(value, schema, path = 'arguments') {
+  const type = schema.type;
+  const valid = type === 'object' ? value !== null && typeof value === 'object' && !Array.isArray(value)
+    : type === 'array' ? Array.isArray(value)
+      : type === 'integer' ? Number.isInteger(value)
+        : type === 'number' ? typeof value === 'number' && Number.isFinite(value)
+          : typeof value === type;
+  if (!valid) throw new Error(`${path} must be ${type}`);
+  if (schema.enum && !schema.enum.includes(value)) throw new Error(`${path} must be one of: ${schema.enum.join(', ')}`);
+  if (schema.minimum !== undefined && value < schema.minimum) throw new Error(`${path} must be at least ${schema.minimum}`);
+  if (schema.maximum !== undefined && value > schema.maximum) throw new Error(`${path} must be at most ${schema.maximum}`);
+  if (type === 'object') {
+    for (const key of schema.required || []) {
+      if (!Object.hasOwn(value, key)) throw new Error(`${path}.${key} is required`);
+    }
+    for (const [key, property] of Object.entries(schema.properties || {})) {
+      if (Object.hasOwn(value, key)) validateArguments(value[key], property, `${path}.${key}`);
+    }
+  } else if (type === 'array') {
+    if (schema.minItems !== undefined && value.length < schema.minItems) throw new Error(`${path} needs at least ${schema.minItems} entries`);
+    if (schema.maxItems !== undefined && value.length > schema.maxItems) throw new Error(`${path} allows at most ${schema.maxItems} entries`);
+    if (schema.items) value.forEach((item, index) => validateArguments(item, schema.items, `${path}[${index}]`));
   }
 }
 
@@ -746,8 +775,17 @@ const fail = (id, code, message) => ({ jsonrpc: '2.0', id, error: { code, messag
  * one response and notifications get none. Pure and exported for tests.
  */
 export async function dispatch(catalog, msg) {
-  const isRequest = msg && msg.id !== undefined && msg.id !== null;
-  const { id, method, params } = msg || {};
+  const isObject = msg !== null && typeof msg === 'object' && !Array.isArray(msg);
+  const hasId = isObject && Object.hasOwn(msg, 'id');
+  const validId = !hasId || msg.id === null || typeof msg.id === 'string' || (typeof msg.id === 'number' && Number.isFinite(msg.id));
+  if (!isObject || msg.jsonrpc !== '2.0' || typeof msg.method !== 'string' || !validId) {
+    return fail(hasId && validId ? msg.id : null, -32600, 'invalid JSON-RPC request');
+  }
+  const isRequest = hasId;
+  const { id, method, params } = msg;
+  if (params !== undefined && (params === null || typeof params !== 'object' || Array.isArray(params))) {
+    return isRequest ? fail(id, -32602, 'params must be an object') : null;
+  }
   try {
     let res;
     if (method === 'initialize') {
@@ -757,8 +795,9 @@ export async function dispatch(catalog, msg) {
     } else if (method === 'tools/list') {
       res = { tools: toolDefinitions() };
     } else if (method === 'tools/call') {
+      if (typeof params?.name !== 'string') return isRequest ? fail(id, -32602, 'tool name is required') : null;
       try {
-        const out = await callTool(catalog, params?.name, params?.arguments || {});
+        const out = await callTool(catalog, params.name, params.arguments === undefined ? {} : params.arguments);
         res = { content: [{ type: 'text', text: JSON.stringify(out, null, 2) }] };
       } catch (e) {
         res = { content: [{ type: 'text', text: String(e?.message || e) }], isError: true };
@@ -778,16 +817,16 @@ async function main() {
 
   let buffer = '';
   process.stdin.setEncoding('utf8');
-  process.stdin.on('data', (chunk) => {
+  for await (const chunk of process.stdin) {
     buffer += chunk;
     let nl;
     while ((nl = buffer.indexOf('\n')) !== -1) {
       const line = buffer.slice(0, nl).trim();
       buffer = buffer.slice(nl + 1);
-      if (line) handleLine(line);
+      if (line) await handleLine(line);
     }
-  });
-  process.stdin.on('end', () => process.exit(0));
+  }
+  if (buffer.trim()) await handleLine(buffer.trim());
 
   async function handleLine(line) {
     let msg;

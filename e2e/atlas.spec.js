@@ -9,6 +9,33 @@ test('loads the map and opens a regional dataset rail', async ({ page }) => {
   await expect(page.locator('#card-list .card').first()).toBeVisible();
 });
 
+test('projection and theme controls announce their current state and next action', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#global-count')).not.toHaveText('0');
+  await expect(page.locator('#proj-globe')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#proj-flat')).toHaveAttribute('aria-pressed', 'false');
+  await page.locator('#proj-flat').click();
+  await expect(page.locator('#proj-globe')).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('#proj-flat')).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Switch to dark theme', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.getByRole('button', { name: 'Switch to light theme', exact: true })).toBeVisible();
+});
+
+test('keyboard focus stops globe motion so the focused region stays in place', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  await expect(page.locator('#global-count')).not.toHaveText('0');
+  const region = page.locator('.region-node:visible').first();
+  await region.focus();
+  const position = await region.getAttribute('transform');
+  await page.waitForTimeout(200);
+  await expect(region).toBeFocused();
+  await expect(region).toHaveAttribute('transform', position);
+  await region.press('Enter');
+  await expect(page.locator('#card-rail')).toBeVisible();
+});
+
 test('author credit publishes GitHub, LinkedIn, and Medium with rel=me', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#global-count')).not.toHaveText('0');

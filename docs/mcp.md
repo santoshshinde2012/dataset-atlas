@@ -10,6 +10,8 @@ node scripts/atlas-mcp.js
 
 Compatible clients (Claude Code, Claude Desktop, any stdio MCP host) load the tools from that process.
 
+The server validates JSON-RPC messages and tool arguments against the published schemas before running a tool. Invalid arguments produce a tool error rather than silently widening filters or dropping malformed values. Stdio requests are processed in order and drained when input closes, including a final request without a newline.
+
 ## What it is for
 
 People browse the map. Agents should use these tools instead of scraping Pages HTML or guessing joins from column names.

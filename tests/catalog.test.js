@@ -129,3 +129,72 @@ test('publication year and free access require explicit valid metadata', () => {
   }
   assert.equal(sanitizeEntry({ ...valid, isAccessibleForFree: 'true' }).isAccessibleForFree, undefined);
 });
+
+test('registry fields must name own entries rather than inherited object properties', () => {
+  for (const key of ['constructor', 'toString', '__proto__']) {
+    assert.equal(sanitizeEntry({ ...valid, domain: key }), null);
+    assert.equal(sanitizeEntry({ ...valid, region: key }), null);
+    assert.equal(sanitizeEntry({ ...valid, sourceType: key }).sourceType, 'research');
+  }
+  assert.equal(sanitizeEntry({ ...valid, domain: ['climate'] }), null);
+});
+
+test('all catalog URL fields reject malformed HTTP locations', () => {
+  for (const url of ['https://?', 'https://#fragment', 'https://example.org:invalid/file', 'https://[bad]/']) {
+    assert.equal(sanitizeEntry({ ...valid, url }), null);
+    const entry = sanitizeEntry({ ...valid, landingPage: url, licenseUrl: url,
+      sample: { columns: ['a', 'b'], rows: [[1, 2]], source: url } });
+    assert.equal(entry.landingPage, valid.url);
+    assert.equal(entry.licenseUrl, undefined);
+    assert.equal(entry.sample.source, undefined);
+  }
+});
+
+test('country tags are deduplicated strings before applying the four-country limit', () => {
+  const entry = sanitizeEntry({ ...valid, countries: [['US'], 'IN', 'IN', 'US', 'BR', 'AU', 'NZ'] });
+  assert.deepEqual(entry.countries, ['IN', 'US', 'BR', 'AU']);
+});
+
+test('malformed catalog payloads fail with an explicit shape error', () => {
+  for (const value of [null, undefined, 1, {}, { datasets: {} }, { datasets: null }]) {
+    assert.throws(() => buildCatalog(value), /Catalog must be an array or an object with a datasets array/);
+  }
+  assert.equal(buildCatalog([valid]).length, 1);
+});
+
+test('malformed scalar objects never invoke untrusted coercion methods', () => {
+  const malformed = JSON.parse('{"toString":null,"valueOf":null}');
+  const [entry] = buildCatalog([{ ...valid, title: malformed, description: malformed, source: malformed,
+    license: malformed, formats: [malformed], licenseOpenness: malformed, freshnessYear: malformed,
+    coverageStart: malformed, coverageEnd: malformed, approxSizeMB: malformed, kaggleRef: malformed,
+    verified: malformed, id: malformed, granularity: malformed,
+    resources: [{ url: 'https://example.org/data.csv', label: malformed, format: malformed }],
+    sample: { columns: ['a', 'b'], rows: [[malformed, 2]] },
+  }]);
+  assert.equal(entry.title, 'Untitled dataset');
+  assert.equal(entry.description, '');
+  assert.equal(entry.source, 'Unknown');
+  assert.equal(entry.granularity, 'unknown');
+  assert.equal(entry.license, 'Unknown');
+  assert.deepEqual(entry.formats, ['Other']);
+  assert.equal(entry.licenseOpenness, 0);
+  assert.equal(entry.freshnessYear, 2015);
+  assert.equal(entry.coverageStart, 2015);
+  assert.equal(entry.coverageEnd, 2015);
+  assert.equal(entry.approxSizeMB, 1);
+  assert.equal(entry.kaggleRef, undefined);
+  assert.equal(entry.verified, undefined);
+  assert.match(entry.id, /^d[a-z0-9]+$/);
+  assert.equal(entry.resources[0].format, 'Other');
+  assert.deepEqual(entry.sample.rows, [['', '2']]);
+});
+
+test('non-finite numbers and fractional years do not escape catalog normalization', () => {
+  const entry = sanitizeEntry({ ...valid, freshnessYear: 'Infinity', coverageStart: 2000.5,
+    coverageEnd: 'NaN', approxSizeMB: 'Infinity', licenseOpenness: 'Infinity' });
+  assert.equal(entry.freshnessYear, 2015);
+  assert.equal(entry.coverageStart, 2015);
+  assert.equal(entry.coverageEnd, 2015);
+  assert.equal(entry.approxSizeMB, 1);
+  assert.equal(entry.licenseOpenness, 0);
+});

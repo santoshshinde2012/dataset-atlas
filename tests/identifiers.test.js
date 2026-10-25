@@ -30,3 +30,16 @@ test('dropAggregateRows keeps India and drops world totals', () => {
   assert.equal(batch[0].iso3, 'NGA');
   assert.equal(batch[1].status, 'country');
 });
+
+test('country-year rows require a known country identifier', () => {
+  const rows = [
+    { iso_code: 'IN', country: 'India' },
+    { iso_code: 'USA', country: 'United States' },
+    { iso_code: '', country: 'India' },
+    { country: 'India' },
+    { iso_code: 'ZZZ', country: 'Unknown entity' },
+    { iso_code: 'IND', country: 'World' },
+    null,
+  ];
+  assert.deepEqual(dropAggregateRows(rows), rows.slice(0, 2));
+});

@@ -96,3 +96,16 @@ test('ds opens one dataset and is not rewritten as a pin share', () => {
   assert.equal(serialized.includes('ds='), false);
   assert.equal(serialized.includes('p='), false);
 });
+
+test('explicitly empty facets survive sharing and reload', () => {
+  const state = { ...baseState(), sourceTypes: new Set(), formats: new Set() };
+  const parsed = parseState(serializeState(state, ['CSV', 'API']));
+  assert.deepEqual(parsed.sourceTypes, []);
+  assert.deepEqual(parsed.formats, []);
+  assert.equal(parseState('#st=junk').sourceTypes, undefined);
+  assert.equal(parseState('#f=Unknown').formats, undefined);
+});
+
+test('inherited registry names never become URL state', () => {
+  assert.deepEqual(parseState('#d=constructor&r=toString&st=__proto__'), {});
+});

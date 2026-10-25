@@ -1,8 +1,7 @@
 /**
  * Unit families. Same ISO-3 + year is not enough if the quantities differ.
  * This module classifies; it never converts. Unknown stays unknown.
- * Longer labels win so "per capita" is a rate, not people, and
- * "million tonnes" is mass rather than a bare "tonne".
+ * Rate labels take precedence over their numerator; otherwise longer labels win.
  */
 const FAMILIES = [
   { id: 'energy', labels: ['twh', 'terawatt', 'exajoule', 'ej', 'kwh', 'mwh', 'gwh', 'joule'] },
@@ -11,7 +10,7 @@ const FAMILIES = [
   { id: 'currency-current', labels: ['current us$', 'current usd', 'current us dollar', 'nominal usd', 'current lcu'] },
   { id: 'currency-ppp', labels: ['ppp', 'international $', 'international dollar', 'constant 2017', 'constant 2021', 'int$'] },
   { id: 'count', labels: ['cases', 'deaths', 'count of', 'number of'] },
-  { id: 'rate', labels: ['per capita', 'per-capita', 'per 100k', 'per 100000', 'percent', '% of'] },
+  { id: 'rate', priority: 1, labels: ['per capita', 'per-capita', 'per 100k', 'per 100000', 'percent', '% of'] },
   { id: 'precipitation', labels: ['rainfall', 'precip', 'mm/year', 'millimetre', 'millimeter'] },
   { id: 'temperature', labels: ['celsius', 'fahrenheit', 'kelvin', '°c', 'degc'] },
 ];
@@ -29,8 +28,14 @@ export function classifyUnit(value) {
   for (const family of FAMILIES) {
     for (const label of family.labels) {
       const needle = norm(label);
-      if (text.includes(needle) && (!best || needle.length > best.label.length)) {
-        best = { family: family.id, label: needle };
+      // Short symbols such as Gt or EJ must be whole tokens, not fragments of
+      // unrelated words such as "length" or "rejected".
+      const matches = needle.length <= 3
+        ? new RegExp(`(^|[^a-z0-9])${needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|[^a-z0-9])`).test(text)
+        : text.includes(needle);
+      const priority = family.priority || 0;
+      if (matches && (!best || priority > best.priority || (priority === best.priority && needle.length > best.label.length))) {
+        best = { family: family.id, label: needle, priority };
       }
     }
   }

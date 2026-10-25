@@ -51,12 +51,16 @@ export function seriesObservation(index, dataset, cca2) {
   if (!index || !dataset || !cca2) return null;
   const series = index.series || null;
   if (!series) return null;
-  const row = series[dataset.url] || (dataset.landingPage ? series[dataset.landingPage] : undefined);
-  if (!row) return null;
-  const span = row[String(cca2).toUpperCase()];
-  if (!span) return 'absent';
+  const key = Object.hasOwn(series, dataset.url) ? dataset.url : dataset.landingPage;
+  if (!key || !Object.hasOwn(series, key)) return null;
+  const row = series[key];
+  if (!row || typeof row !== 'object' || Array.isArray(row)) return null;
+  const country = String(cca2).toUpperCase();
+  if (!Object.hasOwn(row, country)) return 'absent';
+  const span = row[country];
+  if (!Array.isArray(span) || span.length !== 2 || span.some((year) => typeof year !== 'number')) return null;
   const start = Number(span[0]);
   const end = Number(span[1]);
-  if (!Number.isInteger(start) || !Number.isInteger(end)) return null;
+  if (!Number.isInteger(start) || !Number.isInteger(end) || start > end) return null;
   return { start, end };
 }

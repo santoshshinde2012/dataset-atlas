@@ -3,7 +3,6 @@ import { encodeProject, decodeProject, normalizeProject } from '../project.js';
 import { setFieldError } from './form-controls.js';
 import { LEVELS, validYear, yearRangeErrors } from '../requirements.js';
 import { COUNTRY_OPTIONS } from '../search.js';
-import { downloadText } from '../services/download.js';
 import { pythonRecipe } from '../exports.js';
 import { assessFit, assessJoin, projectReport } from '../fit.js';
 import { kitsForTask } from '../kits.js';
@@ -12,8 +11,9 @@ import { trapModalFocus } from './focus-trap.js';
 
 const status = (value) => `<strong class="fit-${value}">${value}</strong>`;
 const link = (url, label) => `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
+const requirementFields = ['fit-country', 'fit-start', 'fit-end', 'fit-level', 'fit-variables'];
 
-export function initWorkbench({ catalog, pilot, toast, store, storage, copyText, sharedProject = null }) {
+export function initWorkbench({ catalog, pilot, toast, store, storage, copyText, downloadText, sharedProject = null }) {
   const dialog = document.getElementById('workbench');
   const body = document.getElementById('workbench-body');
   const button = document.getElementById('workbench-btn');
@@ -47,8 +47,12 @@ export function initWorkbench({ catalog, pilot, toast, store, storage, copyText,
   let navigationObserver;
   const close = () => dialog.close();
 
-  function render() {
+  function render({ resetRequirements = false } = {}) {
     const scrollPosition = body.scrollTop;
+    const draft = resetRequirements ? [] : requirementFields.map((id) => {
+      const control = body.querySelector(`#${id}`);
+      return control && { id, value: control.value, error: control.getAttribute('aria-invalid') === 'true' ? control.validationMessage : '' };
+    }).filter(Boolean);
     navigationObserver?.disconnect();
     shown = pilot.profiles.filter((p) => p.task === task.id).map((profile) => ({ profile, dataset: catalog.find((d) => d.url === profile.url) })).filter((x) => x.dataset);
     for (const id of extraIds) {
@@ -114,9 +118,14 @@ export function initWorkbench({ catalog, pilot, toast, store, storage, copyText,
         <div class="summary-pair"><small>PAIR COMPATIBILITY</small><strong id="summary-pair-status">Choose sources</strong></div>
         <button type="button" class="summary-next" data-step="pair-title">Review compatibility →</button>
       </aside></div>`;
+    // Adding a source or reopening the dialog must not silently discard
+    // rejected requirements and re-enable exports of the previous task.
+    if (draft.some((field) => field.error)) for (const { id, value, error } of draft) {
+      const control = body.querySelector(`#${id}`); control.value = value; setFieldError(control, error);
+    }
     body.querySelector('#workbench-task').onchange = (e) => {
       task = e.target.value === 'custom' ? { ...task, id: 'custom', title: projectName } : { ...pilot.tasks.find((t) => t.id === e.target.value) };
-      extraIds = []; included = null; pairIds = []; render(); persist();
+      extraIds = []; included = null; pairIds = []; render({ resetRequirements: true }); persist();
     };
     body.querySelector('#project-name').onchange = (e) => { projectName = e.target.value.trim() || 'My research project'; body.querySelector('.workspace-summary h3').textContent = projectName; persist(); };
     body.querySelector('#project-add').onchange = (e) => {
@@ -138,7 +147,7 @@ export function initWorkbench({ catalog, pilot, toast, store, storage, copyText,
     const restore = (project) => {
       if (!project) { toast('Project has invalid requirements or format'); return; }
       task = project.task; projectName = project.name; extraIds = project.sourceIds;
-      included = new Set(project.includedIds); pairIds = project.pairIds; applyChoices(project); render(); persist();
+      included = new Set(project.includedIds); pairIds = project.pairIds; applyChoices(project); render({ resetRequirements: true }); persist();
     };
     body.querySelector('#project-load').onchange = (e) => { if (e.target.value !== '') restore(normalizeProject(saved.projects[Number(e.target.value)], catalog, pilot.tasks)); };
     body.querySelector('#project-share').onclick = () => {
@@ -159,7 +168,7 @@ export function initWorkbench({ catalog, pilot, toast, store, storage, copyText,
         restore(project);
       } catch { setFieldError(e.target, 'Choose a valid Atlas project JSON file.'); e.target.value = ''; }
     };
-    for (const id of ['fit-country', 'fit-start', 'fit-end', 'fit-level', 'fit-variables']) body.querySelector(`#${id}`).onchange = () => {
+    for (const id of requirementFields) body.querySelector(`#${id}`).onchange = () => {
       const country = body.querySelector('#fit-country').value.toUpperCase().trim();
       const startYear = validYear(body.querySelector('#fit-start').value);
       const endYear = validYear(body.querySelector('#fit-end').value);
@@ -206,10 +215,7 @@ export function initWorkbench({ catalog, pilot, toast, store, storage, copyText,
       const a = shown[Number(body.querySelector('#join-a').value)];
       const b = shown[Number(body.querySelector('#join-b').value)];
       const markdown = projectReport(task, selected, !a || !b || a === b ? null : [a, b]);
-      const url = URL.createObjectURL(new Blob([markdown], { type: 'text/markdown' }));
-      const anchor = document.createElement('a');
-      anchor.href = url; anchor.download = `dataset-atlas-${task.id}-brief.md`; anchor.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      downloadText(`dataset-atlas-${task.id}-brief.md`, markdown, 'text/markdown');
       toast('Project brief exported');
     };
   }
@@ -231,7 +237,7 @@ export function initWorkbench({ catalog, pilot, toast, store, storage, copyText,
       const found = pilot.tasks.find((item) => item.id === taskId);
       if (found) { task = { ...found }; extraIds = []; included = null; pairIds = []; }
     }
-    render();
+    render({ resetRequirements: Boolean(taskId) });
     if (!dialog.open) dialog.showModal();
     dialog.querySelector('#workbench-close').focus();
   }

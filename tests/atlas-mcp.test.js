@@ -1,9 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import {
   searchCatalog, getDataset, getResource, listBundles, listKits, assessFitTool, buildPassport, toolDefinitions, loadCatalog, dispatch,
   recommendKitTool, checkIdentifiersTool, assessJoinTool, getCrosswalkTool, checkUnitsTool, checkVintageTool,
   coverageForCountry, searchVariables,
+  callTool,
 } from '../scripts/atlas-mcp.js';
 import { buildCatalog } from '../js/catalog.js';
 import { PRESETS } from '../js/config.js';
@@ -281,4 +284,53 @@ test('coverage_for_country reports checked rows and search_variables stays insid
   assert.ok(variables.total >= 1);
   assert.ok(variables.results.some((row) => `${row.variables} ${row.columns} ${row.title}`.toLowerCase().includes('rain')));
   assert.throws(() => coverageForCountry({ iso2: 'India' }), /iso2 required/);
+});
+
+test('coverage_for_country does not claim an unlisted requested series was checked', () => {
+  const result = coverageForCountry({ iso2: 'IN', url: 'https://example.test/unreviewed' });
+  assert.equal(result.checked, false);
+  assert.deepEqual(result.withRows, []);
+  assert.equal(result.checkedWithoutRows, 0);
+});
+
+test('dispatch rejects malformed JSON-RPC envelopes and honors null request IDs', async () => {
+  for (const message of [null, [], 7, { id: 1, method: 'ping' }, { jsonrpc: '2.0', method: 1 }, { jsonrpc: '2.0', id: {}, method: 'ping' }]) {
+    const reply = await dispatch(catalog, message);
+    assert.equal(reply.error.code, -32600);
+  }
+  assert.deepEqual(await dispatch(catalog, { jsonrpc: '2.0', id: null, method: 'ping' }), { jsonrpc: '2.0', id: null, result: {} });
+  const badParams = await dispatch(catalog, { jsonrpc: '2.0', id: 1, method: 'tools/call', params: [] });
+  assert.equal(badParams.error.code, -32602);
+  const noTool = await dispatch(catalog, { jsonrpc: '2.0', id: 2, method: 'tools/call', params: {} });
+  assert.equal(noTool.error.code, -32602);
+});
+
+test('MCP tool arguments follow the advertised schema before reaching domain code', async () => {
+  for (const [name, args] of [
+    ['search_catalog', { includeGlobal: 'false' }],
+    ['search_catalog', { minOpenness: '0.9' }],
+    ['search_catalog', { limit: Infinity }],
+    ['check_identifiers', { codes: 'IND' }],
+    ['check_identifiers', { codes: [null] }],
+    ['get_dataset', {}],
+    ['build_passport', { ids: [catalog[0].id], requirements: { endYear: '2020' } }],
+    ['list_bundles', null],
+  ]) {
+    await assert.rejects(() => callTool(catalog, name, args), /arguments/);
+  }
+  const reply = await dispatch(catalog, { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'search_catalog', arguments: null } });
+  assert.equal(reply.result.isError, true);
+});
+
+test('stdio transport drains requests at EOF, including a final line without newline', () => {
+  const input = [
+    { jsonrpc: '2.0', id: 1, method: 'ping' },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'list_bundles', arguments: {} } },
+    { jsonrpc: '2.0', id: 3, method: 'ping' },
+  ].map((request) => JSON.stringify(request)).join('\n');
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL('../scripts/atlas-mcp.js', import.meta.url))], { input, encoding: 'utf8', timeout: 10000 });
+  assert.equal(result.status, 0, result.stderr);
+  const replies = result.stdout.trim().split('\n').map((line) => JSON.parse(line));
+  assert.deepEqual(replies.map((reply) => reply.id), [1, 2, 3]);
+  assert.ok(JSON.parse(replies[1].result.content[0].text).bundles.length > 0);
 });

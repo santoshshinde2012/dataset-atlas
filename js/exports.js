@@ -2,15 +2,8 @@
 import { iso3For } from './identifiers.js';
 import { parseQuery } from './search.js';
 import { primaryResource } from './resource.js';
-
-export function csvText(columns, rows, { spreadsheetSafe = false } = {}) {
-  const cell = (value) => {
-    let text = String(value ?? '');
-    if (spreadsheetSafe && /^[=+\-@\t\r]/.test(text)) text = "'" + text;
-    return `"${text.replace(/"/g, '""')}"`;
-  };
-  return [columns, ...rows].map((row) => row.map(cell).join(',')).join('\r\n') + '\r\n';
-}
+import { csvText } from './data-table.js';
+export { csvText } from './data-table.js';
 
 export function inventory(list, requirements = {}, selections = {}) {
   const parsed = parseQuery(requirements.search);

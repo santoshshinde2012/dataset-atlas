@@ -13,9 +13,12 @@ export function initTopbar({ store, onPassportToggle }) {
     const state = store.getState();
     $('#proj-globe').classList.toggle('active', state.projection === 'globe');
     $('#proj-flat').classList.toggle('active', state.projection === 'flat');
+    $('#proj-globe').setAttribute('aria-pressed', String(state.projection === 'globe'));
+    $('#proj-flat').setAttribute('aria-pressed', String(state.projection === 'flat'));
     // the toggle shows the theme you would switch TO
     $('#theme-toggle').innerHTML = icon(state.theme === 'light' ? 'moon' : 'sun');
     $('#theme-toggle').title = state.theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme';
+    $('#theme-toggle').setAttribute('aria-label', $('#theme-toggle').title);
     $('#passport-count').textContent = state.pins.size;
   }
 

@@ -71,6 +71,14 @@ export function compareVintage(a, b) {
   if (left.status === 'unknown' || right.status === 'unknown') {
     return { status: 'unknown', left, right, reason: 'One or both vintages are unknown. Do not invent a date shift.' };
   }
+  if (left.basis === 'fiscal' && right.basis === 'fiscal') {
+    if (!left.reporter || !right.reporter) {
+      return { status: 'review', left, right, reason: 'Both use fiscal years, but their reporting periods are not documented for both sources.' };
+    }
+    if (left.reporter.endMonth !== right.reporter.endMonth) {
+      return { status: 'conflict', left, right, reason: `Fiscal reporting periods differ. ${left.reporter.label}. ${right.reporter.label}.` };
+    }
+  }
   if (left.basis === right.basis) {
     return { status: 'match', left, right, reason: `Both use ${left.basis}` };
   }

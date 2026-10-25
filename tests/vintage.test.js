@@ -20,3 +20,9 @@ test('Australia FY vs calendar emissions is a conflict; India FY is classified',
   assert.equal(classifyVintage({ series: 'SP.POP.TOTL' }).basis, 'mid-year');
   assert.match(VINTAGE_NOTE, /Fiscal-year GDP/);
 });
+
+test('two fiscal labels do not imply compatible reporting periods', () => {
+  assert.equal(compareVintage({ basis: 'fiscal', iso3: 'AUS' }, { basis: 'fiscal', iso3: 'IND' }).status, 'conflict');
+  assert.equal(compareVintage({ basis: 'fiscal', iso3: 'AUS' }, { basis: 'fiscal' }).status, 'review');
+  assert.equal(compareVintage({ basis: 'fiscal', iso3: 'AUS' }, { basis: 'fiscal', iso3: 'NZL' }).status, 'match');
+});

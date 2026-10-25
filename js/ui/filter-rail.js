@@ -16,6 +16,7 @@ export function initFilterRail({ store, generated = null, toast = () => {}, task
   countrySelect.innerHTML += Object.entries(COUNTRY_OPTIONS).sort((a, b) => a[1].localeCompare(b[1])).map(([iso, name]) => `<option value="${iso}">${esc(name)}</option>`).join('');
   $('#filter-level').innerHTML += LEVELS.map((level) => `<option value="${level}">${level}</option>`).join('');
   const practical = { country: '#filter-country', startYear: '#filter-start', endYear: '#filter-end', level: '#filter-level', resourceKind: '#filter-resource', coverageMode: '#filter-coverage', reuse: '#filter-reuse' };
+  let practicalKey;
   for (const selector of Object.values(practical)) $(selector).onchange = () => {
     const values = Object.fromEntries(Object.entries(practical).map(([key, sel]) => [key, $(sel).value]));
     const errors = yearRangeErrors(values.startYear, values.endYear);
@@ -56,7 +57,16 @@ export function initFilterRail({ store, generated = null, toast = () => {}, task
   function render() {
     const state = store.getState();
 
-    for (const [key, sel] of Object.entries(practical)) if ($(sel).value !== String(state[key] ?? '')) $(sel).value = state[key] ?? '';
+    const nextPracticalKey = JSON.stringify([state.filterResetRevision, ...Object.keys(practical).map((key) => state[key])]);
+    const requirementsChanged = practicalKey !== nextPracticalKey;
+    const invalidDraft = ['#filter-start', '#filter-end'].some((selector) => $(selector).getAttribute('aria-invalid') === 'true');
+    // Rejected requirements remain an editable draft during unrelated store
+    // updates. Changed requirements or an explicit reset replace that draft.
+    if (requirementsChanged || !invalidDraft) {
+      for (const [key, sel] of Object.entries(practical)) if ($(sel).value !== String(state[key] ?? '')) $(sel).value = state[key] ?? '';
+      setFieldError($('#filter-start')); setFieldError($('#filter-end'));
+    }
+    practicalKey = nextPracticalKey;
 
     // inputs mirror store state so URL-restored or programmatic changes show
     if ($('#search-input').value !== state.search) $('#search-input').value = state.search;

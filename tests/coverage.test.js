@@ -22,3 +22,13 @@ test('checked coverage distinguishes observed rows from a confirmed absence', ()
   assert.equal(seriesObservation(index, dataset, 'BR'), 'absent');
   assert.equal(seriesObservation(index, { url: 'https://example.org/other' }, 'IN'), null);
 });
+
+test('malformed coverage evidence stays unknown rather than observed or absent', () => {
+  const dataset = { url: 'https://example.org/series' };
+  for (const span of [[2024, 2000], [null, 2024], ['2000', '2024'], [2000], [2000, 2024, 2025], '2000', null]) {
+    const index = { series: { [dataset.url]: { IN: span } } };
+    assert.equal(seriesObservation(index, dataset, 'IN'), null);
+  }
+  assert.equal(seriesObservation({ series: { [dataset.url]: [] } }, dataset, 'IN'), null);
+  assert.equal(seriesObservation({ series: {} }, { url: 'constructor' }, 'IN'), null);
+});

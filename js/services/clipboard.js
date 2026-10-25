@@ -1,27 +1,36 @@
-/** Clipboard service with an execCommand fallback for older engines. */
-export function createClipboard(toast) {
-  function fallbackCopy(text, done) {
+/** Clipboard port returns success and reports failures; browser APIs can be substituted in tests. */
+export function createClipboard(toast, { clipboard = globalThis.navigator?.clipboard, document = globalThis.document } = {}) {
+  function fallbackCopy(text) {
+    const previousFocus = document.activeElement;
     const ta = document.createElement('textarea');
     ta.value = text;
     ta.style.position = 'fixed';
     ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
+    // A native modal makes the rest of the document inert, including a body-level textarea.
+    const container = previousFocus?.closest?.('dialog[open]') || document.body;
     try {
-      document.execCommand('copy');
-      done();
+      container.appendChild(ta);
+      ta.focus();
+      ta.select();
+      return document.execCommand('copy') === true;
     } catch {
-      toast('Copy failed');
+      return false;
+    } finally {
+      ta.remove();
+      if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
     }
-    ta.remove();
   }
 
-  return function copyText(text, msg = 'Copied to clipboard') {
-    const done = () => toast(msg);
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done));
-    } else {
-      fallbackCopy(text, done);
+  return async function copyText(text, msg = 'Copied to clipboard') {
+    if (clipboard?.writeText) {
+      try {
+        await clipboard.writeText(text);
+        toast(msg);
+        return true;
+      } catch { /* denied or unavailable: use the focused-document fallback */ }
     }
+    const copied = fallbackCopy(text);
+    toast(copied ? msg : 'Copy failed');
+    return copied;
   };
 }

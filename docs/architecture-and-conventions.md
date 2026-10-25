@@ -17,6 +17,8 @@ index.html → js/main.js (composition root)
 
 Pure modules must not import DOM or browser globals. `main.js` wires them together. UI components receive the store and services they need; they do not import other UI components. `vendor-globals.js` is the only adapter for the vendored D3 and TopoJSON globals. This follows [JavaScript module boundaries](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) without introducing a build framework for a small static site.
 
+`services/atlas-data.js` owns asset fetching and required-response checks; `catalog.js` stays a pure sanitizer. Downloads and local file readers are injected into UI initializers by `main.js`. Repository tests enforce these dependency directions and the published asset graph. Shared CSV serialization belongs to `data-table.js`; `exports.js` re-exports it for existing callers, keeping the parsing worker independent of research exports.
+
 These rules give the SOLID principles concrete meaning here:
 
 - **Single responsibility:** `search.js` handles query terms and scoring; `filters.js` combines facets; `store.js` owns state; `resource.js` owns distributions; `coverage.js` owns geography claims; `kits.js` owns verified pairs; `identifiers.js` owns country vs aggregate codes; `units.js` owns quantity families; `vintage.js` owns year basis; `fit.js` owns screening; `license-use.js` owns reuse labels; `link-health.js` owns URL reachability; UI modules render and handle events; `focus-trap.js` handles modal keyboard containment.
@@ -45,6 +47,10 @@ These rules give the SOLID principles concrete meaning here:
 ## Data and trust boundaries
 
 `catalog.js` sanitizes external catalog entries before they reach cards, exports or the MCP server. New curated metadata requires source evidence and validation; unknown country coverage, license, schema and joins should stay unknown. The workbench is a screening tool. Only a documented, tested source pair should receive a verified join label. [DCAT 3](https://www.w3.org/TR/vocab-dcat-3/) is the reference for separating a dataset landing page from access services and downloadable resources when extending the schema.
+
+HTTP URLs use the shared `sanitizeHttpUrl` boundary in `resource.js`; registry membership uses own keys. Store actions reject unknown catalog IDs and registry values. Project restoration validates versions, typed display fields, numeric years, and source membership before applying a draft. Explicitly empty source and format facets remain empty after a URL round trip.
+
+`scripts/coverage-parser.js` extracts country-year spans without network or filesystem access. Only numeric nonmissing observations establish coverage; zero is a valid observation. Malformed quoting and truncated records fail validation. The coverage builder combines resources only when every attempted resource for a dataset succeeds. If any resource fails, previous checked spans are retained; a new dataset stays unchecked. A complete successful check with no observations records an empty series. Failed requests never establish confirmed country absence.
 
 The deployed app has no runtime API secret. Provider APIs requiring a key must be used during controlled build-time import or through a separately designed server, never from browser code. Source links and third-party content are data, not trusted HTML. Unknown country coverage, license, schema and joins stay unknown — never guessed into a `match`.
 
