@@ -136,3 +136,7 @@ index.html, styles.css  Static application shell and styles
 `js/main.js` wires the app together. `js/store.js` owns state and selectors. `js/catalog.js` sanitizes catalog entries before either UI or MCP code consumes them. Keep domain and region definitions in `js/config.js`, and add tests for behavior that changes.
 
 See [architecture and conventions](docs/architecture-and-conventions.md) for module boundaries, naming, and change rules. How to contribute: [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Support
+
+[![Buy Me a Coffee](https://img.shields.io/badge/buymeacoffee-black?style=for-the-badge&logo=buymeacoffee&logoColor=white)](https://buymeacoffee.com/santoshshin)
